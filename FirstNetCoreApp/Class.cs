@@ -7,5 +7,6 @@ namespace FirstNetCoreApp
 {
     public class Class
     {
+        public int MyProperty { get; set; }
     }
 }
