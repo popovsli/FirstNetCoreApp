@@ -27,7 +27,7 @@ namespace FirstNetCoreApp
             // using RazorPagesMovie.Models;
             // using Microsoft.EntityFrameworkCore;
             services.AddDbContext<MovieContext>(options =>
-    options.UseSqlServer(Configuration.GetConnectionString("MovieContext")));
+                options.UseSqlServer(Configuration.GetConnectionString("MovieContext")));
             services.AddMvc();
         }
 
