@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using FirstNetCoreApp.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FirstNetCoreApp.Pages.Movies
 {
@@ -13,16 +14,35 @@ namespace FirstNetCoreApp.Pages.Movies
     {
         private readonly FirstNetCoreApp.Models.MovieContext _context;
 
+        public IList<Movie> Movie { get; set; }
+        public SelectList Genres { get; set; }
+        public string MovieGenre { get; set; }
+
         public IndexModel(FirstNetCoreApp.Models.MovieContext context)
         {
             _context = context;
         }
-
-        public IList<Movie> Movie { get;set; }
-
-        public async Task OnGetAsync()
+                
+        public async Task OnGetAsync(string movieGenre,string searchString)
         {
-            Movie = await _context.Movie.ToListAsync();
+            MovieGenre = movieGenre;
+            var genreQuery = _context.Movie.OrderBy(x => x.Genre).Select(x => x.Genre);
+
+            var movies = _context.Movie.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                movies = movies.Where(x => x.Title.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(movieGenre))
+            {
+                movies = movies.Where(x => x.Genre.ToLower() == movieGenre.ToLower());
+            }
+
+            Genres = new SelectList(await genreQuery.Distinct().ToListAsync(),MovieGenre);
+            
+            Movie = await movies.ToListAsync();
         }
     }
 }
