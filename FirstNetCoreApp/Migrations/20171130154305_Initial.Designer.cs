@@ -11,8 +11,8 @@ using System;
 namespace FirstNetCoreApp.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20171128155032_Rating")]
-    partial class Rating
+    [Migration("20171130154305_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,19 +26,47 @@ namespace FirstNetCoreApp.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Genre");
+                    b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.Property<decimal>("Price");
 
-                    b.Property<string>("Rating");
+                    b.Property<string>("Rating")
+                        .IsRequired()
+                        .HasMaxLength(5);
 
                     b.Property<DateTime>("ReleaseDate");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(60);
 
                     b.HasKey("ID");
 
                     b.ToTable("Movie");
+                });
+
+            modelBuilder.Entity("FirstNetCoreApp.Models.Schedule", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("PrivateSchedule");
+
+                    b.Property<long>("PrivateScheduleSize");
+
+                    b.Property<string>("PublicSchedule");
+
+                    b.Property<long>("PublicScheduleSize");
+
+                    b.Property<string>("Title");
+
+                    b.Property<DateTime>("UploadDT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Schedule");
                 });
 #pragma warning restore 612, 618
         }
