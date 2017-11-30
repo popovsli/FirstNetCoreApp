@@ -51,6 +51,8 @@
         @foreach (var item in Model.Schedule)
         {
             <tr>
+                <td><a asp-page="./Delete" asp-route-id="@item.ID">Delete</a> </td>
+
                 <td>@Html.DisplayFor(modelItem => item.Title)</td>
 
                 <td>@Html.DisplayFor(modelItem => item.UploadDT)</td>
@@ -58,8 +60,6 @@
                 <td>@Html.DisplayFor(modelItem => item.PublicSchedule)</td>
 
                 <td>@Html.DisplayFor(modelItem => item.PrivateSchedule)</td>
-
-                <td><a asp-page="./Delete" asp-route-id="@item.ID">Delete</a> </td>
             </tr>
         }
     </tbody>
