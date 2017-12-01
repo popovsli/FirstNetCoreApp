@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using FirstNetCoreApp.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using BusinessEntities.Models;
 
 namespace FirstNetCoreApp.Pages.Movies
 {
     public class IndexModel : PageModel
     {
-        private readonly FirstNetCoreApp.Models.MovieContext _context;
+        private readonly MovieContext _context;
 
         public IList<Movie> Movie { get; set; }
         public SelectList Genres { get; set; }
         public string MovieGenre { get; set; }
 
-        public IndexModel(FirstNetCoreApp.Models.MovieContext context)
+        public IndexModel(MovieContext context)
         {
             _context = context;
         }

@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using FirstNetCoreApp.Models;
+using BusinessEntities.Models;
 
 namespace FirstNetCoreApp.Pages.Movies
 {
     public class DeleteModel : PageModel
     {
-        private readonly FirstNetCoreApp.Models.MovieContext _context;
+        private readonly MovieContext _context;
 
-        public DeleteModel(FirstNetCoreApp.Models.MovieContext context)
+        public DeleteModel(MovieContext context)
         {
             _context = context;
         }

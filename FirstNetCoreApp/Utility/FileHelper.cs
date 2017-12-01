@@ -1,4 +1,4 @@
-﻿using FirstNetCoreApp.Models;
+﻿using BusinessEntities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;

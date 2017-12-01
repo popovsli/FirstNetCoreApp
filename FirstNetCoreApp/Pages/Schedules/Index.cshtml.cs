@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using FirstNetCoreApp.Models;
 using Microsoft.EntityFrameworkCore;
 using FirstNetCoreApp.Utility;
+using BusinessEntities.Models;
 
 namespace FirstNetCoreApp.Pages.Schedules
 {

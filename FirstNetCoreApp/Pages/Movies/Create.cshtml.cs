@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using FirstNetCoreApp.Models;
+using BusinessEntities.Models;
 
 namespace FirstNetCoreApp.Pages.Movies
 {
     public class CreateModel : PageModel
     {
-        private readonly FirstNetCoreApp.Models.MovieContext _context;
+        private readonly MovieContext _context;
 
-        public CreateModel(FirstNetCoreApp.Models.MovieContext context)
+        public CreateModel(MovieContext context)
         {
             _context = context;
         }
