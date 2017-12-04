@@ -43,27 +43,13 @@ namespace FirstNetCoreMVC.Controllers
         }
 
         // GET: Movies/Create
-        public async Task<IActionResult> CreateEdit(int? id, string type)
+        public IActionResult Create()
         {
-            switch (type)
-            {
-                case "Create":
-                    {
-                        return View();
-                    }
-                case "Edit":
-                    {
-                        return await GetMovie(id);
-                    }
-                default:
-                    {
-                        return NotFound();
-                    }
-            }
+            return View("CreateEdit");
         }
 
         // GET: Movies/Edit/5
-        private async Task<IActionResult> GetMovie(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -75,7 +61,7 @@ namespace FirstNetCoreMVC.Controllers
             {
                 return NotFound();
             }
-            return View(movie);
+            return View("CreateEdit",movie);
         }
 
         // POST: Movies/Create
@@ -93,7 +79,7 @@ namespace FirstNetCoreMVC.Controllers
             }
             return View(movie);
         }
-        
+
         // POST: Movies/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
