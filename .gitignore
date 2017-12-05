@@ -241,3 +241,5 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 FirstNetCoreApp/appsettings.json
+FirstNetCoreApp/appsettings.json
+FirstNetCoreMVC/appsettings.json

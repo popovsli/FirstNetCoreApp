@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    string actionType = ViewBag.ActionType;
 }
 
 <h2>Create</h2>
@@ -10,9 +11,9 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post" asp-action="Edit">
+        <form method="post" asp-action="@actionType">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
+            @*<input type="hidden" asp-for="ID" />*@
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />

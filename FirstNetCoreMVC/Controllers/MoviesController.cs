@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BusinessEntities.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using BusinessEntities.Models;
-using FirstNetCoreMVC.Models;
 
 namespace FirstNetCoreMVC.Controllers
 {
@@ -45,6 +41,7 @@ namespace FirstNetCoreMVC.Controllers
         // GET: Movies/Create
         public IActionResult Create()
         {
+            ViewBag.ActionType = nameof(Create);
             return View("CreateEdit");
         }
 
@@ -61,7 +58,8 @@ namespace FirstNetCoreMVC.Controllers
             {
                 return NotFound();
             }
-            return View("CreateEdit",movie);
+            ViewBag.ActionType = nameof(Edit);
+            return View("CreateEdit", movie);
         }
 
         // POST: Movies/Create
