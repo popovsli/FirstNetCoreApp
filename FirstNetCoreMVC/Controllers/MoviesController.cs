@@ -1,8 +1,10 @@
 ﻿using BusinessEntities.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using ViewModels.ViewModels;
 
 namespace FirstNetCoreMVC.Controllers
 {
@@ -16,9 +18,31 @@ namespace FirstNetCoreMVC.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string searchGenre)
         {
-            return View(await _context.Movie.ToListAsync());
+            var genreQuery = from m in _context.Movie
+                             orderby m.Genre
+                             select m.Genre;
+
+            var movies = _context.Movie.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                movies = movies.Where(x => x.Title.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(searchGenre))
+            {
+                movies = movies.Where(x => x.Genre.ToLower() == searchGenre.ToLower());
+            }
+
+            MovieViewModel movieViewModel = new MovieViewModel();
+            movieViewModel.movieGenre = searchGenre;
+            movieViewModel.searchString = searchString;
+            movieViewModel.movies = await movies.ToListAsync();
+            movieViewModel.genres = new SelectList(await genreQuery.Distinct().ToListAsync());
+            
+            return View(movieViewModel);
         }
 
         // GET: Movies/Details/5
