@@ -1,8 +1,12 @@
-﻿using BusinessEntities.Models;
+﻿using BusinessEntities.Factory;
+using BusinessEntities.Interfaces;
+using BusinessEntities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using ViewModels.ViewModels;
 
@@ -35,6 +39,11 @@ namespace FirstNetCoreMVC.Controllers
             {
                 movies = movies.Where(x => x.Genre.ToLower() == searchGenre.ToLower());
             }
+
+            //var validationType = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(x => x.Name.Contains(nameof(UserBase) + "Validation"));
+            var a = nameof(UserBase);
+            IUserBase user = Factory<IUserBase, UserBase>.Create();
+            
 
             MovieViewModel movieViewModel = new MovieViewModel();
             movieViewModel.movieGenre = searchGenre;
