@@ -6,11 +6,8 @@ using System.Text;
 
 namespace BusinessEntities.Models
 {
-    public class UserBase : IUserBase
+    public abstract class UserBase : IUser
     {
-
-        private string _fullName;
-
         public string UserName { get; set; }
 
         public string Password { get; set; }
@@ -22,15 +19,15 @@ namespace BusinessEntities.Models
         public string FullName { get { return FirstName + " " + LastName; } }
 
         public bool IsAdmin { get; set; }
-               
 
-        public UserBase(IValidationStratergy<IUserBase> validate)
+
+        public UserBase(IValidationStratergy<IUser> validate)
         {
             _validationType = validate;
         }
 
-        private IValidationStratergy<IUserBase> _validationType = null;
-        public IValidationStratergy<IUserBase> ValidationType
+        private IValidationStratergy<IUser> _validationType = null;
+        public IValidationStratergy<IUser> ValidationType
         {
             get
             {
@@ -40,6 +37,11 @@ namespace BusinessEntities.Models
             {
                 _validationType = value;
             }
+        }
+
+        public bool Validate()
+        {
+           return ValidationType.Validate(this);
         }
     }
 }

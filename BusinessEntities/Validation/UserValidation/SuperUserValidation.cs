@@ -7,9 +7,9 @@ using System.Text;
 
 namespace BusinessEntities.Validation.UserValidation
 {
-    public class UserBaseValidation : IValidationStratergy<IUserBase>
+    public class SuperUserValidation2 : IValidationStratergy<IUser>
     {
-        public bool Validate(IUserBase obj)
+        public bool Validate(IUser obj)
         {
             return obj.IsAdmin;
         }

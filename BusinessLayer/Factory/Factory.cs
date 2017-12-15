@@ -12,22 +12,32 @@ namespace BusinessEntities.Factory
         where BaseType : ReturnType
     {
 
-        static IUnityContainer container = null;
+        static IUnityContainer _container = null;
+        static Type _validationType = null;
 
         static Factory()
         {
-            container = new UnityContainer();
-            var validationType = Assembly.Load("BusinessEntities").GetTypes().FirstOrDefault(x => x.Name.Contains(typeof(BaseType).Name + "Validation"));
-            if (validationType != null)
-                container.RegisterType<ReturnType, BaseType>(typeof(BaseType).Name, new InjectionConstructor(Activator.CreateInstance(validationType)));
+            LoadValidationType();
+
+            _container = new UnityContainer();
+            
+            if (_validationType != null)
+                _container.RegisterType<ReturnType, BaseType>(typeof(BaseType).Name, new InjectionConstructor(Activator.CreateInstance(_validationType)));
+            else
+                _container.RegisterType<ReturnType, BaseType>(typeof(BaseType).Name);
         }
 
         public static ReturnType Create()
         {
             if (!typeof(ReturnType).IsInterface)
-                throw new Exception();
+                throw new Exception(); //TODO 
 
-            return container.Resolve<ReturnType>(typeof(BaseType).Name);
+            return _container.Resolve<ReturnType>(typeof(BaseType).Name);
+        }
+
+        public static void LoadValidationType()
+        {
+            _validationType = Assembly.Load("BusinessEntities").GetTypes().FirstOrDefault(x => x.Name.Contains(typeof(BaseType).Name + "Validation"));
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BusinessEntities.Validation;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BusinessEntities.Interfaces
 {
-    public interface IUserBase
+    public interface IUser
     {
         string UserName { get; set; }
 
@@ -17,5 +18,9 @@ namespace BusinessEntities.Interfaces
         string FullName { get; }
 
         bool IsAdmin { get; set; }
+
+        IValidationStratergy<IUser> ValidationType { get; }
+
+        bool Validate();
     }
 }

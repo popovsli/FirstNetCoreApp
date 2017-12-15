@@ -40,10 +40,11 @@ namespace FirstNetCoreMVC.Controllers
                 movies = movies.Where(x => x.Genre.ToLower() == searchGenre.ToLower());
             }
 
-            //var validationType = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(x => x.Name.Contains(nameof(UserBase) + "Validation"));
-            var a = nameof(UserBase);
-            IUserBase user = Factory<IUserBase, UserBase>.Create();
-            
+
+            IUser user = Factory<IUser, SuperUser>.Create();
+            bool isValid = user.Validate();
+            user.UserName = "popovsli";
+            var validatationType = user.ValidationType;
 
             MovieViewModel movieViewModel = new MovieViewModel();
             movieViewModel.movieGenre = searchGenre;
