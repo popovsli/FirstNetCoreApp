@@ -29,15 +29,15 @@ namespace BusinessEntities.Factory
 
         public static ReturnType Create()
         {
-            if (!typeof(ReturnType).IsInterface)
-                throw new Exception(); //TODO 
+            //if (!typeof(ReturnType).IsInterface)
+            //    throw new Exception(); //TODO 
 
             return _container.Resolve<ReturnType>(typeof(BaseType).Name);
         }
 
         public static void LoadValidationType()
         {
-            _validationType = Assembly.Load("BusinessEntities").GetTypes().FirstOrDefault(x => x.Name.Contains(typeof(BaseType).Name + "Validation"));
+            _validationType = Assembly.Load("BusinessEntities").GetTypes().FirstOrDefault(x => x.Name == (typeof(BaseType).Name + "Validation"));
         }
     }
 }

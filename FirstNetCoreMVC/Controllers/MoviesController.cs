@@ -46,6 +46,8 @@ namespace FirstNetCoreMVC.Controllers
             user.UserName = "popovsli";
             var validatationType = user.ValidationType;
 
+            UserBase cast = (UserBase)user;
+
             MovieViewModel movieViewModel = new MovieViewModel();
             movieViewModel.movieGenre = searchGenre;
             movieViewModel.searchString = searchString;

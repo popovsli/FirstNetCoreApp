@@ -12,6 +12,7 @@ namespace BusinessEntities.Models
 
         public SuperUser(IValidationStratergy<IUser> validate) : base(validate)
         {
+
         }
 
     }

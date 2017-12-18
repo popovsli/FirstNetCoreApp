@@ -1,17 +1,15 @@
 ﻿using BusinessEntities.Interfaces;
-using BusinessEntities.Models;
-using BusinessEntities.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BusinessEntities.Validation.UserValidation
 {
-    public class SuperUserValidation : IValidationStratergy<IUser>
+    public class UserValidation : IValidationStratergy<IUser>
     {
         public bool Validate(IUser obj)
         {
-            return obj.IsAdmin;
+            throw new NotImplementedException();
         }
     }
 }
