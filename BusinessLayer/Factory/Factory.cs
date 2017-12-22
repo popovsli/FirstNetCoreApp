@@ -29,8 +29,8 @@ namespace BusinessEntities.Factory
 
         public static ReturnType Create()
         {
-            //if (!typeof(ReturnType).IsInterface)
-            //    throw new Exception(); //TODO 
+            if (!typeof(ReturnType).IsInterface)
+                throw new Exception(); //TODO 
 
             return _container.Resolve<ReturnType>(typeof(BaseType).Name);
         }

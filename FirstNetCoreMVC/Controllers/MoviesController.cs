@@ -1,6 +1,7 @@
 ﻿using BusinessEntities.Factory;
 using BusinessEntities.Interfaces;
 using BusinessEntities.Models;
+using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,9 @@ namespace FirstNetCoreMVC.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly MovieContext _context;
+        private readonly IMovieService _context;
 
-        public MoviesController(MovieContext context)
+        public MoviesController(IMovieService context)
         {
             _context = context;
         }
@@ -24,11 +25,14 @@ namespace FirstNetCoreMVC.Controllers
         // GET: Movies
         public async Task<IActionResult> Index(string searchString, string searchGenre)
         {
-            var genreQuery = from m in _context.Movie
-                             orderby m.Genre
-                             select m.Genre;
+            //var genreQuery = from m in _context.Movie
+            //                 orderby m.Genre
+            //                 select m.Genre;
 
-            var movies = _context.Movie.AsQueryable();
+            var genreQuery = _context.GetGenres();
+
+            //var movies = _context.Movie.AsQueryable();
+            var movies = _context.GetAllMovies();
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -46,14 +50,12 @@ namespace FirstNetCoreMVC.Controllers
             user.UserName = "popovsli";
             var validatationType = user.ValidationType;
 
-            UserBase cast = (UserBase)user;
-
             MovieViewModel movieViewModel = new MovieViewModel();
             movieViewModel.movieGenre = searchGenre;
             movieViewModel.searchString = searchString;
             movieViewModel.movies = await movies.ToListAsync();
             movieViewModel.genres = new SelectList(await genreQuery.Distinct().ToListAsync());
-            
+
             return View(movieViewModel);
         }
 
@@ -65,7 +67,9 @@ namespace FirstNetCoreMVC.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movie.SingleOrDefaultAsync(m => m.ID == id);
+            //var movie = await _context.Movie.SingleOrDefaultAsync(m => m.ID == id);
+            var movie = await _context.GetMovie(id);
+
             if (movie == null)
             {
                 return NotFound();
@@ -89,7 +93,9 @@ namespace FirstNetCoreMVC.Controllers
                 return NotFound();
             }
 
-            Movie movie = await _context.Movie.SingleOrDefaultAsync(m => m.ID == id);
+            //Movie movie = await _context.Movie.SingleOrDefaultAsync(m => m.ID == id);
+            Movie movie = await _context.GetMovie(id);
+
             if (movie == null)
             {
                 return NotFound();
@@ -107,8 +113,8 @@ namespace FirstNetCoreMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(movie);
-                await _context.SaveChangesAsync();
+                await _context.Add(movie);
+                //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
@@ -123,10 +129,11 @@ namespace FirstNetCoreMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Attach(movie).State = EntityState.Modified;
+                //_context.Attach(movie).State = EntityState.Modified;
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    await _context.Edit(movie);
+                    //await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -152,8 +159,10 @@ namespace FirstNetCoreMVC.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movie
-                .SingleOrDefaultAsync(m => m.ID == id);
+            //var movie = await _context.Movie
+            //    .SingleOrDefaultAsync(m => m.ID == id);
+            var movie = await _context.GetMovie(id);
+
             if (movie == null)
             {
                 return NotFound();
@@ -167,15 +176,17 @@ namespace FirstNetCoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _context.Movie.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Movie.Remove(movie);
-            await _context.SaveChangesAsync();
+            //var movie = await _context.Movie.SingleOrDefaultAsync(m => m.ID == id);
+            //_context.Movie.Remove(movie);
+            //await _context.SaveChangesAsync();
+            await _context.RemoveMovie(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool MovieExists(int id)
         {
-            return _context.Movie.Any(e => e.ID == id);
+            return _context.MovieExists(id);
+            //return _context.Movie.Any(e => e.ID == id);
         }
     }
 }

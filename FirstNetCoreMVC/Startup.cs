@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using FirstNetCoreMVC.Models;
 using BusinessEntities.Models;
+using BusinessLayer.Interfaces;
+using BusinessLayer.Services;
 
 namespace FirstNetCoreMVC
 {
@@ -25,9 +27,10 @@ namespace FirstNetCoreMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
             services.AddDbContext<MovieContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MovieContext")));
+
+            services.AddScoped<IMovieService, MovieService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
