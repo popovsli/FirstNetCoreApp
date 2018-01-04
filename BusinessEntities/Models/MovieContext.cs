@@ -18,11 +18,16 @@ namespace BusinessEntities.Models
         public DbSet<Movie> Movie { get; set; }
         public DbSet<Schedule> Schedule { get; set; }
 
+        public virtual void Commit()
+        {
+            base.SaveChanges();
+        }
+
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    modelBuilder.Entity<Movie>().ToTable(typeof(Movie).Name);
         //    modelBuilder.Entity<Schedule>().ToTable(typeof(Schedule).Name);
-            
+
         //    base.OnModelCreating(modelBuilder);
         //}
     }

@@ -1,4 +1,5 @@
-﻿using BusinessEntities.Factory;
+﻿using AutoMapper;
+using BusinessEntities.Factory;
 using BusinessEntities.Interfaces;
 using BusinessEntities.Models;
 using BusinessLayer.Interfaces;
@@ -49,6 +50,9 @@ namespace FirstNetCoreMVC.Controllers
             bool isValid = user.Validate();
             user.UserName = "popovsli";
             var validatationType = user.ValidationType;
+
+            //Using Automapper to map domain model with view model
+            //MovieViewModel movViewModel = Mapper.Map<Movie, MovieViewModel>(await movies.FirstOrDefaultAsync());
 
             MovieViewModel movieViewModel = new MovieViewModel();
             movieViewModel.movieGenre = searchGenre;

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using FirstNetCoreMVC.Models;
 using BusinessEntities.Models;
 using BusinessLayer.Interfaces;
 using BusinessLayer.Services;
