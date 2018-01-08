@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Autofac.Extensions.DependencyInjection;
 
 namespace FirstNetCoreMVC
 {
@@ -19,6 +20,7 @@ namespace FirstNetCoreMVC
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureServices(services => services.AddAutofac()) //call AddAutofac to hook Autofac into the startup pipeline.
                 .UseStartup<Startup>()
                 .Build();
     }
