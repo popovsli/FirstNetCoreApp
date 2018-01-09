@@ -8,11 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using BusinessEntities.Models;
-using BusinessLayer.Interfaces;
-using BusinessLayer.Services;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using FirstNetCoreMVC.Utils.Autofac.Modules;
+using BusinessLayer.Utils.Autofac.Modules;
+using System.Reflection;
 
 namespace FirstNetCoreMVC
 {
@@ -44,7 +43,11 @@ namespace FirstNetCoreMVC
         // "Without ConfigureContainer" mechanism shown later.
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule(new ServiceModule());
+            //Register single modul
+            //builder.RegisterModule(new ServiceModule());
+
+            //Register all modules in specific Assembly
+            builder.RegisterAssemblyModules(Assembly.Load(nameof(BusinessLayer)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
