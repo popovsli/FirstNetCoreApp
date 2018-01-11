@@ -17,10 +17,12 @@ namespace FirstNetCoreMVC.Controllers
     public class MoviesController : Controller
     {
         private readonly IMovieService _context;
+        private readonly IMapper _mapper;
 
-        public MoviesController(IMovieService context)
+        public MoviesController(IMovieService context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: Movies
@@ -52,8 +54,8 @@ namespace FirstNetCoreMVC.Controllers
             var validatationType = user.ValidationType;
 
             //Using Automapper to map domain model with view model
-            //MovieViewModel movViewModel = Mapper.Map<Movie, MovieViewModel>(await movies.FirstOrDefaultAsync());
-
+            //MovieViewModel movViewModel = _mapper.Map<Movie, MovieViewModel>(await movies.FirstOrDefaultAsync());
+            
             MovieViewModel movieViewModel = new MovieViewModel();
             movieViewModel.movieGenre = searchGenre;
             movieViewModel.searchString = searchString;

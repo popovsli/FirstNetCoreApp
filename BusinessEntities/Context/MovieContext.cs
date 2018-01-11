@@ -1,8 +1,9 @@
 ﻿
 
+using BusinessEntities.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BusinessEntities.Models
+namespace BusinessEntities.Context
 {
     public class MovieContext : DbContext
     {

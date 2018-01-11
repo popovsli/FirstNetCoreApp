@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BusinessEntities.Models;
+using BusinessEntities.Context;
 
 namespace FirstNetCoreApp.Pages.Movies
 {

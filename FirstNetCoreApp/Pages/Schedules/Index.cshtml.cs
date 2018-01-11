@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using FirstNetCoreApp.Utility;
 using BusinessEntities.Models;
+using BusinessEntities.Context;
 
 namespace FirstNetCoreApp.Pages.Schedules
 {

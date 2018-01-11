@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using BusinessEntities.Models;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using BusinessLayer.Utils.Autofac.Modules;
 using System.Reflection;
+using FirstNetCoreMVC.Utils;
+using BusinessEntities.Context;
 
 namespace FirstNetCoreMVC
 {
@@ -20,6 +20,7 @@ namespace FirstNetCoreMVC
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Bootstrapper.Run();
         }
 
         public IConfiguration Configuration { get; }
@@ -47,7 +48,9 @@ namespace FirstNetCoreMVC
             //builder.RegisterModule(new ServiceModule());
 
             //Register all modules in specific Assembly
+            builder.RegisterAssemblyModules(Assembly.GetExecutingAssembly());
             builder.RegisterAssemblyModules(Assembly.Load(nameof(BusinessLayer)));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

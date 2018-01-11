@@ -12,8 +12,6 @@ namespace FirstNetCoreMVC.Utils
     {
         public static void Run()
         {
-            SetAutofacContainer();
-
             //Configure AutoMapper
             AutoMapperConfiguration.Configure();
         }
