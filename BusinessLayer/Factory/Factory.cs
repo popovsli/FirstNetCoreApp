@@ -1,11 +1,12 @@
-﻿using Microsoft.Practices.Unity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Unity;
+using Unity.Injection;
 
-namespace BusinessEntities.Factory
+namespace BusinessLayer.Factory
 {
     public static class Factory<ReturnType, BaseType>
         where ReturnType : class
