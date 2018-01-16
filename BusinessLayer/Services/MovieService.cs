@@ -28,7 +28,16 @@ namespace BusinessLayer.Services
         public async Task Edit(Movie movie)
         {
             _context.Attach(movie).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public IQueryable<Movie> GetAllMovies()
