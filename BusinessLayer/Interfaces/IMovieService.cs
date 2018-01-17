@@ -22,5 +22,7 @@ namespace BusinessLayer.Interfaces
         IQueryable<string> GetGenres();
 
         IQueryable<Movie> GetAllMovies();
+
+        IQueryable<Movie> SearchMovieAsNoTracking(string searchString, string searchGenre, string sortOrder);
     }
 }

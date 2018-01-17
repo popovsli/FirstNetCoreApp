@@ -12,5 +12,6 @@ namespace ViewModels.ViewModels
         public SelectList genres;
         public string movieGenre { get; set; }
         public string searchString { get; set; }
+        public string OrderBy { get; set; }
     }
 }

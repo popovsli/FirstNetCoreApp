@@ -5,6 +5,7 @@ using BusinessLayer.Factory;
 using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -16,37 +17,21 @@ namespace FirstNetCoreMVC.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly IMovieService _context;
+        private readonly IMovieService _service;
         private readonly IMapper _mapper;
 
         public MoviesController(IMovieService context, IMapper mapper)
         {
-            _context = context;
+            _service = context;
             _mapper = mapper;
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index(string searchString, string searchGenre)
+        public async Task<IActionResult> Index(string searchString, string searchGenre, string orderBy)
         {
-            //var genreQuery = from m in _context.Movie
-            //                 orderby m.Genre
-            //                 select m.Genre;
+            var genreQuery = _service.GetGenres();
 
-            var genreQuery = _context.GetGenres();
-
-            //var movies = _context.Movie.AsQueryable();
-            var movies = _context.GetAllMovies();
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                movies = movies.Where(x => x.Title.Contains(searchString));
-            }
-
-            if (!string.IsNullOrEmpty(searchGenre))
-            {
-                movies = movies.Where(x => x.Genre.ToLower() == searchGenre.ToLower());
-            }
-
+            var movies = _service.SearchMovieAsNoTracking(searchString, searchGenre, orderBy);
 
             IUser user = Factory<IUser, SuperUser>.Create();
             bool isValid = user.Validate();
@@ -55,12 +40,13 @@ namespace FirstNetCoreMVC.Controllers
 
             //Using Automapper to map domain model with view model
             //MovieViewModel movViewModel = _mapper.Map<Movie, MovieViewModel>(await movies.FirstOrDefaultAsync());
-            
+
             MovieViewModel movieViewModel = new MovieViewModel();
             movieViewModel.movieGenre = searchGenre;
             movieViewModel.searchString = searchString;
             movieViewModel.movies = await movies.ToListAsync();
             movieViewModel.genres = new SelectList(await genreQuery.Distinct().ToListAsync());
+            movieViewModel.OrderBy = orderBy;
 
             return View(movieViewModel);
         }
@@ -73,8 +59,7 @@ namespace FirstNetCoreMVC.Controllers
                 return NotFound();
             }
 
-            //var movie = await _context.Movie.SingleOrDefaultAsync(m => m.ID == id);
-            var movie = await _context.GetMovie(id);
+            var movie = await _service.GetMovie(id);
 
             if (movie == null)
             {
@@ -90,7 +75,7 @@ namespace FirstNetCoreMVC.Controllers
             ViewBag.ActionType = nameof(Create);
             return View("CreateEdit");
         }
-               
+
         // POST: Movies/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -100,8 +85,7 @@ namespace FirstNetCoreMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _context.Add(movie);
-                //await _context.SaveChangesAsync();
+                await _service.Add(movie);
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
@@ -116,7 +100,7 @@ namespace FirstNetCoreMVC.Controllers
             }
 
             //Movie movie = await _context.Movie.SingleOrDefaultAsync(m => m.ID == id);
-            Movie movie = await _context.GetMovie(id);
+            Movie movie = await _service.GetMovie(id);
 
             if (movie == null)
             {
@@ -136,11 +120,9 @@ namespace FirstNetCoreMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                //_context.Attach(movie).State = EntityState.Modified;
                 try
                 {
-                    await _context.Edit(movie);
-                    //await _context.SaveChangesAsync();
+                    await _service.Edit(movie);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -159,20 +141,23 @@ namespace FirstNetCoreMVC.Controllers
         }
 
         // GET: Movies/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, string ex)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            //var movie = await _context.Movie
-            //    .SingleOrDefaultAsync(m => m.ID == id);
-            var movie = await _context.GetMovie(id);
+            var movie = await _service.GetMovie(id);
 
             if (movie == null)
             {
                 return NotFound();
+            }
+
+            if (!string.IsNullOrEmpty(ex))
+            {
+                ViewBag.Exception = ex;
             }
 
             return View(movie);
@@ -183,17 +168,25 @@ namespace FirstNetCoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //var movie = await _context.Movie.SingleOrDefaultAsync(m => m.ID == id);
-            //_context.Movie.Remove(movie);
-            //await _context.SaveChangesAsync();
-            await _context.RemoveMovie(id);
+            try
+            {
+                await _service.RemoveMovie(id);
+            }
+            catch (DbUpdateException ex)
+            {
+                RouteValueDictionary routeInfo = new RouteValueDictionary();
+                routeInfo.Add("id", id);
+                routeInfo.Add("exception", ex);
+
+                return RedirectToAction(nameof(Delete), routeInfo);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
         private bool MovieExists(int id)
         {
-            return _context.MovieExists(id);
-            //return _context.Movie.Any(e => e.ID == id);
+            return _service.MovieExists(id);
         }
     }
 }

@@ -27,22 +27,41 @@ namespace BusinessLayer.Services
 
         public async Task Edit(Movie movie)
         {
-            _context.Attach(movie).State = EntityState.Modified;
             try
             {
+                _context.Attach(movie).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (DbUpdateException ex)
             {
-
-                throw;
+                //Log the error
+                throw ex;
             }
-
         }
 
         public IQueryable<Movie> GetAllMovies()
         {
             return _context.Movie.AsQueryable();
+        }
+
+        public IQueryable<Movie> SearchMovieAsNoTracking(string searchString, string searchGenre, string sortOrder)
+        {
+            IQueryable<Movie> searchedMovies = GetAllMovies();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchedMovies.Where(x => x.Title.ToLower().Contains(searchString.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(searchGenre))
+            {
+                searchedMovies.Where(x => x.Genre.ToLower().Contains(searchGenre.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(sortOrder))
+            {
+                searchedMovies.OrderBy(x => x.GetType().GetProperty(sortOrder));
+            }
+
+            return _context.Movie.AsNoTracking();
         }
 
         public IQueryable<string> GetGenres()
@@ -65,9 +84,18 @@ namespace BusinessLayer.Services
 
         public async Task RemoveMovie(int id)
         {
-            var movie = await GetMovie(id);
-            _context.Movie.Remove(movie);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var movie = await GetMovie(id);
+                _context.Movie.Remove(movie);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                //Log exception
+                throw ex;
+            }
+
         }
     }
 }
