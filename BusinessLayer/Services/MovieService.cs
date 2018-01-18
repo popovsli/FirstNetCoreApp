@@ -41,7 +41,7 @@ namespace BusinessLayer.Services
 
         public IQueryable<Movie> GetAllMovies()
         {
-            return _context.Movie.AsQueryable();
+            return _context.Movie.AsNoTracking().AsQueryable();
         }
 
         public IQueryable<Movie> SearchMovieAsNoTracking(string searchString, string searchGenre, string sortOrder)
@@ -50,18 +50,18 @@ namespace BusinessLayer.Services
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                searchedMovies.Where(x => x.Title.ToLower().Contains(searchString.ToLower()));
+                searchedMovies= searchedMovies.Where(x => x.Title.ToLower().Contains(searchString.ToLower()));
             }
             if (!string.IsNullOrEmpty(searchGenre))
             {
-                searchedMovies.Where(x => x.Genre.ToLower().Contains(searchGenre.ToLower()));
+                searchedMovies = searchedMovies.Where(x => x.Genre.ToLower().Contains(searchGenre.ToLower()));
             }
             if (!string.IsNullOrEmpty(sortOrder))
             {
-                searchedMovies.OrderBy(x => x.GetType().GetProperty(sortOrder));
+                searchedMovies = searchedMovies.OrderBy(x => x.GetType().GetProperty(sortOrder));
             }
 
-            return _context.Movie.AsNoTracking();
+            return searchedMovies;
         }
 
         public IQueryable<string> GetGenres()
