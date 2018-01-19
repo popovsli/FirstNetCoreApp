@@ -5,20 +5,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FirstNetCoreMVC.Models;
+using BusinessLayer.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace FirstNetCoreMVC.Controllers
 {
     public class HomeController : Controller
     {
+        private IHomeService _service;
+
+        public HomeController(IHomeService service)
+        {
+            _service = service;
+        }
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
             ViewData["Message"] = "Your application description page.";
-
+            var movies = await _service.GetMoviesGroupByGenres().ToListAsync();
             return View();
         }
 

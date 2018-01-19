@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirstNetCoreApp", "FirstNetCoreApp\FirstNetCoreApp.csproj", "{1CB965D3-568A-44A7-AB3F-C9CBA3A7F311}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessEntities", "BusinessEntities\BusinessEntities.csproj", "{59A8C710-85DC-4E85-9510-5154109559D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirstNetCoreMVC", "FirstNetCoreMVC\FirstNetCoreMVC.csproj", "{517B796F-309F-49D4-82D7-903EA97093D2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModels", "ViewModels\ViewModels.csproj", "{6572AEC2-62E4-41F0-8F2A-3E67D8343E3D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{C0C695A2-33AF-4AE9-B45E-8C0D87C0E3BA}"
 EndProject
@@ -31,10 +29,6 @@ Global
 		{517B796F-309F-49D4-82D7-903EA97093D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{517B796F-309F-49D4-82D7-903EA97093D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{517B796F-309F-49D4-82D7-903EA97093D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6572AEC2-62E4-41F0-8F2A-3E67D8343E3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6572AEC2-62E4-41F0-8F2A-3E67D8343E3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6572AEC2-62E4-41F0-8F2A-3E67D8343E3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6572AEC2-62E4-41F0-8F2A-3E67D8343E3D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C0C695A2-33AF-4AE9-B45E-8C0D87C0E3BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C0C695A2-33AF-4AE9-B45E-8C0D87C0E3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0C695A2-33AF-4AE9-B45E-8C0D87C0E3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU

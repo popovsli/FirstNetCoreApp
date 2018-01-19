@@ -1,10 +1,11 @@
 ﻿using BusinessEntities.Models;
+using FirstNetCoreMVC.Utils.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ViewModels.ViewModels
+namespace FirstNetCoreMVC.ViewModels
 {
     public class MovieViewModel
     {

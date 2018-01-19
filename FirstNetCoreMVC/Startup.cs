@@ -29,9 +29,9 @@ namespace FirstNetCoreMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
+           
             services.AddDbContext<MovieContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("MovieContext")));
+                    options.UseSqlServer(Configuration.GetConnectionString("MovieContext"),x => x.MigrationsAssembly("BusinessEntities")));
 
             //services.AddScoped<IMovieService, MovieService>();
         }
