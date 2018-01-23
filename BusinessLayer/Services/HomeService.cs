@@ -24,7 +24,7 @@ namespace BusinessLayer.Services
                          select new MoviesByGenreDTO()
                          {
                              Genre = movieGrouped.Key,
-                             MoviesName = movieGrouped.AsQueryable()
+                             Movies = movieGrouped.AsQueryable()
                          };
             return result;
         }

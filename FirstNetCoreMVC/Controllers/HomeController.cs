@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc;
 using FirstNetCoreMVC.Models;
 using BusinessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using BusinessLayer.DTOs;
+using FirstNetCoreMVC.ViewModels;
+using AutoMapper;
 
 namespace FirstNetCoreMVC.Controllers
 {
     public class HomeController : Controller
     {
         private IHomeService _service;
+        private IMapper _mapper;
 
-        public HomeController(IHomeService service)
+        public HomeController(IHomeService service,IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -27,8 +32,8 @@ namespace FirstNetCoreMVC.Controllers
         public async Task<IActionResult> About()
         {
             ViewData["Message"] = "Your application description page.";
-            var movies = await _service.GetMoviesGroupByGenres().ToListAsync();
-            return View();
+            List<MoviesByGenreViewModel> movViewModel = _mapper.Map<List<MoviesByGenreDTO>, List<MoviesByGenreViewModel>>(await _service.GetMoviesGroupByGenres().ToListAsync());
+            return View(movViewModel);
         }
 
         public IActionResult Contact()

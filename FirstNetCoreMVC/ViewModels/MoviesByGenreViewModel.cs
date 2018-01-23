@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
-namespace BusinessLayer.DTOs
+namespace FirstNetCoreMVC.ViewModels
 {
-    public class MoviesByGenreDTO
+    public class MoviesByGenreViewModel
     {
         public string Genre { get; set; }
-        public IQueryable<Movie> Movies { get; set; }
+        public List<Movie> Movies { get; set; }
     }
 }
