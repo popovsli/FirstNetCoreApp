@@ -1,0 +1,1 @@
+﻿{"ContextClassName":"Movie1Context","DatabaseType":2,"IdReplace":true,"IncludeConnectionString":false,"OutputPath":"Models2","ProjectRootNamespace":"BusinessEntities","SelectedToBeGenerated":2,"Tables":["dbo.Movie","dbo.Schedule"],"UseDatabaseNames":false,"UseFluentApiOnly":false,"UseHandleBars":true,"UseInflector":true}
