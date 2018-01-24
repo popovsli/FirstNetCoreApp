@@ -41,16 +41,16 @@ namespace FirstNetCoreMVC.Controllers
             if (id.HasValue)
             {
                 ViewData["InstructorID"] = id.Value;
-                Instructor instructor = viewModel.Instructors.Where(
-                    i => i.ID == id.Value).Single();
+                Instructor instructor = viewModel.Instructors.FirstOrDefault(
+                    i => i.ID == id.Value);
                 viewModel.Courses = instructor.CourseAssignments.Select(s => s.Course).ToList();
             }
 
             if (courseID.HasValue)
             {
                 ViewData["CourseID"] = courseID.Value;
-                viewModel.Enrollments = viewModel.Courses.Where(
-                    x => x.CourseID == courseID).Single().Enrollments.ToList();
+                viewModel.Enrollments = viewModel.Courses.FirstOrDefault(
+                    x => x.CourseID == courseID).Enrollments.ToList();
             }
 
             return View(viewModel);

@@ -1,10 +1,10 @@
-﻿@model IEnumerable<BusinessEntities.Models.ContosoUniversity.Instructor>
+﻿@model FirstNetCoreMVC.ViewModels.InstructorViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Instructors";
 }
 
-<h2>Index</h2>
+<h2>Instructors</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,36 +12,55 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstMidName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HireDate)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Instructors[0].LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Instructors[0].FirstMidName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Instructors[0].HireDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Instructors[0].OfficeAssignment.Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].Title)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstMidName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HireDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Instructors)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstMidName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HireDate)
+                </td>
+                <td>
+                    @if (item.OfficeAssignment != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.OfficeAssignment.Location)
+                    }
+                </td>
+                <td>
+                    @foreach (var courseAssigments in item.CourseAssignments)
+                    {
+                        @courseAssigments.Course.CourseID @: @courseAssigments.Course.Title <br />
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
