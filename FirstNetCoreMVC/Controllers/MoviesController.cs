@@ -3,6 +3,7 @@ using BusinessEntities.Interfaces;
 using BusinessEntities.Models;
 using BusinessLayer.Factory;
 using BusinessLayer.Interfaces;
+using FirstNetCoreMVC.Utils.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
@@ -11,7 +12,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using ViewModels.ViewModels;
+using FirstNetCoreMVC.ViewModels;
 
 namespace FirstNetCoreMVC.Controllers
 {
@@ -27,28 +28,27 @@ namespace FirstNetCoreMVC.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index(string searchString, string searchGenre, string orderBy)
+        public async Task<IActionResult> Index(string orderBy, int? page, MovieViewModel model)
         {
+
             var genreQuery = _service.GetGenres();
 
-            var movies = _service.SearchMovieAsNoTracking(searchString, searchGenre, orderBy);
+            var movies = _service.SearchMovieAsNoTracking(model.searchString, model.searchGenre, orderBy);
 
-            IUser user = Factory<IUser, SuperUser>.Create();
-            bool isValid = user.Validate();
-            user.UserName = "popovsli";
-            var validatationType = user.ValidationType;
+            //IUser user = Factory<IUser, SuperUser>.Create();
+            //bool isValid = user.Validate();
+            //user.UserName = "popovsli";
+            //var validatationType = user.ValidationType;
 
             //Using Automapper to map domain model with view model
             //MovieViewModel movViewModel = _mapper.Map<Movie, MovieViewModel>(await movies.FirstOrDefaultAsync());
 
-            MovieViewModel movieViewModel = new MovieViewModel();
-            movieViewModel.movieGenre = searchGenre;
-            movieViewModel.searchString = searchString;
-            movieViewModel.movies = await movies.ToListAsync();
-            movieViewModel.genres = new SelectList(await genreQuery.Distinct().ToListAsync());
-            movieViewModel.OrderBy = orderBy;
+            //MovieViewModel movieViewModel = new MovieViewModel();
+            model.movies = await PaginatedList<Movie>.CreateAsync(movies, page ?? 1, 3);
+            model.genres = new SelectList(await genreQuery.Distinct().ToListAsync());
+            model.OrderBy = orderBy;
 
-            return View(movieViewModel);
+            return View(model);
         }
 
         // GET: Movies/Details/5

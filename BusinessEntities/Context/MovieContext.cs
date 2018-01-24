@@ -1,12 +1,18 @@
 ﻿
 
 using BusinessEntities.Models;
+using BusinessEntities.Models.ContosoUniversity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessEntities.Context
 {
     public class MovieContext : DbContext
     {
+        //Add migration- Add-Migration NewMigration -Project "Project name"
+        //Create the database and tables in it- Update-Database
+        //To delete the last migration that you added -Remove-Migration
+        //Reverting a migration- Update-Database LastGoodMigration
+
         public MovieContext(DbContextOptions<MovieContext> options)
                 : base(options)
         {
@@ -19,17 +25,37 @@ namespace BusinessEntities.Context
         public DbSet<Movie> Movie { get; set; }
         public DbSet<Schedule> Schedule { get; set; }
 
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Instructor> Instructors { get; set; }
+        public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
+        public DbSet<CourseAssignment> CourseAssignments { get; set; }
+
+
         public virtual void Commit()
         {
             base.SaveChanges();
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Movie>().ToTable(typeof(Movie).Name);
-        //    modelBuilder.Entity<Schedule>().ToTable(typeof(Schedule).Name);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Movie>().ToTable(nameof(Movie));
+            modelBuilder.Entity<Schedule>().ToTable(nameof(Schedule));
 
-        //    base.OnModelCreating(modelBuilder);
-        //}
+            modelBuilder.Entity<Course>().ToTable("Course");
+            modelBuilder.Entity<Enrollment>().ToTable("Enrollment");
+            modelBuilder.Entity<Student>().ToTable("Student");
+            modelBuilder.Entity<Department>().ToTable("Department");
+            modelBuilder.Entity<Instructor>().ToTable("Instructor");
+            modelBuilder.Entity<OfficeAssignment>().ToTable("OfficeAssignment");
+            modelBuilder.Entity<CourseAssignment>().ToTable("CourseAssignment");
+
+            modelBuilder.Entity<CourseAssignment>()
+                .HasKey(c => new { c.CourseID, c.InstructorID });
+
+            //base.OnModelCreating(modelBuilder);
+        }
     }
 }

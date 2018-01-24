@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ViewModels.ViewModels;
+using FirstNetCoreMVC.ViewModels;
+using BusinessLayer.DTOs;
 
 namespace FirstNetCoreMVC.Utils.Automapper
 {
@@ -18,6 +19,7 @@ namespace FirstNetCoreMVC.Utils.Automapper
         public ViewModelToDomainMappingProfile()
         {
             CreateMap<MovieViewModel,Movie>().ForMember(g => g.ID, map => map.MapFrom(vm => vm.genres));
+            CreateMap<MoviesByGenreViewModel, MoviesByGenreDTO>();
         }
     }
 }

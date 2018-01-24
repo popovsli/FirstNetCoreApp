@@ -8,9 +8,9 @@ namespace ViewModels.ViewModels
 {
     public class MovieViewModel
     {
-        public List<Movie> movies;
+        public PaginatedList<Movie> movies;
         public SelectList genres;
-        public string movieGenre { get; set; }
+        public string searchGenre { get; set; }
         public string searchString { get; set; }
         public string OrderBy { get; set; }
     }

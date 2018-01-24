@@ -1,6 +1,8 @@
 ﻿
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace BusinessEntities.Models
 {
@@ -12,7 +14,7 @@ namespace BusinessEntities.Models
         [Required]
         public string Title { get; set; }
 
-
+        //[Column("Date")]
         //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Date),Display(Name = "Release Date")]
         public DateTime ReleaseDate { get; set; }

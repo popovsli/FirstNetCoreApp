@@ -31,7 +31,7 @@ namespace FirstNetCoreMVC
             services.AddMvc();
 
             services.AddDbContext<MovieContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("MovieContext")));
+                    options.UseSqlServer(Configuration.GetConnectionString("MovieContext"), x => x.MigrationsAssembly("BusinessEntities")));
 
             //services.AddScoped<IMovieService, MovieService>();
         }
@@ -49,8 +49,6 @@ namespace FirstNetCoreMVC
 
             //Register all modules in specific Assembly
             builder.RegisterAssemblyModules(Assembly.GetExecutingAssembly());
-            builder.RegisterAssemblyModules(Assembly.Load(nameof(BusinessLayer)));
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
