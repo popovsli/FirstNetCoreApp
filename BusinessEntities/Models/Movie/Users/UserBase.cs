@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BusinessEntities.Models
+namespace BusinessEntities.Users.Models
 {
     public abstract class UserBase : IUser
     {

@@ -4,7 +4,7 @@ using System.Text;
 using BusinessEntities.Interfaces;
 using BusinessEntities.Validation;
 
-namespace BusinessEntities.Models
+namespace BusinessEntities.Users.Models
 {
     public class User : UserBase
     {

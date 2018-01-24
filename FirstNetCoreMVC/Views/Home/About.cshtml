@@ -6,28 +6,31 @@
 <h3>@ViewData["Message"]</h3>
 
 <table class="table">
-    <tr>
-        @for (var i = 0; i < Model.Count(); i++)
-        {
-            <th>
-                @Html.DisplayFor(x => Model[i].Genre)
-            </th>
-        }
-    </tr>
-
-    @for (var i = 0; i < Model.Max(t => t.Movies.Count); i++)
-    {
+    <thead>
         <tr>
-            @for (var x = 0; x < Model.Count(); x++)
+            @for (var i = 0; i < Model.Count(); i++)
             {
-                if (Model[x].Movies.Count > i)
-                {
-                    <td>
-                        @Model[x].Movies[i].Title
-                    </td>
-                }
+                <th>
+                    @Html.DisplayFor(x => Model[i].Genre)
+                </th>
             }
         </tr>
-    }
-
+    </thead>
+    <tbody>
+    
+        @for (var i = 0; i < (Model.Count > 0 ? Model.Max(t => t.Movies.Count) : 0); i++)
+        {
+            <tr>
+                @for (var x = 0; x < Model.Count(); x++)
+                {
+                    if (Model[x].Movies.Count > i)
+                    {
+                        <td>
+                            @Model[x].Movies[i].Title
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
 </table>
