@@ -11,6 +11,7 @@ namespace BusinessEntities.Models.ContosoUniversity
         public int DepartmentID { get; set; }
 
         [StringLength(50, MinimumLength = 3)]
+        [Display(Name = "Department Name")]
         public string Name { get; set; }
 
         [DataType(DataType.Currency)]
