@@ -104,11 +104,18 @@ namespace FirstNetCoreMVC.Controllers
                 return NotFound();
             }
 
-            var instructor = await _context.Instructors.SingleOrDefaultAsync(m => m.ID == id);
+            var instructor = await _context.Instructors
+                .Include(x => x.OfficeAssignment)
+                .Include(x => x.CourseAssignments)
+                    .ThenInclude(x => x.Course)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(m => m.ID == id);
+
             if (instructor == null)
             {
                 return NotFound();
             }
+
             return View(instructor);
         }
 
@@ -117,7 +124,7 @@ namespace FirstNetCoreMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,LastName,FirstMidName,HireDate")] Instructor instructor)
+        public async Task<IActionResult> Edit(int id, Instructor instructor)
         {
             if (id != instructor.ID)
             {
@@ -126,9 +133,14 @@ namespace FirstNetCoreMVC.Controllers
 
             if (ModelState.IsValid)
             {
+                if (String.IsNullOrWhiteSpace(instructor.OfficeAssignment?.Location))
+                {
+                    instructor.OfficeAssignment = null;
+                }
                 try
                 {
-                    _context.Update(instructor);
+                    _context.Attach(instructor).State = EntityState.Modified;
+                    _context.Attach(instructor.OfficeAssignment).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -141,6 +153,13 @@ namespace FirstNetCoreMVC.Controllers
                     {
                         throw;
                     }
+                }
+                catch (DbUpdateException ex /* ex */)
+                {
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
                 }
                 return RedirectToAction(nameof(Index));
             }

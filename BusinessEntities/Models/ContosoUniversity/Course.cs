@@ -9,7 +9,7 @@ namespace BusinessEntities.Models.ContosoUniversity
     public class Course
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Display(Name = "Number")]
+        [Display(Name = "Course ID")]
         public int CourseID { get; set; }
 
         [StringLength(50, MinimumLength = 3)]
