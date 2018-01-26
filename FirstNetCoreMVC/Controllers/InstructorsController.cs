@@ -115,8 +115,25 @@ namespace FirstNetCoreMVC.Controllers
             {
                 return NotFound();
             }
-
+            PopulateAssignedCourseData(instructor);
             return View(instructor);
+        }
+
+        private void PopulateAssignedCourseData(Instructor instructor)
+        {
+            var allCourses = _context.Courses;
+            var instructorCourses = new HashSet<int>(instructor.CourseAssignments.Select(x => x.CourseID));
+            var viewModel = new List<AssignedCourseViewModel>();
+            foreach (var course in allCourses)
+            {
+                viewModel.Add(new AssignedCourseViewModel()
+                {
+                    CourseID = course.CourseID,
+                    Title = course.Title,
+                    Assigned = instructorCourses.Contains(course.CourseID)
+                });
+            }
+            ViewData["Courses"] = viewModel;
         }
 
         // POST: Instructors/Edit/5
@@ -124,7 +141,7 @@ namespace FirstNetCoreMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Instructor instructor)
+        public async Task<IActionResult> Edit(int id, Instructor instructor, string[] selectedCourses)
         {
             if (id != instructor.ID)
             {
@@ -137,6 +154,9 @@ namespace FirstNetCoreMVC.Controllers
                 {
                     instructor.OfficeAssignment = null;
                 }
+
+                UpdateInstructorCourses(selectedCourses, instructor);
+
                 try
                 {
                     _context.Attach(instructor).State = EntityState.Modified;
@@ -163,7 +183,38 @@ namespace FirstNetCoreMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            UpdateInstructorCourses(selectedCourses, instructor);
+            PopulateAssignedCourseData(instructor);
             return View(instructor);
+        }
+
+        private void UpdateInstructorCourses(string[] selectedCourses, Instructor instructor)
+        {
+            if (selectedCourses == null)
+            {
+                instructor.CourseAssignments = new List<CourseAssignment>();
+                return;
+            }
+            var selectedCoursesHS = new HashSet<string>(selectedCourses);
+            var instructorCourses = new HashSet<int>(instructor.CourseAssignments.Select(x => x.CourseID));
+            foreach (var course in _context.Courses)
+            {
+                if (selectedCoursesHS.Contains(course.CourseID.ToString()))
+                {
+                    if (!instructorCourses.Contains(course.CourseID))
+                    {
+                        instructor.CourseAssignments.Add(new CourseAssignment { InstructorID = instructor.ID, CourseID = course.CourseID });
+                    }
+                }
+                else
+                {
+                    if (instructorCourses.Contains(course.CourseID))
+                    {
+                        CourseAssignment courseToRemove = instructor.CourseAssignments.SingleOrDefault(i => i.CourseID == course.CourseID);
+                        _context.Remove(courseToRemove);
+                    }
+                }
+            }
         }
 
         // GET: Instructors/Delete/5
