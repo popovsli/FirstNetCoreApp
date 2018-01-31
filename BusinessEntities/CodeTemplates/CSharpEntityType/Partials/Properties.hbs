@@ -2,7 +2,18 @@
 {{#each property-annotations}}
 {{spaces 8}}{{{property-annotation}}}
 {{/each}}
-{{spaces 8}}public {{property-type}} {{property-name}} { get; set; }
+{{spaces 8}}public {{property-type}} {{property-name}}
+{{spaces 7}} {
+{{spaces 12}}get { return _{{property-name}}; }
+{{spaces 12}}set
+{{spaces 11}} {
+{{spaces 16}}if (Equals(value, _{{property-name}})) return;
+				_{{property-name}} = value;
+				NotifyPropertyChanged();
+{{spaces 11}} }
+{{spaces 7}} }
+
+{{spaces 8}}private {{property-type}} _{{property-name}};
 {{/each}}
 {{#if nav-properties}}
 
@@ -11,9 +22,10 @@
 {{spaces 8}}{{{nav-property-annotation}}}
 {{/each}}
 {{#if nav-property-collection}}
-{{spaces 8}}public ICollection<{{nav-property-type}}> {{nav-property-name}} { get; set; }
-{{else}}
-{{spaces 8}}public {{nav-property-type}} {{nav-property-name}} { get; set; }
-{{/if}}
-{{/each}}
-{{/if}}
+{{spaces 8}}public ICollection<{{nav-property-type}}>
+    {{nav-property-name}} { get; set; }
+    {{else}}
+    {{spaces 8}}public {{nav-property-type}} {{nav-property-name}} { get; set; }
+    {{/if}}
+    {{/each}}
+    {{/if}}

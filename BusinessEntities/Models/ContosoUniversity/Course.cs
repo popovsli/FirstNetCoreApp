@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BusinessEntities.Models.ContosoUniversity
 {
-    public class Course
+    public class Course : BaseModel
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Display(Name = "Course ID")]

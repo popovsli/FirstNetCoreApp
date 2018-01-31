@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BusinessEntities.Models.ContosoUniversity
 {
-    public class Department
+    public class Department : BaseModel
     {
         public int DepartmentID { get; set; }
 

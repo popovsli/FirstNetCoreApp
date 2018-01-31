@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessEntities.Context;
 using BusinessEntities.Models.ContosoUniversity;
 using FirstNetCoreMVC.ViewModels;
+using TrackableEntities.EF.Core;
 
 namespace FirstNetCoreMVC.Controllers
 {
@@ -163,6 +164,14 @@ namespace FirstNetCoreMVC.Controllers
                 return NotFound();
             }
 
+            //var instructorToUpdate = await _context.Instructors
+            //    .Include(i => i.OfficeAssignment)
+            //    .Include(i => i.CourseAssignments)
+            //        .ThenInclude(i => i.Course).AsNoTracking()
+            //    .SingleOrDefaultAsync(m => m.ID == id);
+
+            //if (await TryUpdateModelAsync(instructorToUpdate))
+            //{
             if (ModelState.IsValid)
             {
                 if (String.IsNullOrWhiteSpace(instructor.OfficeAssignment?.Location))
@@ -170,24 +179,15 @@ namespace FirstNetCoreMVC.Controllers
                     instructor.OfficeAssignment = null;
                 }
 
+                _context.Attach(instructor).Collection(x => x.CourseAssignments).Load();
+                _context.Entry(instructor).State = EntityState.Detached;
+
                 UpdateInstructorCourses(selectedCourses, instructor);
 
                 try
                 {
-                    _context.Attach(instructor).State = EntityState.Modified;
-                    _context.Attach(instructor.OfficeAssignment).State = EntityState.Modified;
+                    _context.ApplyChanges(instructor);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!InstructorExists(instructor.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
                 }
                 catch (DbUpdateException ex /* ex */)
                 {
@@ -197,7 +197,11 @@ namespace FirstNetCoreMVC.Controllers
                         "see your system administrator.");
                 }
                 return RedirectToAction(nameof(Index));
+                //}
             }
+
+            await _context.LoadRelatedEntitiesAsync(instructor);
+
             UpdateInstructorCourses(selectedCourses, instructor);
             PopulateAssignedCourseData(instructor);
             return View(instructor);

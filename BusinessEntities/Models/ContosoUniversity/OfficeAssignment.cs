@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BusinessEntities.Models.ContosoUniversity
 {
-    public class OfficeAssignment
+    public class OfficeAssignment : BaseModel
     {
         [Key]
         public int InstructorID { get; set; }

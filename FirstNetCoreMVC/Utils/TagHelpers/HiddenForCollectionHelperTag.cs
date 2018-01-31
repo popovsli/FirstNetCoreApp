@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,8 +10,31 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirstNetCoreMVC.Utils.CustomHelperTags
+namespace FirstNetCoreMVC.Utils.TagHelpers
 {
+    public class HiddenForCollectionTagHelper<T> : TagHelper
+        where T : ICollection
+    {
+
+        public List<T> HiddenCollection { get; set; }
+
+        public override void Process(TagHelperContext context, TagHelperOutput output)
+        {
+            output.TagName = "input";
+
+            var result = new StringBuilder();
+            if (HiddenCollection != null && HiddenCollection.Count > 0)
+            {
+                Parallel.ForEach(HiddenCollection, (currentItem) =>
+                {
+                    
+                  //  result.AppendLine(currentItem.);
+                });
+            }
+            // output.Attributes.SetAttribute("href", "mailto:" + address);
+        }
+    }
+
     public static class HiddenForCollectionHelperTag
     {
         public static HtmlString HiddenForCollection<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression) where TProperty : ICollection
@@ -35,7 +59,7 @@ namespace FirstNetCoreMVC.Utils.CustomHelperTags
                 }
             }
             return new HtmlString(result.ToString());
-           // return new MvcHtmlString(result.ToString());
+            // return new MvcHtmlString(result.ToString());
         }
     }
 }
