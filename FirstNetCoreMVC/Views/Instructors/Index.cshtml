@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Instructors[0].LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Instructors[0].FirstMidName)
+                @Html.DisplayNameFor(model => model.Instructors[0].FirstName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Instructors[0].HireDate)
@@ -34,7 +34,7 @@
         @foreach (var item in Model.Instructors)
         {
             string selectedRow = "";
-            if (item.ID == (int?)ViewData["InstructorID"])
+            if (item.Id == (int?)ViewData["InstructorID"])
             {
                 selectedRow = "success";
             }
@@ -43,7 +43,7 @@
                     @Html.DisplayFor(modelItem => item.LastName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FirstMidName)
+                    @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.HireDate)
@@ -57,14 +57,14 @@
                 <td>
                     @foreach (var courseAssigments in item.CourseAssignments)
                     {
-                        @courseAssigments.Course.CourseID @: @courseAssigments.Course.Title <br />
+                        @courseAssigments.Course.CourseId @: @courseAssigments.Course.Title <br />
                     }
                 </td>
                 <td>
-                    <a asp-action="Index" asp-route-id="@item.ID">Select</a> |
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    <a asp-action="Index" asp-route-id="@item.Id">Select</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }
@@ -78,7 +78,7 @@
         <thead>
             <tr>
                 <th></th>
-                <th>@Html.DisplayNameFor(x => x.Courses[0].CourseID)</th>
+                <th>@Html.DisplayNameFor(x => x.Courses[0].CourseId)</th>
                 <th>@Html.DisplayNameFor(x => x.Courses[0].Title)</th>
                 <th>@Html.DisplayNameFor(x => x.Courses[0].Department.Name)</th>
             </tr>
@@ -87,16 +87,16 @@
             @foreach (var course in Model.Courses)
             {
                 string selectedRow = "";
-                if (course.CourseID == (int?)ViewData["CourseID"])
+                if (course.CourseId == (int?)ViewData["CourseID"])
                 {
                     selectedRow = "success";
                 }
                 <tr class="@selectedRow">
                     <td>
-                        @Html.ActionLink("Select", "Index", new { courseID = course.CourseID })
+                        @Html.ActionLink("Select", "Index", new { courseID = course.CourseId })
                     </td>
                     <td>
-                        @Html.DisplayFor(x => course.CourseID)
+                        @Html.DisplayFor(x => course.CourseId)
                     </td>
                     <td>
                         @Html.DisplayFor(x => course.Title)
@@ -119,7 +119,7 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(x => x.Enrollments[0].Student.FullName)
+                    @Html.DisplayNameFor(x => x.Enrollments[0].Student.FirstName)
                 </th>
                 <th>
                     @Html.DisplayNameFor(x => x.Enrollments[0].Grade)
@@ -131,7 +131,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(x => enrollment.Student.FullName)
+                        @Html.DisplayFor(x => enrollment.Student.FirstName)
                     </td>
                     <td>
                         @Html.DisplayFor(x => enrollment.Grade)

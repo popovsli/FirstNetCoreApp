@@ -4,19 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using BusinessEntities.Context;
-using BusinessEntities.Models.ContosoUniversity;
 using FirstNetCoreMVC.ViewModels;
-using TrackableEntities.EF.Core;
+using BusinessEntities.GeneratedModels;
+using TrackableEntities.Client;
+using Microsoft.EntityFrameworkCore;
 
 namespace FirstNetCoreMVC.Controllers
 {
     public class InstructorsController : Controller
     {
-        private readonly MovieContext _context;
+        private readonly Movie2Context _context;
 
-        public InstructorsController(MovieContext context)
+        public InstructorsController(Movie2Context context)
         {
             _context = context;
         }
@@ -43,7 +43,7 @@ namespace FirstNetCoreMVC.Controllers
             {
                 ViewData["InstructorID"] = id.Value;
                 Instructor instructor = viewModel.Instructors.FirstOrDefault(
-                    i => i.ID == id.Value);
+                    i => i.Id == id.Value);
                 viewModel.Courses = instructor.CourseAssignments.Select(s => s.Course).ToList();
             }
 
@@ -51,7 +51,7 @@ namespace FirstNetCoreMVC.Controllers
             {
                 ViewData["CourseID"] = courseID.Value;
                 viewModel.Enrollments = viewModel.Courses.FirstOrDefault(
-                    x => x.CourseID == courseID).Enrollments.ToList();
+                    x => x.CourseId == courseID).Enrollments.ToList();
             }
 
             return View(viewModel);
@@ -66,7 +66,7 @@ namespace FirstNetCoreMVC.Controllers
             }
 
             var instructor = await _context.Instructors
-                .SingleOrDefaultAsync(m => m.ID == id);
+                .SingleOrDefaultAsync(m => m.Id == id);
             if (instructor == null)
             {
                 return NotFound();
@@ -79,7 +79,7 @@ namespace FirstNetCoreMVC.Controllers
         public IActionResult Create()
         {
             var instructor = new Instructor();
-            instructor.CourseAssignments = new List<CourseAssignment>();
+            //instructor.CourseAssignments = new List<CourseAssignment>();
             PopulateAssignedCourseData(instructor);
             return View();
         }
@@ -93,10 +93,10 @@ namespace FirstNetCoreMVC.Controllers
         {
             if (selectedCourses != null)
             {
-                instructor.CourseAssignments = new List<CourseAssignment>();
+                //instructor.CourseAssignments = new List<CourseAssignment>();
                 foreach (var course in selectedCourses)
                 {
-                    var courseToAdd = new CourseAssignment { InstructorID = instructor.ID, CourseID = int.Parse(course) };
+                    var courseToAdd = new CourseAssignment { InstructorId = instructor.Id, CourseId = int.Parse(course) };
                     instructor.CourseAssignments.Add(courseToAdd);
                 }
             }
@@ -125,7 +125,7 @@ namespace FirstNetCoreMVC.Controllers
                 .Include(x => x.CourseAssignments)
                     .ThenInclude(x => x.Course)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(m => m.ID == id);
+                .SingleOrDefaultAsync(m => m.Id == id);
 
             if (instructor == null)
             {
@@ -138,15 +138,15 @@ namespace FirstNetCoreMVC.Controllers
         private void PopulateAssignedCourseData(Instructor instructor)
         {
             var allCourses = _context.Courses;
-            var instructorCourses = new HashSet<int>(instructor.CourseAssignments.Select(x => x.CourseID));
+            var instructorCourses = new HashSet<int>(instructor.CourseAssignments.Select(x => x.CourseId));
             var viewModel = new List<AssignedCourseViewModel>();
             foreach (var course in allCourses)
             {
                 viewModel.Add(new AssignedCourseViewModel()
                 {
-                    CourseID = course.CourseID,
+                    CourseID = course.CourseId,
                     Title = course.Title,
-                    Assigned = instructorCourses.Contains(course.CourseID)
+                    Assigned = instructorCourses.Contains(course.CourseId)
                 });
             }
             ViewData["Courses"] = viewModel;
@@ -159,11 +159,11 @@ namespace FirstNetCoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Instructor instructor, string[] selectedCourses)
         {
-            if (id != instructor.ID)
+            if (id != instructor.Id)
             {
                 return NotFound();
             }
-
+            instructor.FirstName = "new";
             //var instructorToUpdate = await _context.Instructors
             //    .Include(i => i.OfficeAssignment)
             //    .Include(i => i.CourseAssignments)
@@ -179,14 +179,14 @@ namespace FirstNetCoreMVC.Controllers
                     instructor.OfficeAssignment = null;
                 }
 
-                _context.Attach(instructor).Collection(x => x.CourseAssignments).Load();
-                _context.Entry(instructor).State = EntityState.Detached;
+                //_context.Attach(instructor).Collection(x => x.CourseAssignments).Load();
+                //_context.Entry(instructor).State = EntityState.Detached;
 
                 UpdateInstructorCourses(selectedCourses, instructor);
 
                 try
                 {
-                    _context.ApplyChanges(instructor);
+                    //_context.ApplyChanges(instructor);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateException ex /* ex */)
@@ -200,7 +200,7 @@ namespace FirstNetCoreMVC.Controllers
                 //}
             }
 
-            await _context.LoadRelatedEntitiesAsync(instructor);
+          //  await _context.LoadRelatedEntitiesAsync(instructor);
 
             UpdateInstructorCourses(selectedCourses, instructor);
             PopulateAssignedCourseData(instructor);
@@ -211,25 +211,25 @@ namespace FirstNetCoreMVC.Controllers
         {
             if (selectedCourses == null)
             {
-                instructor.CourseAssignments = new List<CourseAssignment>();
+                //instructor.CourseAssignments = new List<CourseAssignment>();
                 return;
             }
             var selectedCoursesHS = new HashSet<string>(selectedCourses);
-            var instructorCourses = new HashSet<int>(instructor.CourseAssignments.Select(x => x.CourseID));
+            var instructorCourses = new HashSet<int>(instructor.CourseAssignments.Select(x => x.CourseId));
             foreach (var course in _context.Courses)
             {
-                if (selectedCoursesHS.Contains(course.CourseID.ToString()))
+                if (selectedCoursesHS.Contains(course.CourseId.ToString()))
                 {
-                    if (!instructorCourses.Contains(course.CourseID))
+                    if (!instructorCourses.Contains(course.CourseId))
                     {
-                        instructor.CourseAssignments.Add(new CourseAssignment { InstructorID = instructor.ID, CourseID = course.CourseID });
+                        instructor.CourseAssignments.Add(new CourseAssignment { InstructorId = instructor.Id, CourseId = course.CourseId });
                     }
                 }
                 else
                 {
-                    if (instructorCourses.Contains(course.CourseID))
+                    if (instructorCourses.Contains(course.CourseId))
                     {
-                        CourseAssignment courseToRemove = instructor.CourseAssignments.SingleOrDefault(i => i.CourseID == course.CourseID);
+                        CourseAssignment courseToRemove = instructor.CourseAssignments.SingleOrDefault(i => i.CourseId == course.CourseId);
                         _context.Remove(courseToRemove);
                     }
                 }
@@ -245,7 +245,7 @@ namespace FirstNetCoreMVC.Controllers
             }
 
             var instructor = await _context.Instructors
-                .SingleOrDefaultAsync(m => m.ID == id);
+                .SingleOrDefaultAsync(m => m.Id == id);
             if (instructor == null)
             {
                 return NotFound();
@@ -261,14 +261,14 @@ namespace FirstNetCoreMVC.Controllers
         {
             Instructor instructor = await _context.Instructors
                 .Include(i => i.CourseAssignments)
-                .SingleAsync(i => i.ID == id);
+                .SingleAsync(i => i.Id == id);
             _context.Instructors.Remove(instructor);
 
             var departments = await _context.Departments
-                .Where(d => d.InstructorID == id)
+                .Where(d => d.InstructorId == id)
                 .ToListAsync();
 
-            departments.ForEach(d => d.InstructorID = null);
+            departments.ForEach(d => d.InstructorId = null);
 
             _context.Instructors.Remove(instructor);
 
@@ -278,7 +278,7 @@ namespace FirstNetCoreMVC.Controllers
 
         private bool InstructorExists(int id)
         {
-            return _context.Instructors.Any(e => e.ID == id);
+            return _context.Instructors.Any(e => e.Id == id);
         }
     }
 }

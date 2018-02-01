@@ -6,6 +6,11 @@ namespace BusinessEntities.GeneratedModels
 {
     public partial class Student : EntityBase
     {
+        public Student()
+        {
+            Enrollments = new ChangeTrackingCollection<Enrollment>();
+        }
+
         public int Id
         {
             get { return _Id; }
@@ -16,8 +21,8 @@ namespace BusinessEntities.GeneratedModels
 				NotifyPropertyChanged();
             }
         }
-
         private int _Id;
+
         public DateTime EnrollmentDate
         {
             get { return _EnrollmentDate; }
@@ -28,8 +33,8 @@ namespace BusinessEntities.GeneratedModels
 				NotifyPropertyChanged();
             }
         }
-
         private DateTime _EnrollmentDate;
+
         public string FirstName
         {
             get { return _FirstName; }
@@ -40,8 +45,8 @@ namespace BusinessEntities.GeneratedModels
 				NotifyPropertyChanged();
             }
         }
-
         private string _FirstName;
+
         public string LastName
         {
             get { return _LastName; }
@@ -52,7 +57,19 @@ namespace BusinessEntities.GeneratedModels
 				NotifyPropertyChanged();
             }
         }
-
         private string _LastName;
+
+        public ChangeTrackingCollection<Enrollment> Enrollments
+        {
+            get { return _Enrollments; }
+            set
+            {
+                if (Equals(value, _Enrollments)) return;
+                _Enrollments = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private ChangeTrackingCollection<Enrollment> _Enrollments;
+
     }
 }

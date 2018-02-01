@@ -12,6 +12,7 @@ using Autofac.Extensions.DependencyInjection;
 using System.Reflection;
 using FirstNetCoreMVC.Utils;
 using BusinessEntities.Context;
+using BusinessEntities.GeneratedModels;
 
 namespace FirstNetCoreMVC
 {
@@ -30,7 +31,7 @@ namespace FirstNetCoreMVC
         {
             services.AddMvc();
 
-            services.AddDbContext<MovieContext>(options =>
+            services.AddDbContext<Movie2Context>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MovieContext"), x => x.MigrationsAssembly("BusinessEntities")));
 
             //services.AddScoped<IMovieService, MovieService>();
