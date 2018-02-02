@@ -53,7 +53,7 @@ namespace BusinessEntities.Context
             modelBuilder.Entity<CourseAssignment>().ToTable("CourseAssignment");
 
             modelBuilder.Entity<CourseAssignment>()
-                .HasKey(c => new { c.CourseID, c.InstructorID });
+                .HasKey(c => new { c.CourseId, c.InstructorId });
 
             //base.OnModelCreating(modelBuilder);
         }

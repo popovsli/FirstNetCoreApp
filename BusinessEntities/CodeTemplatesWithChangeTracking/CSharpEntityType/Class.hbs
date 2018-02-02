@@ -5,9 +5,9 @@ namespace {{namespace}}
 {{#if class-annotation}}
 {{{class-annotation}}}
 {{/if}}
-    public partial class {{class}} : ITrackable, IMergeable
+    public partial class {{class}} : EntityBase
     {
-        {{{> constructor}}}
-        {{> properties}}
+{{{> constructor}}}
+{{> properties}}
     }
 }

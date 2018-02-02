@@ -10,7 +10,7 @@ namespace BusinessEntities.Models.ContosoUniversity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Display(Name = "Course ID")]
-        public int CourseID { get; set; }
+        public int CourseId { get; set; }
 
         [StringLength(50, MinimumLength = 3)]
         public string Title { get; set; }
@@ -18,7 +18,7 @@ namespace BusinessEntities.Models.ContosoUniversity
         [Range(0, 5)]
         public int Credits { get; set; }
 
-        public int DepartmentID { get; set; }
+        public int DepartmentId { get; set; }
 
         public Department Department { get; set; }
         public ICollection<Enrollment> Enrollments { get; set; }

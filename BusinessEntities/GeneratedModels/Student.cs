@@ -1,75 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using TrackableEntities.Client;
+using TrackableEntities.Common.Core;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessEntities.GeneratedModels
 {
-    public partial class Student : EntityBase
+    public partial class Student : ITrackable, IMergeable
     {
         public Student()
         {
-            Enrollments = new ChangeTrackingCollection<Enrollment>();
+            Enrollments = new List<Enrollment>();
         }
 
-        public int Id
-        {
-            get { return _Id; }
-            set
-            {
-                if (Equals(value, _Id)) return;
-				_Id = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private int _Id;
+        public int Id { get; set; }
+        public DateTime EnrollmentDate { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
-        public DateTime EnrollmentDate
-        {
-            get { return _EnrollmentDate; }
-            set
-            {
-                if (Equals(value, _EnrollmentDate)) return;
-				_EnrollmentDate = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private DateTime _EnrollmentDate;
+        public ICollection<Enrollment> Enrollments { get; set; }
 
-        public string FirstName
-        {
-            get { return _FirstName; }
-            set
-            {
-                if (Equals(value, _FirstName)) return;
-				_FirstName = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private string _FirstName;
-
-        public string LastName
-        {
-            get { return _LastName; }
-            set
-            {
-                if (Equals(value, _LastName)) return;
-				_LastName = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private string _LastName;
-
-        public ChangeTrackingCollection<Enrollment> Enrollments
-        {
-            get { return _Enrollments; }
-            set
-            {
-                if (Equals(value, _Enrollments)) return;
-                _Enrollments = value;
-                NotifyPropertyChanged();
-            }
-        }
-        private ChangeTrackingCollection<Enrollment> _Enrollments;
-
+        [NotMapped]
+        public TrackingState TrackingState { get; set; }
+        [NotMapped]
+        public ICollection<string> ModifiedProperties { get; set; }
+        [NotMapped]
+        public Guid EntityIdentifier { get; set; }
     }
 }

@@ -9,7 +9,6 @@
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
-    <PackageReference Include="TrackableEntities.Client" Version="2.5.7" />
     <PackageReference Include="TrackableEntities.EF.Core" Version="1.0.0-beta" />
   </ItemGroup>
 
@@ -35,6 +34,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
 
 </Project>

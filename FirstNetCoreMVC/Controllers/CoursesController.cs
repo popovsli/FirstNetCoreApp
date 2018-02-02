@@ -36,7 +36,7 @@ namespace FirstNetCoreMVC.Controllers
 
             var course = await _context.Courses
                 .Include(c => c.Department).AsNoTracking()
-                .SingleOrDefaultAsync(m => m.CourseID == id);
+                .SingleOrDefaultAsync(m => m.CourseId == id);
             if (course == null)
             {
                 return NotFound();
@@ -65,7 +65,7 @@ namespace FirstNetCoreMVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            PopulateDepartmentsDropDownList(course.DepartmentID);
+            PopulateDepartmentsDropDownList(course.DepartmentId);
             return View(course);
         }
 
@@ -77,12 +77,12 @@ namespace FirstNetCoreMVC.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Courses.AsNoTracking().SingleOrDefaultAsync(m => m.CourseID == id);
+            var course = await _context.Courses.AsNoTracking().SingleOrDefaultAsync(m => m.CourseId == id);
             if (course == null)
             {
                 return NotFound();
             }
-            PopulateDepartmentsDropDownList(course.DepartmentID);
+            PopulateDepartmentsDropDownList(course.DepartmentId);
             return View(course);
         }
 
@@ -93,7 +93,7 @@ namespace FirstNetCoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CourseID,Title,Credits,DepartmentID")] Course course)
         {
-            if (id != course.CourseID)
+            if (id != course.CourseId)
             {
                 return NotFound();
             }
@@ -108,7 +108,7 @@ namespace FirstNetCoreMVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CourseExists(course.CourseID))
+                    if (!CourseExists(course.CourseId))
                     {
                         return NotFound();
                     }
@@ -126,7 +126,7 @@ namespace FirstNetCoreMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            PopulateDepartmentsDropDownList(course.DepartmentID);
+            PopulateDepartmentsDropDownList(course.DepartmentId);
             return View(course);
         }
 
@@ -140,7 +140,7 @@ namespace FirstNetCoreMVC.Controllers
 
             var course = await _context.Courses
                 .Include(c => c.Department).AsNoTracking()
-                .SingleOrDefaultAsync(m => m.CourseID == id);
+                .SingleOrDefaultAsync(m => m.CourseId == id);
             if (course == null)
             {
                 return NotFound();
@@ -162,7 +162,7 @@ namespace FirstNetCoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await _context.Courses.SingleOrDefaultAsync(m => m.CourseID == id);
+            var course = await _context.Courses.SingleOrDefaultAsync(m => m.CourseId == id);
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -170,7 +170,7 @@ namespace FirstNetCoreMVC.Controllers
 
         private bool CourseExists(int id)
         {
-            return _context.Courses.Any(e => e.CourseID == id);
+            return _context.Courses.Any(e => e.CourseId == id);
         }
     }
 }

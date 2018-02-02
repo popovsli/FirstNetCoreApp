@@ -1,94 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using TrackableEntities.Client;
+using TrackableEntities.Common.Core;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessEntities.GeneratedModels
 {
-    public partial class Schedule : EntityBase
+    public partial class Schedule : ITrackable, IMergeable
     {
-        public int Id
-        {
-            get { return _Id; }
-            set
-            {
-                if (Equals(value, _Id)) return;
-				_Id = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private int _Id;
+        public int Id { get; set; }
+        public string PrivateSchedule { get; set; }
+        public long PrivateScheduleSize { get; set; }
+        public string PublicSchedule { get; set; }
+        public long PublicScheduleSize { get; set; }
+        public string Title { get; set; }
+        public DateTime UploadDt { get; set; }
 
-        public string PrivateSchedule
-        {
-            get { return _PrivateSchedule; }
-            set
-            {
-                if (Equals(value, _PrivateSchedule)) return;
-				_PrivateSchedule = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private string _PrivateSchedule;
-
-        public long PrivateScheduleSize
-        {
-            get { return _PrivateScheduleSize; }
-            set
-            {
-                if (Equals(value, _PrivateScheduleSize)) return;
-				_PrivateScheduleSize = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private long _PrivateScheduleSize;
-
-        public string PublicSchedule
-        {
-            get { return _PublicSchedule; }
-            set
-            {
-                if (Equals(value, _PublicSchedule)) return;
-				_PublicSchedule = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private string _PublicSchedule;
-
-        public long PublicScheduleSize
-        {
-            get { return _PublicScheduleSize; }
-            set
-            {
-                if (Equals(value, _PublicScheduleSize)) return;
-				_PublicScheduleSize = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private long _PublicScheduleSize;
-
-        public string Title
-        {
-            get { return _Title; }
-            set
-            {
-                if (Equals(value, _Title)) return;
-				_Title = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private string _Title;
-
-        public DateTime UploadDt
-        {
-            get { return _UploadDt; }
-            set
-            {
-                if (Equals(value, _UploadDt)) return;
-				_UploadDt = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private DateTime _UploadDt;
-
+        [NotMapped]
+        public TrackingState TrackingState { get; set; }
+        [NotMapped]
+        public ICollection<string> ModifiedProperties { get; set; }
+        [NotMapped]
+        public Guid EntityIdentifier { get; set; }
     }
 }

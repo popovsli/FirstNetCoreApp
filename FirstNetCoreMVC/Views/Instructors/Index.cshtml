@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Instructors[0].LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Instructors[0].FirstName)
+                @Html.DisplayNameFor(model => model.Instructors[0].FirstMidName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Instructors[0].HireDate)
@@ -43,7 +43,7 @@
                     @Html.DisplayFor(modelItem => item.LastName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
+                    @Html.DisplayFor(modelItem => item.FirstMidName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.HireDate)
@@ -119,7 +119,7 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(x => x.Enrollments[0].Student.FirstName)
+                    @Html.DisplayNameFor(x => x.Enrollments[0].Student.FirstMidName)
                 </th>
                 <th>
                     @Html.DisplayNameFor(x => x.Enrollments[0].Grade)
@@ -131,7 +131,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(x => enrollment.Student.FirstName)
+                        @Html.DisplayFor(x => enrollment.Student.FirstMidName)
                     </td>
                     <td>
                         @Html.DisplayFor(x => enrollment.Grade)

@@ -8,7 +8,7 @@ namespace BusinessEntities.Models.ContosoUniversity
     public class OfficeAssignment : BaseModel
     {
         [Key]
-        public int InstructorID { get; set; }
+        public int InstructorId { get; set; }
         [StringLength(50)]
         [Display(Name = "Office Location")]
         public string Location { get; set; }

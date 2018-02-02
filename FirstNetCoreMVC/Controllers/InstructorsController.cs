@@ -4,19 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using BusinessEntities.Context;
 using FirstNetCoreMVC.ViewModels;
-using BusinessEntities.GeneratedModels;
-using TrackableEntities.Client;
 using Microsoft.EntityFrameworkCore;
+using TrackableEntities.Common.Core;
+using TrackableEntities.EF.Core;
+using BusinessEntities.Context;
+using BusinessEntities.Models.ContosoUniversity;
 
 namespace FirstNetCoreMVC.Controllers
 {
     public class InstructorsController : Controller
     {
-        private readonly Movie2Context _context;
+        private readonly MovieContext _context;
 
-        public InstructorsController(Movie2Context context)
+        public InstructorsController(MovieContext context)
         {
             _context = context;
         }
@@ -163,48 +164,44 @@ namespace FirstNetCoreMVC.Controllers
             {
                 return NotFound();
             }
-            instructor.FirstName = "new";
-            //var instructorToUpdate = await _context.Instructors
-            //    .Include(i => i.OfficeAssignment)
-            //    .Include(i => i.CourseAssignments)
-            //        .ThenInclude(i => i.Course).AsNoTracking()
-            //    .SingleOrDefaultAsync(m => m.ID == id);
 
-            //if (await TryUpdateModelAsync(instructorToUpdate))
-            //{
-            if (ModelState.IsValid)
+            var instructorToUpdate = await _context.Instructors
+                .Include(i => i.OfficeAssignment)
+                .Include(i => i.CourseAssignments)
+                    .ThenInclude(i => i.Course)
+                .SingleOrDefaultAsync(m => m.Id == id);
+
+            if (await TryUpdateModelAsync(instructorToUpdate))
             {
-                if (String.IsNullOrWhiteSpace(instructor.OfficeAssignment?.Location))
+                if (ModelState.IsValid)
                 {
-                    instructor.OfficeAssignment = null;
-                }
+                    if (String.IsNullOrWhiteSpace(instructorToUpdate.OfficeAssignment?.Location))
+                    {
+                        instructorToUpdate.OfficeAssignment = null;
+                    }
+                    UpdateInstructorCourses(selectedCourses, instructorToUpdate);
 
-                //_context.Attach(instructor).Collection(x => x.CourseAssignments).Load();
-                //_context.Entry(instructor).State = EntityState.Detached;
-
-                UpdateInstructorCourses(selectedCourses, instructor);
-
-                try
-                {
-                    //_context.ApplyChanges(instructor);
-                    await _context.SaveChangesAsync();
+                    try
+                    {
+                        //_context.ApplyChanges(instructor);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException ex /* ex */)
+                    {
+                        //Log the error (uncomment ex variable name and write a log.)
+                        ModelState.AddModelError("", "Unable to save changes. " +
+                            "Try again, and if the problem persists, " +
+                            "see your system administrator.");
+                    }
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateException ex /* ex */)
-                {
-                    //Log the error (uncomment ex variable name and write a log.)
-                    ModelState.AddModelError("", "Unable to save changes. " +
-                        "Try again, and if the problem persists, " +
-                        "see your system administrator.");
-                }
-                return RedirectToAction(nameof(Index));
-                //}
             }
 
-          //  await _context.LoadRelatedEntitiesAsync(instructor);
+            //await _context.LoadRelatedEntitiesAsync(instructorToUpdate);
 
-            UpdateInstructorCourses(selectedCourses, instructor);
-            PopulateAssignedCourseData(instructor);
-            return View(instructor);
+            UpdateInstructorCourses(selectedCourses, instructorToUpdate);
+            PopulateAssignedCourseData(instructorToUpdate);
+            return View(instructorToUpdate);
         }
 
         private void UpdateInstructorCourses(string[] selectedCourses, Instructor instructor)

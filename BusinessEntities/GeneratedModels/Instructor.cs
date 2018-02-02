@@ -1,103 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using TrackableEntities.Client;
+using TrackableEntities.Common.Core;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessEntities.GeneratedModels
 {
-    public partial class Instructor : EntityBase
+    public partial class Instructor : ITrackable, IMergeable
     {
         public Instructor()
         {
-            CourseAssignments = new ChangeTrackingCollection<CourseAssignment>();
-            Departments = new ChangeTrackingCollection<Department>();
+            CourseAssignments = new List<CourseAssignment>();
+            Departments = new List<Department>();
         }
 
-        public int Id
-        {
-            get { return _Id; }
-            set
-            {
-                if (Equals(value, _Id)) return;
-				_Id = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private int _Id;
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public DateTime HireDate { get; set; }
+        public string LastName { get; set; }
 
-        public string FirstName
-        {
-            get { return _FirstName; }
-            set
-            {
-                if (Equals(value, _FirstName)) return;
-				_FirstName = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private string _FirstName;
+        public OfficeAssignment OfficeAssignment { get; set; }
+        public ICollection<CourseAssignment> CourseAssignments { get; set; }
+        public ICollection<Department> Departments { get; set; }
 
-        public DateTime HireDate
-        {
-            get { return _HireDate; }
-            set
-            {
-                if (Equals(value, _HireDate)) return;
-				_HireDate = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private DateTime _HireDate;
-
-        public string LastName
-        {
-            get { return _LastName; }
-            set
-            {
-                if (Equals(value, _LastName)) return;
-				_LastName = value;
-				NotifyPropertyChanged();
-            }
-        }
-        private string _LastName;
-
-        public OfficeAssignment OfficeAssignment
-        {
-            get { return _OfficeAssignment; }
-            set
-            {
-                if (Equals(value, _OfficeAssignment)) return;
-                _OfficeAssignment = value;
-                OfficeAssignmentChangeTracker = _OfficeAssignment == null ? null
-				: new ChangeTrackingCollection<OfficeAssignment> { _OfficeAssignment };
-			    NotifyPropertyChanged();
-            }
-        }
-        private OfficeAssignment _OfficeAssignment;
-        private ChangeTrackingCollection<OfficeAssignment> OfficeAssignmentChangeTracker { get; set; }
-
-        public ChangeTrackingCollection<CourseAssignment> CourseAssignments
-        {
-            get { return _CourseAssignments; }
-            set
-            {
-                if (Equals(value, _CourseAssignments)) return;
-                _CourseAssignments = value;
-                NotifyPropertyChanged();
-            }
-        }
-        private ChangeTrackingCollection<CourseAssignment> _CourseAssignments;
-
-        public ChangeTrackingCollection<Department> Departments
-        {
-            get { return _Departments; }
-            set
-            {
-                if (Equals(value, _Departments)) return;
-                _Departments = value;
-                NotifyPropertyChanged();
-            }
-        }
-        private ChangeTrackingCollection<Department> _Departments;
-
+        [NotMapped]
+        public TrackingState TrackingState { get; set; }
+        [NotMapped]
+        public ICollection<string> ModifiedProperties { get; set; }
+        [NotMapped]
+        public Guid EntityIdentifier { get; set; }
     }
 }

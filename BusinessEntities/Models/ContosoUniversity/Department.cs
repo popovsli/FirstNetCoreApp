@@ -8,7 +8,7 @@ namespace BusinessEntities.Models.ContosoUniversity
 {
     public class Department : BaseModel
     {
-        public int DepartmentID { get; set; }
+        public int DepartmentId { get; set; }
 
         [StringLength(50, MinimumLength = 3)]
         [Display(Name = "Department Name")]
@@ -23,7 +23,7 @@ namespace BusinessEntities.Models.ContosoUniversity
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
 
-        public int? InstructorID { get; set; }
+        public int? InstructorId { get; set; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; }

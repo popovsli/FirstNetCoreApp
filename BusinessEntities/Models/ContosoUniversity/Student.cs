@@ -8,7 +8,7 @@ namespace BusinessEntities.Models.ContosoUniversity
 {
     public class Student : BaseModel
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         [Required]
         [StringLength(50)]
         [Display(Name = "Last Name")]

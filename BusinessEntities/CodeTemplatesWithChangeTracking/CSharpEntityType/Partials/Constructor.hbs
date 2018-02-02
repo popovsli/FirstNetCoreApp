@@ -2,7 +2,7 @@
 {{spaces 8}}public {{class}}()
 {{spaces 8}}{
 {{#each lines}}
-{{spaces 8}}    {{property-name}} = new List<{{property-type}}>();
+{{spaces 8}}    {{property-name}} = new ChangeTrackingCollection<{{property-type}}>();
 {{/each}}
 {{spaces 7}} }
 

@@ -2,53 +2,25 @@
 {{#each property-annotations}}
 {{spaces 8}}{{{property-annotation}}}
 {{/each}}
-{{spaces 8}}public {{property-type}} {{property-name}}
-{{spaces 7}} {
-{{spaces 12}}get { return _{{property-name}}; }
-{{spaces 12}}set
-{{spaces 11}} {
-{{spaces 16}}if (Equals(value, _{{property-name}})) return;
-				_{{property-name}} = value;
-				NotifyPropertyChanged();
-{{spaces 11}} }
-{{spaces 7}} }
-{{spaces 8}}private {{property-type}} _{{property-name}};
-
+{{spaces 8}}public {{property-type}} {{property-name}} { get; set; }
 {{/each}}
 {{#if nav-properties}}
+
 {{#each nav-properties}}
 {{#each nav-property-annotations}}
 {{spaces 8}}{{{nav-property-annotation}}}
 {{/each}}
 {{#if nav-property-collection}}
-{{spaces 8}}public ChangeTrackingCollection<{{nav-property-type}}> {{nav-property-name}}
-{{spaces 7}} {
-{{spaces 12}}get { return _{{nav-property-name}}; }
-{{spaces 12}}set
-{{spaces 11}} {
-{{spaces 16}}if (Equals(value, _{{nav-property-name}})) return;
-{{spaces 16}}_{{nav-property-name}} = value;
-{{spaces 16}}NotifyPropertyChanged();
-{{spaces 11}} }
-{{spaces 7}} }
-{{spaces 8}}private ChangeTrackingCollection<{{nav-property-type}}> _{{nav-property-name}};
-
+{{spaces 8}}public ICollection<{{nav-property-type}}> {{nav-property-name}} { get; set; }
 {{else}}
-{{spaces 8}}public {{nav-property-type}} {{nav-property-name}}
-{{spaces 7}} {
-{{spaces 12}}get { return _{{nav-property-name}}; }
-{{spaces 12}}set
-{{spaces 11}} {
-{{spaces 16}}if (Equals(value, _{{nav-property-name}})) return;
-{{spaces 16}}_{{nav-property-name}} = value;
-{{spaces 16}}{{nav-property-name}}ChangeTracker = _{{nav-property-name}} == null ? null
-				: new ChangeTrackingCollection<{{nav-property-type}}> { _{{nav-property-name}} };
-			    NotifyPropertyChanged();
-{{spaces 11}} }
-{{spaces 7}} }
-{{spaces 8}}private {{nav-property-type}} _{{nav-property-name}};
-{{spaces 8}}private ChangeTrackingCollection<{{nav-property-type}}> {{nav-property-name}}ChangeTracker { get; set; }
-
+{{spaces 8}}public {{nav-property-type}} {{nav-property-name}} { get; set; }
 {{/if}}
 {{/each}}
 {{/if}}
+
+{{spaces 8}}[NotMapped]
+{{spaces 8}}public TrackingState TrackingState { get; set; }
+{{spaces 8}}[NotMapped]
+{{spaces 8}}public ICollection<string> ModifiedProperties { get; set; }
+{{spaces 8}}[NotMapped]
+{{spaces 8}}public Guid EntityIdentifier { get; set; }
