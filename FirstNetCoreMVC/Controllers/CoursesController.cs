@@ -57,7 +57,7 @@ namespace FirstNetCoreMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CourseID,Title,Credits,DepartmentID")] Course course)
+        public async Task<IActionResult> Create([Bind("CourseID,Title,Credits,DepartmentId")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -154,7 +154,7 @@ namespace FirstNetCoreMVC.Controllers
             var departmentsQuery = from d in _context.Departments
                                    orderby d.Name
                                    select d;
-            ViewBag.DepartmentID = new SelectList(departmentsQuery.AsNoTracking(), "DepartmentID", "Name", selectedDepartment);
+            ViewBag.DepartmentID = new SelectList(departmentsQuery.AsNoTracking(), "DepartmentId", "Name", selectedDepartment);
         }
 
         // POST: Courses/Delete/5

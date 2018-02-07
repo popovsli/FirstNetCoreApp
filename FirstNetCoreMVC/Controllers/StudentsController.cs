@@ -21,22 +21,13 @@ namespace FirstNetCoreMVC.Controllers
         }
 
         // GET: Students
-        public async Task<IActionResult> Index( string sortOrder,string currentFilter,string searchString,int? page)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, int? page)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            ViewData["CurrentFilter"] = searchString;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? nameof(Student.LastName) + "_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == nameof(Student.EnrollmentDate) ? nameof(Student.EnrollmentDate) + "_desc" : nameof(Student.EnrollmentDate);
+            ViewData["searchString"] = searchString;
+                    
 
             var students = from s in _context.Students
                            select s;
@@ -45,24 +36,29 @@ namespace FirstNetCoreMVC.Controllers
                 students = students.Where(s => s.LastName.Contains(searchString)
                                        || s.FirstName.Contains(searchString));
             }
-            switch (sortOrder)
+            if (string.IsNullOrEmpty(sortOrder))
             {
-                case "name_desc":
-                    students = students.OrderByDescending(s => s.LastName);
-                    break;
-                case "Date":
-                    students = students.OrderBy(s => s.EnrollmentDate);
-                    break;
-                case "date_desc":
-                    students = students.OrderByDescending(s => s.EnrollmentDate);
-                    break;
-                default:
-                    students = students.OrderBy(s => s.LastName);
-                    break;
+                sortOrder = nameof(Student.LastName);
+            }
+            bool descending = false;
+
+            if (sortOrder.EndsWith("_desc"))
+            {
+                sortOrder = sortOrder.Substring(0, sortOrder.Length - 5);
+                descending = true;
             }
 
-            int pageSize = 3;
-            return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), page ?? 1, pageSize));
+            if (descending)
+            {
+                students = students.OrderByDescending(e => EF.Property<object>(e, sortOrder));
+            }
+            else
+            {
+                students = students.OrderBy(e => EF.Property<object>(e, sortOrder));
+            }
+
+
+            return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), page ?? 1, 3));
         }
 
         // GET: Students/Details/5
