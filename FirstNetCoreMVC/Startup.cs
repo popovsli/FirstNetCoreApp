@@ -13,6 +13,7 @@ using System.Reflection;
 using FirstNetCoreMVC.Utils;
 using BusinessEntities.Context;
 using BusinessEntities.GeneratedModels;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace FirstNetCoreMVC
 {
@@ -31,8 +32,19 @@ namespace FirstNetCoreMVC
         {
             services.AddMvc();
 
+            //When want to change Area folder name with other name
+            //services.Configure<RazorViewEngineOptions>(options =>
+            //{
+            //    options.AreaViewLocationFormats.Clear();
+            //    options.AreaViewLocationFormats.Add("/Services/{2}/Views/{1}/{0}.cshtml");
+            //    options.AreaViewLocationFormats.Add("/Services/{2}/Views/Shared/{0}.cshtml");
+            //    options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+            //});
+            
             services.AddDbContext<MovieContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MovieContext"), x => x.MigrationsAssembly("BusinessEntities")));
+
+
 
             //services.AddScoped<IMovieService, MovieService>();
         }
@@ -72,7 +84,14 @@ namespace FirstNetCoreMVC
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+         );
             });
+
+
         }
     }
 }
