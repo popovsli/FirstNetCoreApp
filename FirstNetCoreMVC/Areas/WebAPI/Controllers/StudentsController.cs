@@ -34,7 +34,31 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
             return new ObjectResult(item);
         }
 
+        /// <summary>
+        /// Create a Student
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /Todo
+        ///     {
+        ///         "id": 1,
+        ///         "enrollmentDate":"2010-09-01T00:00:00",
+        ///         "enrollments":null,
+        ///         "lastName":"Last Name",
+        ///         "firstName":"First Name",
+        ///         "Discriminator":"Student or Instructor",
+        ///         "trackingState": "Tracking states"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="student"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly-created item</response>
+        /// <response code="400">If the item is null</response>            
         [HttpPost]
+        [ProducesResponseType(typeof(Student), 201)]
+        [ProducesResponseType(typeof(Student), 400)]
         public async Task<IActionResult> CreateUpdate([FromBody] Student student)
         {
             if (student == null) return BadRequest();
@@ -45,6 +69,11 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
             return CreatedAtRoute("GetStudent", new { id = student.Id }, student);
         }
 
+        /// <summary>
+        /// Delete specific Student
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -64,7 +93,7 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
         }
 
         [HttpGet]
-        public  IEnumerable<Student> GetAllStudent()
+        public IEnumerable<Student> GetAllStudent()
         {
             return _context.Students.ToList();
         }

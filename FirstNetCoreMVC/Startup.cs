@@ -12,8 +12,9 @@ using Autofac.Extensions.DependencyInjection;
 using System.Reflection;
 using FirstNetCoreMVC.Utils;
 using BusinessEntities.Context;
-using BusinessEntities.GeneratedModels;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Swashbuckle.AspNetCore.Swagger;
+using System.IO;
 
 namespace FirstNetCoreMVC
 {
@@ -40,12 +41,30 @@ namespace FirstNetCoreMVC
             //    options.AreaViewLocationFormats.Add("/Services/{2}/Views/Shared/{0}.cshtml");
             //    options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             //});
-            
+
             services.AddDbContext<MovieContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MovieContext"), x => x.MigrationsAssembly("BusinessEntities")));
 
+            // Register the Swagger generator, defining one or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "Student API",
+                    Version = "v1",
+                    Description = "A simple example ASP.NET Core Web API",
+                    TermsOfService = "None",
+                    Contact = new Contact { Name = "Shayne Boyer", Email = "", Url = "https://twitter.com/spboyer" },
+                    License = new License { Name = "Use under LICX", Url = "https://example.com/license" }
+                });
 
+                // Set the comments path for the Swagger JSON and UI.
+                var basePath = AppContext.BaseDirectory;
+                var xmlPath = Path.Combine(basePath, "FirstNetCoreMVC.xml");
+                c.IncludeXmlComments(xmlPath);
+            });
 
+            //Register types for dependancy injection
             //services.AddScoped<IMovieService, MovieService>();
         }
 
@@ -87,11 +106,17 @@ namespace FirstNetCoreMVC
 
                 routes.MapRoute(
                     name: "areas",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-         );
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             });
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
 
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
         }
     }
 }
