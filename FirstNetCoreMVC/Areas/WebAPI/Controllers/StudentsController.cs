@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrackableEntities.EF.Core;
 using TrackableEntities.Common.Core;
+using static FirstNetCoreMVC.Common.Constants;
 
 namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
 {
@@ -24,14 +25,14 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
         }
 
         [HttpGet("{id}", Name = "GetStudent")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var item = _context.Person.FirstOrDefault(t => t.Id == id);
+            var item = await _context.Person.FirstOrDefaultAsync(t => t.Id == id);
             if (item == null)
             {
-                return NotFound();
+                return NotFound(id);
             }
-            return new ObjectResult(item);
+            return Ok(item);
         }
 
         /// <summary>
@@ -61,12 +62,29 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
         [ProducesResponseType(typeof(Student), 400)]
         public async Task<IActionResult> CreateUpdate([FromBody] Student student)
         {
-            if (student == null) return BadRequest();
 
-            _context.ApplyChanges(student);
-            await _context.SaveChangesAsync();
+            if (student == null || !ModelState.IsValid)
+            {
+                //return BadRequest(ErrorCode.ObjectIsNotValid.ToString());
+                return BadRequest(ModelState);
+            }
 
+            try
+            {
+                _context.ApplyChanges(student);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return BadRequest(ErrorCode.CouldNotUpdateObject.ToString());
+            }
+            catch(Exception)
+            {
+                return BadRequest(ErrorCode.CouldNotCreateObject.ToString());
+            }
+           
             return CreatedAtRoute("GetStudent", new { id = student.Id }, student);
+            //return Ok(student);
         }
 
         /// <summary>
@@ -81,7 +99,7 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
 
             if (studentToDelete == null)
             {
-                return NotFound();
+                return NotFound(ErrorCode.RecordNotFound.ToString());
             }
 
             studentToDelete.TrackingState = TrackingState.Deleted;
@@ -89,13 +107,13 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
             _context.ApplyChanges(studentToDelete);
             await _context.SaveChangesAsync();
 
-            return new NoContentResult();
+            return Ok();
         }
 
         [HttpGet]
-        public IEnumerable<Student> GetAllStudent()
+        public async Task<IActionResult> GetAllStudent()
         {
-            return _context.Students.ToList();
+            return Ok(await _context.Students.ToListAsync());
         }
     }
 }
