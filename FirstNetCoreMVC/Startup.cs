@@ -32,7 +32,7 @@ namespace FirstNetCoreMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
+        
             //When want to change Area folder name with other name
             //services.Configure<RazorViewEngineOptions>(options =>
             //{

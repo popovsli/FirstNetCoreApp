@@ -16,7 +16,7 @@ namespace FirstNetCoreMVC.Utils.Autofac.Modules
 
             builder.RegisterAssemblyTypes(executingAssembly)
                 .Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerLifetimeScope();
-       
+
             //To exclude types from scanning, use the Except() predicate:
             //builder.RegisterAssemblyTypes(asm).Except<MyUnwantedType>();
         }

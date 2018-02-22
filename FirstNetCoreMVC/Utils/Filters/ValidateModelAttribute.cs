@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessLayer.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
@@ -7,13 +8,8 @@ using System.Threading.Tasks;
 
 namespace FirstNetCoreMVC.Utils.Filters
 {
-    public class ValidateModelAttribute : ActionFilterAttribute
+    public class ValidateModelFilterAttribute : ActionFilterAttribute
     {
-        public ValidateModelAttribute()
-        {
-
-        }
-
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (!context.ModelState.IsValid)

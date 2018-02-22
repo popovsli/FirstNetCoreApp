@@ -10,20 +10,25 @@ using Microsoft.EntityFrameworkCore;
 using TrackableEntities.EF.Core;
 using TrackableEntities.Common.Core;
 using static FirstNetCoreMVC.Common.Constants;
+using FirstNetCoreMVC.Utils.Filters;
+using BusinessLayer.Interfaces;
 
 namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
 {
+    [TypeFilter(typeof(ValidateModelFilterAttribute))]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class StudentsController : Controller
     {
         private readonly MovieContext _context;
+        public IMovieService MovieService { get; set; }
 
         public StudentsController(MovieContext context)
         {
             _context = context;
         }
 
+        [ValidateStudentExists]
         [HttpGet("{id}", Name = "GetStudent")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -78,11 +83,11 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
             {
                 return BadRequest(ErrorCode.CouldNotUpdateObject.ToString());
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return BadRequest(ErrorCode.CouldNotCreateObject.ToString());
             }
-           
+
             return CreatedAtRoute("GetStudent", new { id = student.Id }, student);
             //return Ok(student);
         }
@@ -93,14 +98,10 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [ValidateStudentExists]
         public async Task<IActionResult> Delete(int id)
         {
             var studentToDelete = await _context.Students.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (studentToDelete == null)
-            {
-                return NotFound(ErrorCode.RecordNotFound.ToString());
-            }
 
             studentToDelete.TrackingState = TrackingState.Deleted;
 
