@@ -31,8 +31,14 @@ namespace FirstNetCoreMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-        
+            //register a filter globally
+            services.AddMvc(options =>
+            {
+           //     options.Filters.Add(new AddHeaderAttribute("GlobalAddHeader",
+           //"Result filter added to MvcOptions.Filters")); // an instance
+           //     options.Filters.Add(typeof(SampleActionFilter)); // by type
+            });
+
             //When want to change Area folder name with other name
             //services.Configure<RazorViewEngineOptions>(options =>
             //{
