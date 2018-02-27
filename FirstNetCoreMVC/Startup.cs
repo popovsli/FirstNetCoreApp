@@ -140,6 +140,7 @@ namespace FirstNetCoreMVC
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
