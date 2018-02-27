@@ -133,6 +133,7 @@ namespace FirstNetCoreMVC
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
+                app.UseDatabaseErrorPage();
             }
             else
             {

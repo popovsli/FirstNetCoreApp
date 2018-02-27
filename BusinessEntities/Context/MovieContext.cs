@@ -1,12 +1,12 @@
 ﻿
-
 using BusinessEntities.Models;
 using BusinessEntities.Models.ContosoUniversity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessEntities.Context
 {
-    public class MovieContext : DbContext
+    public class MovieContext : IdentityDbContext<ApplicationUser>
     {
         //Add migration- Add-Migration NewMigration -Project "Project name"
         //Create the database and tables in it- Update-Database
