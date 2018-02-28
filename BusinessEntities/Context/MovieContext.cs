@@ -1,12 +1,13 @@
 ﻿
 using BusinessEntities.Models;
 using BusinessEntities.Models.ContosoUniversity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessEntities.Context
 {
-    public class MovieContext : IdentityDbContext<ApplicationUser>
+    public class MovieContext : IdentityDbContext<User>
     {
         //Add migration- Add-Migration NewMigration -Project "Project name"
         //Create the database and tables in it- Update-Database
@@ -34,7 +35,6 @@ namespace BusinessEntities.Context
         public DbSet<CourseAssignment> CourseAssignments { get; set; }
         public DbSet<Person> Person { get; set; }
 
-
         public virtual void Commit()
         {
             base.SaveChanges();
@@ -42,6 +42,8 @@ namespace BusinessEntities.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Movie>().ToTable(nameof(Movie));
             modelBuilder.Entity<Schedule>().ToTable(nameof(Schedule));
 
@@ -53,6 +55,14 @@ namespace BusinessEntities.Context
             modelBuilder.Entity<OfficeAssignment>().ToTable("OfficeAssignment");
             modelBuilder.Entity<CourseAssignment>().ToTable("CourseAssignment");
             modelBuilder.Entity<Person>().ToTable("Person");
+
+            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<IdentityRole<string>>().ToTable("Roles");
+            modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
+            modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
+            modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
+            modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
+            modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
 
             modelBuilder.Entity<CourseAssignment>()
                 .HasKey(c => new { c.CourseId, c.InstructorId });

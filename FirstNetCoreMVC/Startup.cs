@@ -54,7 +54,7 @@ namespace FirstNetCoreMVC
                     options.UseSqlServer(Configuration.GetConnectionString("MovieContext"), x => x.MigrationsAssembly("BusinessEntities")));
 
             //Identity services are added to the application
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<MovieContext>()
                 .AddDefaultTokenProviders();
 
