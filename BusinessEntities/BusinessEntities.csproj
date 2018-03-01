@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\20180124090101_AddContosoUniversityTables.cs" />
+    <Compile Remove="Migrations\20180301102921_ChangeUserIdentityPrimaryKey.cs" />
+    <Compile Remove="Migrations\20180301104202_ChangeUserIdentityPrimaryKey.cs" />
+    <Compile Remove="Migrations\20180301104259_ChangeUserIdentityPrimaryKey.cs" />
   </ItemGroup>
 
   <ItemGroup>

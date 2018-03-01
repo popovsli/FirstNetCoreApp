@@ -17,6 +17,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
 using BusinessEntities.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace FirstNetCoreMVC
 {
@@ -36,9 +37,9 @@ namespace FirstNetCoreMVC
             //register a filter globally
             services.AddMvc(options =>
             {
-           //     options.Filters.Add(new AddHeaderAttribute("GlobalAddHeader",
-           //"Result filter added to MvcOptions.Filters")); // an instance
-           //     options.Filters.Add(typeof(SampleActionFilter)); // by type
+                //     options.Filters.Add(new AddHeaderAttribute("GlobalAddHeader",
+                //"Result filter added to MvcOptions.Filters")); // an instance
+                //     options.Filters.Add(typeof(SampleActionFilter)); // by type
             });
 
             //When want to change Area folder name with other name
@@ -54,7 +55,7 @@ namespace FirstNetCoreMVC
                     options.UseSqlServer(Configuration.GetConnectionString("MovieContext"), x => x.MigrationsAssembly("BusinessEntities")));
 
             //Identity services are added to the application
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<MovieContext>()
                 .AddDefaultTokenProviders();
 
@@ -75,7 +76,35 @@ namespace FirstNetCoreMVC
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
+
+                // Token settings
+                //options.Tokens.ChangeEmailTokenProvider; 
+
+                // Signin settings
+                //options.SignIn.RequireConfirmedEmail = true;
+                //options.SignIn.RequireConfirmedPhoneNumber = false;
             });
+
+            //Specify options for Identity for specific user and roletype
+            //services.AddIdentity<User, IdentityRole>(options =>
+            // {
+            //     // Lockout settings
+            //     options.Lockout.AllowedForNewUsers = true;
+            //     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            //     options.Lockout.MaxFailedAccessAttempts = 5;
+
+            //// Password settings
+            //options.Password.RequireDigit = true;
+            //options.Password.RequiredLength = 8;
+            //options.Password.RequiredUniqueChars = 2;
+            //options.Password.RequireLowercase = true;
+            //options.Password.RequireNonAlphanumeric = true;
+            //options.Password.RequireUppercase = true;
+
+            // })
+            // .AddEntityFrameworkStores<MovieContext>()
+            // .AddDefaultTokenProviders(); ;
+
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -85,6 +114,8 @@ namespace FirstNetCoreMVC
                 options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
                 options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
                 options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+                // ReturnUrlParameter requires `using Microsoft.AspNetCore.Authentication.Cookies;`
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
                 options.SlidingExpiration = true;
             });
 

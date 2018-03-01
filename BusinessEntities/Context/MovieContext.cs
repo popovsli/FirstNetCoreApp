@@ -4,10 +4,11 @@ using BusinessEntities.Models.ContosoUniversity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace BusinessEntities.Context
 {
-    public class MovieContext : IdentityDbContext<User>
+    public class MovieContext : IdentityDbContext<User, Role, string>
     {
         //Add migration- Add-Migration NewMigration -Project "Project name"
         //Create the database and tables in it- Update-Database
@@ -42,8 +43,6 @@ namespace BusinessEntities.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<Movie>().ToTable(nameof(Movie));
             modelBuilder.Entity<Schedule>().ToTable(nameof(Schedule));
 
@@ -57,7 +56,7 @@ namespace BusinessEntities.Context
             modelBuilder.Entity<Person>().ToTable("Person");
 
             modelBuilder.Entity<User>().ToTable("User");
-            modelBuilder.Entity<IdentityRole<string>>().ToTable("Roles");
+            modelBuilder.Entity<Role>().ToTable("Roles");
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
             modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
             modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
@@ -66,6 +65,23 @@ namespace BusinessEntities.Context
 
             modelBuilder.Entity<CourseAssignment>()
                 .HasKey(c => new { c.CourseId, c.InstructorId });
+
+            modelBuilder.Entity<IdentityRoleClaim<string>>()
+              .HasKey(c => new { c.Id });
+
+            modelBuilder.Entity<IdentityUserRole<string>>()
+                .HasKey(c => new { c.RoleId });
+
+            modelBuilder.Entity<IdentityUserLogin<string>>()
+               .HasKey(c => new { c.LoginProvider, c.ProviderKey });
+
+            modelBuilder.Entity<IdentityUserToken<string>>()
+               .HasKey(c => new { c.UserId, c.LoginProvider, c.Name });
+
+            modelBuilder.Entity<IdentityUserClaim<string>>()
+               .HasKey(c => new { c.Id });
+
+           
 
             //base.OnModelCreating(modelBuilder);
         }
