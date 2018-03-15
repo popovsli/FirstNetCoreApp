@@ -81,7 +81,7 @@ namespace BusinessEntities.Context
             modelBuilder.Entity<IdentityUserClaim<string>>()
                .HasKey(c => new { c.Id });
 
-           
+
 
             //base.OnModelCreating(modelBuilder);
         }

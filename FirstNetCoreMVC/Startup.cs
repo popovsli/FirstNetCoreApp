@@ -68,7 +68,7 @@ namespace FirstNetCoreMVC
                 options.Password.RequireUppercase = true;
                 options.Password.RequireLowercase = false;
                 options.Password.RequiredUniqueChars = 6;
-
+                               
                 // Lockout settings
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
                 options.Lockout.MaxFailedAccessAttempts = 10;
@@ -76,6 +76,8 @@ namespace FirstNetCoreMVC
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
+                //Allowed characters in the username.
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 
                 // Token settings
                 //options.Tokens.ChangeEmailTokenProvider; 
@@ -109,14 +111,22 @@ namespace FirstNetCoreMVC
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
+                options.Cookie.Name = "AuthenticateCookie";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.Expiration = TimeSpan.FromDays(150);
                 options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
                 options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
                 options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+
                 // ReturnUrlParameter requires `using Microsoft.AspNetCore.Authentication.Cookies;`
                 options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
                 options.SlidingExpiration = true;
+
+                //If set, the provider used by the CookieAuthenticationHandler for data protection.
+                //options.DataProtectionProvider 
+
+                //Determines the name of the query string parameter which is appended by the middleware when a 401 Unauthorized status code is changed to a 302 Redirect onto the login path.
+                options.ReturnUrlParameter = "ReturnUrl";
             });
 
             // Register the Swagger generator, defining one or more Swagger documents
