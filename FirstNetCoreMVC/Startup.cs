@@ -56,7 +56,7 @@ namespace FirstNetCoreMVC
 
             //Identity services are added to the application
             services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<MovieContext>()
+                //.AddEntityFrameworkStores<MovieContext>()
                 .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>

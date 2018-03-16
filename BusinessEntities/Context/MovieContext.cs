@@ -1,14 +1,12 @@
 ﻿
 using BusinessEntities.Models;
 using BusinessEntities.Models.ContosoUniversity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace BusinessEntities.Context
 {
-    public class MovieContext : IdentityDbContext<User, Role, string>
+    public class MovieContext : DbContext //IdentityDbContext<User, Role, string>
     {
         //Add migration- Add-Migration NewMigration -Project "Project name"
         //Create the database and tables in it- Update-Database
@@ -35,6 +33,8 @@ namespace BusinessEntities.Context
         public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
         public DbSet<CourseAssignment> CourseAssignments { get; set; }
         public DbSet<Person> Person { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Role> Role { get; set; }
 
         public virtual void Commit()
         {
@@ -57,29 +57,29 @@ namespace BusinessEntities.Context
 
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Role>().ToTable("Roles");
-            modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
-            modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
-            modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
-            modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
-            modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
+            //modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
+            //modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
+            //modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
+            //modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
+            //modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
 
             modelBuilder.Entity<CourseAssignment>()
                 .HasKey(c => new { c.CourseId, c.InstructorId });
 
-            modelBuilder.Entity<IdentityRoleClaim<string>>()
-              .HasKey(c => new { c.Id });
+            //modelBuilder.Entity<IdentityRoleClaim<string>>()
+            //  .HasKey(c => new { c.Id });
 
-            modelBuilder.Entity<IdentityUserRole<string>>()
-                .HasKey(c => new { c.RoleId });
+            //modelBuilder.Entity<IdentityUserRole<string>>()
+            //    .HasKey(c => new { c.RoleId });
 
-            modelBuilder.Entity<IdentityUserLogin<string>>()
-               .HasKey(c => new { c.LoginProvider, c.ProviderKey });
+            //modelBuilder.Entity<IdentityUserLogin<string>>()
+            //   .HasKey(c => new { c.LoginProvider, c.ProviderKey });
 
-            modelBuilder.Entity<IdentityUserToken<string>>()
-               .HasKey(c => new { c.UserId, c.LoginProvider, c.Name });
+            //modelBuilder.Entity<IdentityUserToken<string>>()
+            //   .HasKey(c => new { c.UserId, c.LoginProvider, c.Name });
 
-            modelBuilder.Entity<IdentityUserClaim<string>>()
-               .HasKey(c => new { c.Id });
+            //modelBuilder.Entity<IdentityUserClaim<string>>()
+            //   .HasKey(c => new { c.Id });
 
 
 
