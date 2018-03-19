@@ -16,6 +16,9 @@ namespace FirstNetCoreMVC.Utils.Autofac.Modules
             builder.RegisterAssemblyTypes(executingAssembly)
                 .Where(x => x.Name.EndsWith("Store")).AsImplementedInterfaces().InstancePerLifetimeScope();
 
+            builder.RegisterAssemblyTypes(executingAssembly)
+               .Where(x => x.Name.EndsWith("Manager")).AsSelf().InstancePerLifetimeScope();
+
             //To exclude types from scanning, use the Except() predicate:
             //builder.RegisterAssemblyTypes(asm).Except<MyUnwantedType>();
         }
