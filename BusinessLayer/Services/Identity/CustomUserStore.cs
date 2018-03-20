@@ -23,18 +23,20 @@ namespace BusinessLayer.Services.Identity
 
         public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken = default(CancellationToken))
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentException(nameof(User));
 
             _context.User.Add(user);
-            return await _context.SaveChangesAsync(cancellationToken) == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not insert user {user.Email}." }) : IdentityResult.Success;
+            return await _context.SaveChangesAsync() == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not insert user {user.Email}." }) : IdentityResult.Success;
         }
 
         public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
 
             _context.User.Remove(user);
-            return await _context.SaveChangesAsync(cancellationToken) == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not delete user {user.Email}." }) : IdentityResult.Success;
+            return await _context.SaveChangesAsync() == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not delete user {user.Email}." }) : IdentityResult.Success;
         }
 
         public void Dispose()
@@ -52,6 +54,7 @@ namespace BusinessLayer.Services.Identity
 
         public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (string.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
 
             Guid idGuid;
@@ -60,7 +63,7 @@ namespace BusinessLayer.Services.Identity
                 throw new ArgumentException("Not a valid Guid id", nameof(userId));
             }
 
-            return await _context.User.FindAsync(idGuid.ToString(),cancellationToken);
+            return await _context.User.FindAsync(idGuid.ToString());
         }
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
@@ -190,11 +193,12 @@ namespace BusinessLayer.Services.Identity
 
         public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
 
             _context.Attach(user).State = EntityState.Modified;
 
-            return await _context.SaveChangesAsync(cancellationToken) == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not insert user {user.Email}." }) : IdentityResult.Success;
+            return await _context.SaveChangesAsync() == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not insert user {user.Email}." }) : IdentityResult.Success;
         }
     }
 }

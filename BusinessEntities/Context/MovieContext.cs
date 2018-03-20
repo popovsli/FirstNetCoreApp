@@ -66,6 +66,9 @@ namespace BusinessEntities.Context
             modelBuilder.Entity<CourseAssignment>()
                 .HasKey(c => new { c.CourseId, c.InstructorId });
 
+            modelBuilder.Entity<User>()
+                .HasKey(c => new { c.Id });
+
             //modelBuilder.Entity<IdentityRoleClaim<string>>()
             //  .HasKey(c => new { c.Id });
 
