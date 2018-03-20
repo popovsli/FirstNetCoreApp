@@ -17,7 +17,7 @@ namespace FirstNetCoreMVC.Utils.Autofac.Modules
             var executingAssembly = Reflaction.Assembly.Load(nameof(BusinessLayer));
 
             builder.RegisterAssemblyTypes(executingAssembly)
-                .Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerLifetimeScope()
+                .Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerLifetimeScope() //Instance per request
                 .Except<EmailSenderService>(option => option.As<IEmailSenderService>().InstancePerDependency());
                
             //To exclude types from scanning, use the Except() predicate:

@@ -6,6 +6,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using BusinessEntities.Models;
 using BusinessLayer.Interfaces;
+using BusinessLayer.Services.Identity;
 using FirstNetCoreMVC.Utils.Extensions;
 using FirstNetCoreMVC.ViewModels.ManageViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -20,7 +21,7 @@ namespace FirstNetCoreMVC.Controllers
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
-        private readonly UserManager<User> _userManager;
+        private readonly CustomUserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSenderService _emailSender;
         private readonly ILogger _logger;
@@ -30,7 +31,7 @@ namespace FirstNetCoreMVC.Controllers
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
 
         public ManageController(
-          UserManager<User> userManager,
+          CustomUserManager<User> userManager,
           SignInManager<User> signInManager,
           IEmailSenderService emailSender,
           ILogger<ManageController> logger,
