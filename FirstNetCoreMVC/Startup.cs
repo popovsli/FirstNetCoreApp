@@ -18,6 +18,8 @@ using System.IO;
 using BusinessEntities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace FirstNetCoreMVC
 {
@@ -40,6 +42,7 @@ namespace FirstNetCoreMVC
                 //     options.Filters.Add(new AddHeaderAttribute("GlobalAddHeader",
                 //"Result filter added to MvcOptions.Filters")); // an instance
                 //     options.Filters.Add(typeof(SampleActionFilter)); // by type
+                options.Filters.Add(new RequireHttpsAttribute());
             });
 
             //When want to change Area folder name with other name
@@ -68,7 +71,7 @@ namespace FirstNetCoreMVC
                 options.Password.RequireUppercase = true;
                 options.Password.RequireLowercase = false;
                 options.Password.RequiredUniqueChars = 6;
-                               
+
                 // Lockout settings
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
                 options.Lockout.MaxFailedAccessAttempts = 10;
@@ -83,7 +86,8 @@ namespace FirstNetCoreMVC
                 //options.Tokens.ChangeEmailTokenProvider; 
 
                 // Signin settings
-                //options.SignIn.RequireConfirmedEmail = true;
+                //Prevents registered users from logging in until their email is confirmed.
+                options.SignIn.RequireConfirmedEmail = true;
                 //options.SignIn.RequireConfirmedPhoneNumber = false;
             });
 
@@ -107,6 +111,8 @@ namespace FirstNetCoreMVC
             // .AddEntityFrameworkStores<MovieContext>()
             // .AddDefaultTokenProviders(); ;
 
+            //It also automatically refreshes the user's claims from the database every refreshInterval if the stamp is unchanged (which takes care of things like changing roles etc)
+            //services.Configure<SecurityStampValidatorOptions>(o => o.ValidationInterval = TimeSpan.FromMinutes(10));
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -180,6 +186,9 @@ namespace FirstNetCoreMVC
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            //Redirects all HTTP requests to HTTPS:
+            app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
 
             app.UseStaticFiles();
             app.UseAuthentication();

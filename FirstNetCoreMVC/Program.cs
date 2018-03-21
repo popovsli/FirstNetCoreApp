@@ -43,6 +43,7 @@ namespace FirstNetCoreMVC
             WebHost.CreateDefaultBuilder(args)
                 .ConfigureServices(services => services.AddAutofac()) //call AddAutofac to hook Autofac into the startup pipeline.
                 .UseStartup<Startup>()
+                //.UseUrls("http://localhost:5001;https://localhost:5002")
                 .Build();
     }
 }
