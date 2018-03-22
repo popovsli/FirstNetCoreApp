@@ -14,8 +14,7 @@ namespace BusinessLayer.Services
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            //Options.SendGridKey //Name: NetCore, Key: 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
-            return Execute("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", subject, message, email);
+            return Execute("test", subject, message, email);
         }
 
         public Task Execute(string apiKey, string subject, string message, string email)
