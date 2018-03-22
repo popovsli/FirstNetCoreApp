@@ -1,4 +1,6 @@
-﻿using BusinessLayer.Interfaces;
+﻿using BusinessEntities.Options;
+using BusinessLayer.Interfaces;
+using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
@@ -12,9 +14,16 @@ namespace BusinessLayer.Services
     // For more details see https://go.microsoft.com/fwlink/?LinkID=532713
     public class EmailSenderService : IEmailSenderService
     {
+        public AuthMessageSenderOptions Options { get; }
+
+        public EmailSenderService(IOptions<AuthMessageSenderOptions> optionsAccessor)
+        {
+            Options = optionsAccessor.Value;
+        }
+
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            return Execute("test", subject, message, email);
+            return Execute(Options.SendGridKey, subject, message, email);
         }
 
         public Task Execute(string apiKey, string subject, string message, string email)

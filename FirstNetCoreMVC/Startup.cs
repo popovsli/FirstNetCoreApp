@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
+using BusinessEntities.Options;
 
 namespace FirstNetCoreMVC
 {
@@ -153,6 +154,8 @@ namespace FirstNetCoreMVC
                 var xmlPath = Path.Combine(basePath, "FirstNetCoreMVC.xml");
                 c.IncludeXmlComments(xmlPath);
             });
+
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
             //Register types for dependancy injection
             //services.AddScoped<IMovieService, MovieService>();
