@@ -46,6 +46,7 @@ namespace FirstNetCoreMVC
                 options.Filters.Add(new RequireHttpsAttribute());
             });
 
+           
             //When want to change Area folder name with other name
             //services.Configure<RazorViewEngineOptions>(options =>
             //{
@@ -62,6 +63,12 @@ namespace FirstNetCoreMVC
             services.AddIdentity<User, Role>()
                 //.AddEntityFrameworkStores<MovieContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+            });
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -156,6 +163,7 @@ namespace FirstNetCoreMVC
             });
 
             services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.Configure<GoogleAuthenticationOptions>(Configuration.GetSection("Authentication").GetSection("Google"));
 
             //Register types for dependancy injection
             //services.AddScoped<IMovieService, MovieService>();
