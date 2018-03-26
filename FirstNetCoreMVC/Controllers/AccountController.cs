@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using BusinessEntities.Models;
 using BusinessLayer.Interfaces;
+using BusinessLayer.Services.Identity;
 using FirstNetCoreMVC.Utils.Extensions;
 using FirstNetCoreMVC.ViewModels.AccountViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -19,13 +20,13 @@ namespace FirstNetCoreMVC.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
+        private readonly CustomUserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSenderService _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
-            UserManager<User> userManager,
+            CustomUserManager<User> userManager,
             SignInManager<User> signInManager,
             IEmailSenderService emailSender,
             ILogger<AccountController> logger)

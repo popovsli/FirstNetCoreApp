@@ -1,12 +1,13 @@
 ﻿
 using BusinessEntities.Models;
 using BusinessEntities.Models.ContosoUniversity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace BusinessEntities.Context
 {
-    public class MovieContext : DbContext //IdentityDbContext<User, Role, string>
+    public class MovieContext : IdentityDbContext<User, string, IdentityUserLogin<string>, Role>
     {
         //Add migration- Add-Migration NewMigration -Project "Project name"
         //Create the database and tables in it- Update-Database
@@ -33,8 +34,7 @@ namespace BusinessEntities.Context
         public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
         public DbSet<CourseAssignment> CourseAssignments { get; set; }
         public DbSet<Person> Person { get; set; }
-        public DbSet<User> User { get; set; }
-        public DbSet<Role> Role { get; set; }
+
 
         public virtual void Commit()
         {
@@ -55,8 +55,9 @@ namespace BusinessEntities.Context
             modelBuilder.Entity<CourseAssignment>().ToTable("CourseAssignment");
             modelBuilder.Entity<Person>().ToTable("Person");
 
-            modelBuilder.Entity<User>().ToTable("User");
-            modelBuilder.Entity<Role>().ToTable("Roles");
+            //modelBuilder.Entity<User>().ToTable("User");
+            //modelBuilder.Entity<Role>().ToTable("Roles");
+
             //modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
             //modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
             //modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
@@ -66,8 +67,8 @@ namespace BusinessEntities.Context
             modelBuilder.Entity<CourseAssignment>()
                 .HasKey(c => new { c.CourseId, c.InstructorId });
 
-            modelBuilder.Entity<User>()
-                .HasKey(c => new { c.Id });
+            //modelBuilder.Entity<User>()
+            //    .HasKey(c => new { c.Id });
 
             //modelBuilder.Entity<IdentityRoleClaim<string>>()
             //  .HasKey(c => new { c.Id });
@@ -89,4 +90,31 @@ namespace BusinessEntities.Context
             //base.OnModelCreating(modelBuilder);
         }
     }
+
+    public class IdentityDbContext<TUser, TKey, TUserLogin, TRole> : DbContext //IdentityDbContext<User, Role, string>
+        where TKey : IEquatable<TKey>
+        where TUser : IdentityUser<TKey>, new()
+        where TUserLogin : IdentityUserLogin<string>, new()
+        where TRole : IdentityRole<TKey>,new()
+    {
+        public IdentityDbContext(DbContextOptions<MovieContext> options)
+                : base(options)
+        {
+        }
+
+        public DbSet<TUser> User { get; set; }
+        public DbSet<TRole> Role { get; set; }
+        public DbSet<TUserLogin> UserLogin { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TUser>().ToTable("User");
+            modelBuilder.Entity<TRole>().ToTable("Roles");
+            modelBuilder.Entity<TUserLogin>().ToTable("UserLogin");
+
+            modelBuilder.Entity<TUser>()
+                .HasKey(c => new { c.Id });
+        }
+    }
+
 }
