@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FirstNetCoreMVC.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {

@@ -1,10 +1,10 @@
 ﻿using BusinessEntities.Context;
-using BusinessEntities.GeneratedModels;
 using BusinessEntities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -12,20 +12,35 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Services.Identity
 {
-    public class CustomUserStore : IUserStore<User>,
-        IUserPasswordStore<User>, IUserEmailStore<User>
-        , IUserLoginStore<User>
-    {
-        private readonly MovieContext _context;
 
-        public CustomUserStore(MovieContext dbContext)
+    //public class CustomUserStore<TUser, TKey, TUserLogin> : CustomBaseUserStore<TUser, TKey, TUserLogin, Role>
+    //    where TUser : IdentityUser<TKey>, new()
+    //    where TKey : IEquatable<TKey>
+    //    where TUserLogin : IdentityUserLogin<string>, new()
+    //{
+        
+    //}
+
+    public class CustomBaseUserStore<TUser, TKey, TUserLogin, TRole> : IUserStore<TUser>,
+        IUserPasswordStore<TUser>, IUserEmailStore<TUser>
+        , IUserLoginStore<TUser>
+        where TUser : IdentityUser<TKey>, new()
+        where TKey : IEquatable<TKey>
+        where TUserLogin : IdentityUserLogin<TKey>, new()
+        where TRole : IdentityRole<TKey>, new()
+    {
+        private readonly IdentityDbContext<TUser, TKey, TUserLogin, TRole> _context;
+
+        public CustomBaseUserStore(IdentityDbContext<TUser, TKey, TUserLogin, TRole> dbContext)
         {
             _context = dbContext;
         }
 
+        public CustomBaseUserStore() { }
+
         #region IUserStore implementation
 
-        public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentException(nameof(User));
@@ -34,7 +49,7 @@ namespace BusinessLayer.Services.Identity
             return await _context.SaveChangesAsync() == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not insert user {user.Email}." }) : IdentityResult.Success;
         }
 
-        public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -43,7 +58,7 @@ namespace BusinessLayer.Services.Identity
             return await _context.SaveChangesAsync() == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not delete user {user.Email}." }) : IdentityResult.Success;
         }
 
-        public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
+        public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (string.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
@@ -54,20 +69,17 @@ namespace BusinessLayer.Services.Identity
                 throw new ArgumentException("Not a valid Guid id", nameof(userId));
             }
 
-            var test = _context.User.FindAsync(idGuid.ToString());
-            var user = await _context.User.FirstOrDefaultAsync(x => x.Id.Equals(userId));
-            return user;
-            //await _context.User.FindAsync(idGuid.ToString());
+            return await _context.User.FindAsync(idGuid.ToString());
         }
 
-        public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(normalizedUserName)) throw new ArgumentNullException(nameof(normalizedUserName));
 
             return await _context.User.SingleOrDefaultAsync(x => x.NormalizedUserName == normalizedUserName, cancellationToken);
         }
 
-        public Task<string> GetNormalizedUserNameAsync(User user, CancellationToken cancellationToken)
+        public Task<string> GetNormalizedUserNameAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -75,7 +87,7 @@ namespace BusinessLayer.Services.Identity
             return Task.FromResult(user.NormalizedUserName);
         }
 
-        public Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)
+        public Task<string> GetUserIdAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -83,7 +95,7 @@ namespace BusinessLayer.Services.Identity
             return Task.FromResult(user.Id.ToString());
         }
 
-        public Task<string> GetUserNameAsync(User user, CancellationToken cancellationToken)
+        public Task<string> GetUserNameAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -92,7 +104,7 @@ namespace BusinessLayer.Services.Identity
 
         }
 
-        public Task SetNormalizedUserNameAsync(User user, string normalizedName, CancellationToken cancellationToken)
+        public Task SetNormalizedUserNameAsync(TUser user, string normalizedName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -102,7 +114,7 @@ namespace BusinessLayer.Services.Identity
             return Task.FromResult<object>(null);
         }
 
-        public Task SetUserNameAsync(User user, string userName, CancellationToken cancellationToken)
+        public Task SetUserNameAsync(TUser user, string userName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -112,7 +124,7 @@ namespace BusinessLayer.Services.Identity
             return Task.FromResult<object>(null);
         }
 
-        public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -131,7 +143,7 @@ namespace BusinessLayer.Services.Identity
 
         #region IUserEmailStore implementation
 
-        public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        public async Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (string.IsNullOrEmpty(normalizedEmail)) throw new ArgumentNullException(nameof(normalizedEmail));
@@ -139,7 +151,7 @@ namespace BusinessLayer.Services.Identity
             return await _context.User.SingleOrDefaultAsync(x => x.NormalizedEmail == normalizedEmail);
         }
 
-        public Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
+        public Task<string> GetEmailAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -147,12 +159,12 @@ namespace BusinessLayer.Services.Identity
             return Task.FromResult(user.Email);
         }
 
-        public Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
+        public Task<bool> GetEmailConfirmedAsync(TUser user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.EmailConfirmed);
         }
 
-        public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
+        public Task<string> GetNormalizedEmailAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -160,7 +172,7 @@ namespace BusinessLayer.Services.Identity
             return Task.FromResult(user.NormalizedEmail);
         }
 
-        public Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
+        public Task SetEmailAsync(TUser user, string email, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -170,7 +182,7 @@ namespace BusinessLayer.Services.Identity
             return Task.FromResult<object>(null);
         }
 
-        public Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        public Task SetEmailConfirmedAsync(TUser user, bool confirmed, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -179,7 +191,7 @@ namespace BusinessLayer.Services.Identity
             return Task.FromResult<object>(null);
         }
 
-        public Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
+        public Task SetNormalizedEmailAsync(TUser user, string normalizedEmail, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -193,7 +205,7 @@ namespace BusinessLayer.Services.Identity
 
         #region IUserPasswordStore implementation
 
-        public Task<string> GetPasswordHashAsync(User user, CancellationToken cancellationToken)
+        public Task<string> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -201,12 +213,12 @@ namespace BusinessLayer.Services.Identity
             return Task.FromResult(user.PasswordHash);
         }
 
-        public Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
+        public Task<bool> HasPasswordAsync(TUser user, CancellationToken cancellationToken)
         {
             return Task.FromResult(!string.IsNullOrEmpty(user.PasswordHash));
         }
 
-        public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken)
+        public Task SetPasswordHashAsync(TUser user, string passwordHash, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -220,7 +232,7 @@ namespace BusinessLayer.Services.Identity
 
         #region IUserLoginStore implementation
 
-        public async Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
+        public async Task AddLoginAsync(TUser user, UserLoginInfo login, CancellationToken cancellationToken)
         {
             //FindUserLoginAsync
             cancellationToken.ThrowIfCancellationRequested();
@@ -231,9 +243,9 @@ namespace BusinessLayer.Services.Identity
             await _context.SaveChangesAsync();
         }
 
-        protected virtual UserLogin CreateUserLogin(User user, UserLoginInfo login)
+        protected virtual TUserLogin CreateUserLogin(TUser user, UserLoginInfo login)
         {
-            return new UserLogin
+            return new TUserLogin
             {
                 UserId = user.Id,
                 ProviderKey = login.ProviderKey,
@@ -242,12 +254,12 @@ namespace BusinessLayer.Services.Identity
             };
         }
 
-        public async Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+        public async Task RemoveLoginAsync(TUser user, string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
 
-            UserLogin userLogin = await FindUserLoginAsync(loginProvider, providerKey, user);
+            TUserLogin userLogin = await FindUserLoginAsync(loginProvider, providerKey, user);
             if (userLogin != null)
             {
                 _context.UserLogin.Remove(userLogin);
@@ -255,36 +267,43 @@ namespace BusinessLayer.Services.Identity
             }
         }
 
-        public async Task<IList<UserLoginInfo>> GetLoginsAsync(User user, CancellationToken cancellationToken)
+        public async Task<IList<UserLoginInfo>> GetLoginsAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
             return await _context.UserLogin.Where(x => x.UserId.Equals(user.Id)).Select(x => new UserLoginInfo(x.LoginProvider, x.ProviderKey, x.ProviderDisplayName)).ToListAsync(cancellationToken);
         }
 
-        public async Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        public async Task<TUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            UserLogin userLogin = await FindUserLoginAsync(loginProvider, providerKey);
+            TUserLogin userLogin = await FindUserLoginAsync(loginProvider, providerKey);
             if (userLogin != null)
             {
-                return await FindByIdAsync(userLogin.UserId, cancellationToken);
+                return await FindByIdAsync(userLogin.UserId.ToString(), cancellationToken);
             }
             return null;
         }
 
-        protected virtual async Task<UserLogin> FindUserLoginAsync(string loginProvider, string providerKey, User user)
+        public virtual TKey ConvertIdFromString(string id)
         {
-            UserLogin userLogin = await _context.UserLogin.Where(x => x.LoginProvider == loginProvider && x.ProviderKey == providerKey && (user != null ? x.UserId == user.Id : true))
-                .FirstOrDefaultAsync();
-
-            return userLogin;
+            if (id == null)
+            {
+                return default(TKey);
+            }
+            return (TKey)TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(id);
         }
 
-        protected virtual async Task<UserLogin> FindUserLoginAsync(string loginProvider, string providerKey)
+        protected virtual async Task<TUserLogin> FindUserLoginAsync(string loginProvider, string providerKey, TUser user = default(TUser))
         {
-            UserLogin userLogin = await _context.UserLogin.Where(x => x.LoginProvider == loginProvider && x.ProviderKey == providerKey)
-                .FirstOrDefaultAsync();
+            TUserLogin userLogin = await _context.UserLogin.Where(x => x.LoginProvider == loginProvider && x.ProviderKey == providerKey && (user != null ? x.UserId.Equals(user.Id) : true))
+                .Select(x => new TUserLogin()
+                {
+                    LoginProvider = x.LoginProvider,
+                    ProviderDisplayName = x.ProviderDisplayName,
+                    ProviderKey = x.ProviderKey,
+                    UserId = x.UserId
+                }).FirstOrDefaultAsync();
 
             return userLogin;
         }

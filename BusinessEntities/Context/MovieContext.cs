@@ -7,7 +7,7 @@ using System;
 
 namespace BusinessEntities.Context
 {
-    public class MovieContext : IdentityDbContext<User, string, IdentityUserLogin<string>, Role>
+    public class MovieContext : IdentityDbContext<User, string, UserLogin, Role>
     {
         //Add migration- Add-Migration NewMigration -Project "Project name"
         //Create the database and tables in it- Update-Database
@@ -43,6 +43,7 @@ namespace BusinessEntities.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Movie>().ToTable(nameof(Movie));
             modelBuilder.Entity<Schedule>().ToTable(nameof(Schedule));
 
@@ -66,6 +67,7 @@ namespace BusinessEntities.Context
 
             modelBuilder.Entity<CourseAssignment>()
                 .HasKey(c => new { c.CourseId, c.InstructorId });
+
 
             //modelBuilder.Entity<User>()
             //    .HasKey(c => new { c.Id });
@@ -94,8 +96,8 @@ namespace BusinessEntities.Context
     public class IdentityDbContext<TUser, TKey, TUserLogin, TRole> : DbContext //IdentityDbContext<User, Role, string>
         where TKey : IEquatable<TKey>
         where TUser : IdentityUser<TKey>, new()
-        where TUserLogin : IdentityUserLogin<string>, new()
-        where TRole : IdentityRole<TKey>,new()
+        where TUserLogin : IdentityUserLogin<TKey>, new()
+        where TRole : IdentityRole<TKey>, new()
     {
         public IdentityDbContext(DbContextOptions<MovieContext> options)
                 : base(options)
@@ -110,9 +112,15 @@ namespace BusinessEntities.Context
         {
             modelBuilder.Entity<TUser>().ToTable("User");
             modelBuilder.Entity<TRole>().ToTable("Roles");
-            modelBuilder.Entity<TUserLogin>().ToTable("UserLogin");
+            modelBuilder.Entity<TUserLogin>().ToTable("UserLogins");
 
             modelBuilder.Entity<TUser>()
+                .HasKey(c => new { c.Id });
+
+            modelBuilder.Entity<TUserLogin>()
+               .HasKey(c => new { c.LoginProvider, c.ProviderKey });
+
+            modelBuilder.Entity<TRole>()
                 .HasKey(c => new { c.Id });
         }
     }

@@ -17,12 +17,16 @@ namespace FirstNetCoreMVC.Utils.Autofac.Modules
         {
             var executingAssembly = Reflaction.Assembly.Load(nameof(BusinessLayer));
 
-            //builder.RegisterAssemblyTypes(executingAssembly)
-            //    .Where(x => x.Name.EndsWith("Store")).AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterAssemblyTypes(executingAssembly)
+                .Where(x => x.Name.EndsWith("Store")).AsImplementedInterfaces().InstancePerLifetimeScope();
 
 
             //Register custom UserStores
-            builder.RegisterGeneric(typeof(CustomUserStore<>)).As(typeof(IUserStore<>)).InstancePerLifetimeScope();
+            //builder.RegisterGeneric(typeof(CustomGenericUserStore<,,,>)).AsImplementedInterfaces().InstancePerMatchingLifetimeScope();
+
+            //builder.RegisterGeneric(typeof(TestUser<,,,,>)).AsImplementedInterfaces().InstancePerLifetimeScope();
+
+
 
             //Register custom UserManagers
             builder.RegisterGeneric(typeof(CustomUserManager<>)).AsSelf().InstancePerLifetimeScope();
