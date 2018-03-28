@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace BusinessLayer.Services.Identity
 {
 
-    public class CustomUserStore : CustomBaseUserStore<User, string, UserLogin, Role>
+    public class CustomUserStore : CustomBaseUserStore<User, string, UserLogin, Role,MovieContext>
     {
         public CustomUserStore(MovieContext dbContext) : base(dbContext)
         {
@@ -22,13 +22,17 @@ namespace BusinessLayer.Services.Identity
 
     }
 
-    public class CustomBaseUserStore<TUser, TKey, TUserLogin, TRole> : IUserStore<TUser>,
-        IUserPasswordStore<TUser>, IUserEmailStore<TUser>
-        , IUserLoginStore<TUser>
+    public class CustomBaseUserStore<TUser, TKey, TUserLogin, TRole,TContext> : IUserStore<TUser>,
+        IUserPasswordStore<TUser>,
+        IUserEmailStore<TUser>,
+        IUserLoginStore<TUser>,
+        IUserAuthenticationTokenStore<TUser>
         where TUser : IdentityUser<TKey>
         where TKey : IEquatable<TKey>
         where TUserLogin : IdentityUserLogin<TKey>, new()
         where TRole : IdentityRole<TKey>, new()
+        where TContext : IdentityBaseDbContext<TUser,TKey,TUserLogin,TRole>
+
     {
         private readonly IdentityBaseDbContext<TUser, TKey, TUserLogin, TRole> _context;
 
@@ -279,6 +283,7 @@ namespace BusinessLayer.Services.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
             TUserLogin userLogin = await FindUserLoginAsync(loginProvider, providerKey);
+
             if (userLogin != null)
             {
                 return await FindByIdAsync(userLogin.UserId.ToString(), cancellationToken);
@@ -295,9 +300,9 @@ namespace BusinessLayer.Services.Identity
             return (TKey)TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(id);
         }
 
-        protected virtual async Task<TUserLogin> FindUserLoginAsync(string loginProvider, string providerKey, TUser user = default(TUser))
+        protected virtual async Task<TUserLogin> FindUserLoginAsync(string loginProvider, string providerKey, TUser user)
         {
-            TUserLogin userLogin = await _context.UserLogin.Where(x => x.LoginProvider == loginProvider && x.ProviderKey == providerKey && (user != null ? x.UserId.Equals(user.Id) : true))
+            TUserLogin userLogin = await _context.UserLogin.Where(x => x.LoginProvider == loginProvider && x.ProviderKey == providerKey && x.UserId.Equals(user.Id))
                 .Select(x => new TUserLogin()
                 {
                     LoginProvider = x.LoginProvider,
@@ -307,6 +312,35 @@ namespace BusinessLayer.Services.Identity
                 }).FirstOrDefaultAsync();
 
             return userLogin;
+        }
+
+        protected virtual async Task<TUserLogin> FindUserLoginAsync(string loginProvider, string providerKey)
+        {
+            TUserLogin userLogin = await _context.UserLogin.Where(x => x.LoginProvider == loginProvider && x.ProviderKey == providerKey)
+                .Select(x => new TUserLogin()
+                {
+                    LoginProvider = x.LoginProvider,
+                    ProviderDisplayName = x.ProviderDisplayName,
+                    ProviderKey = x.ProviderKey,
+                    UserId = x.UserId
+                }).FirstOrDefaultAsync();
+
+            return userLogin;
+        }
+
+        public Task SetTokenAsync(TUser user, string loginProvider, string name, string value, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

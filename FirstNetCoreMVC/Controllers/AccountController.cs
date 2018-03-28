@@ -290,9 +290,27 @@ namespace FirstNetCoreMVC.Controllers
             else
             {
                 // If the user does not have an account, then ask the user to create an account.
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+                var user = await _userManager.FindByEmailAsync(email);
+
+                if (user != null)
+                {
+                    var addLoginResult = await _userManager.AddLoginAsync(user, info);
+
+                    if (addLoginResult.Succeeded)
+                    {
+                        _logger.LogInformation("User link his {Name} provider to account with {Email}.", info.LoginProvider, user.Email);
+                    }
+
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation("User logged in with {Name} provider.", info.LoginProvider);
+                    return RedirectToLocal(returnUrl);
+                }
+
                 ViewData["ReturnUrl"] = returnUrl;
                 ViewData["LoginProvider"] = info.LoginProvider;
-                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
                 return View("ExternalLogin", new ExternalLoginViewModel { Email = email });
             }
         }
