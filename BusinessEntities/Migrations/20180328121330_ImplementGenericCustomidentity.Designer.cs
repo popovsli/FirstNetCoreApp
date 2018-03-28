@@ -13,9 +13,10 @@ using System;
 namespace BusinessEntities.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    partial class MovieContextModelSnapshot : ModelSnapshot
+    [Migration("20180328121330_ImplementGenericCustomidentity")]
+    partial class ImplementGenericCustomidentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,7 +235,7 @@ namespace BusinessEntities.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("BusinessEntities.Models.UserLogin", b =>

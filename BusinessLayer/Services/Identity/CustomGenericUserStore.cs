@@ -13,25 +13,26 @@ using System.Threading.Tasks;
 namespace BusinessLayer.Services.Identity
 {
 
-    //public class CustomUserStore<TUser, TKey, TUserLogin> : CustomBaseUserStore<TUser, TKey, TUserLogin, Role>
-    //    where TUser : IdentityUser<TKey>, new()
-    //    where TKey : IEquatable<TKey>
-    //    where TUserLogin : IdentityUserLogin<string>, new()
-    //{
-        
-    //}
+    public class CustomUserStore : CustomBaseUserStore<User, string, UserLogin, Role>
+    {
+        public CustomUserStore(MovieContext dbContext) : base(dbContext)
+        {
+
+        }
+
+    }
 
     public class CustomBaseUserStore<TUser, TKey, TUserLogin, TRole> : IUserStore<TUser>,
         IUserPasswordStore<TUser>, IUserEmailStore<TUser>
         , IUserLoginStore<TUser>
-        where TUser : IdentityUser<TKey>, new()
+        where TUser : IdentityUser<TKey>
         where TKey : IEquatable<TKey>
         where TUserLogin : IdentityUserLogin<TKey>, new()
         where TRole : IdentityRole<TKey>, new()
     {
-        private readonly IdentityDbContext<TUser, TKey, TUserLogin, TRole> _context;
+        private readonly IdentityBaseDbContext<TUser, TKey, TUserLogin, TRole> _context;
 
-        public CustomBaseUserStore(IdentityDbContext<TUser, TKey, TUserLogin, TRole> dbContext)
+        public CustomBaseUserStore(IdentityBaseDbContext<TUser, TKey, TUserLogin, TRole> dbContext)
         {
             _context = dbContext;
         }

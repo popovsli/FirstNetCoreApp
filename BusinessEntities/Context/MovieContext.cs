@@ -7,7 +7,7 @@ using System;
 
 namespace BusinessEntities.Context
 {
-    public class MovieContext : IdentityDbContext<User, string, UserLogin, Role>
+    public class MovieContext : IdentityBaseDbContext<User,string,UserLogin,Role> //IdentityDbContext
     {
         //Add migration- Add-Migration NewMigration -Project "Project name"
         //Create the database and tables in it- Update-Database
@@ -93,13 +93,14 @@ namespace BusinessEntities.Context
         }
     }
 
-    public class IdentityDbContext<TUser, TKey, TUserLogin, TRole> : DbContext //IdentityDbContext<User, Role, string>
+    public class IdentityBaseDbContext<TUser, TKey, TUserLogin, TRole> : DbContext //IdentityDbContext<User, Role, string>
         where TKey : IEquatable<TKey>
-        where TUser : IdentityUser<TKey>, new()
+        where TUser : IdentityUser<TKey>
         where TUserLogin : IdentityUserLogin<TKey>, new()
         where TRole : IdentityRole<TKey>, new()
+        //where TContext : IdentityBaseDbContext<TUser, TKey, TUserLogin, TRole,TContext>
     {
-        public IdentityDbContext(DbContextOptions<MovieContext> options)
+        public IdentityBaseDbContext(DbContextOptions options)
                 : base(options)
         {
         }
@@ -110,7 +111,7 @@ namespace BusinessEntities.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TUser>().ToTable("User");
+            modelBuilder.Entity<TUser>().ToTable("Users");
             modelBuilder.Entity<TRole>().ToTable("Roles");
             modelBuilder.Entity<TUserLogin>().ToTable("UserLogins");
 

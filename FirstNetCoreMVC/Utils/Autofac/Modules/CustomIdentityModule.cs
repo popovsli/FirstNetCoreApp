@@ -8,6 +8,8 @@ using AutofacRef = Autofac;
 using System.Reflection;
 using Autofac;
 using BusinessLayer.Services.Identity;
+using BusinessEntities.Context;
+using BusinessEntities.Models;
 
 namespace FirstNetCoreMVC.Utils.Autofac.Modules
 {
@@ -17,17 +19,13 @@ namespace FirstNetCoreMVC.Utils.Autofac.Modules
         {
             var executingAssembly = Reflaction.Assembly.Load(nameof(BusinessLayer));
 
-            builder.RegisterAssemblyTypes(executingAssembly)
-                .Where(x => x.Name.EndsWith("Store")).AsImplementedInterfaces().InstancePerLifetimeScope();
-
+            //builder.RegisterAssemblyTypes(executingAssembly)
+            //    .Where(x => x.Name.EndsWith("Store")).AsImplementedInterfaces().InstancePerLifetimeScope();
 
             //Register custom UserStores
-            //builder.RegisterGeneric(typeof(CustomGenericUserStore<,,,>)).AsImplementedInterfaces().InstancePerMatchingLifetimeScope();
-
-            //builder.RegisterGeneric(typeof(TestUser<,,,,>)).AsImplementedInterfaces().InstancePerLifetimeScope();
-
-
-
+            builder.RegisterType<CustomUserStore>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterGeneric(typeof(CustomRoleStore<>)).As(typeof(IRoleStore<>)).InstancePerLifetimeScope();
+           
             //Register custom UserManagers
             builder.RegisterGeneric(typeof(CustomUserManager<>)).AsSelf().InstancePerLifetimeScope();
                     

@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Services.Identity
 {
-    public class CustomUserStore : IUserStore<User>,
+    public class CustomUserStore2 : IUserStore<User>,
         IUserPasswordStore<User>, IUserEmailStore<User>
         , IUserLoginStore<User>
     {
         private readonly MovieContext _context;
 
-        public CustomUserStore(MovieContext dbContext)
+        public CustomUserStore2(MovieContext dbContext)
         {
             _context = dbContext;
         }
