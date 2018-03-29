@@ -46,7 +46,7 @@ namespace FirstNetCoreMVC
                 options.Filters.Add(new RequireHttpsAttribute());
             });
 
-           
+
             //When want to change Area folder name with other name
             //services.Configure<RazorViewEngineOptions>(options =>
             //{
@@ -82,7 +82,7 @@ namespace FirstNetCoreMVC
 
                 // Lockout settings
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.MaxFailedAccessAttempts = 3;
                 options.Lockout.AllowedForNewUsers = true;
 
                 // User settings
