@@ -34,6 +34,7 @@ namespace BusinessEntities.Context
         public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
         public DbSet<CourseAssignment> CourseAssignments { get; set; }
         public DbSet<Person> Person { get; set; }
+        public DbSet<Contact> Contact { get; set; }
 
 
         public virtual void Commit()
@@ -55,6 +56,7 @@ namespace BusinessEntities.Context
             modelBuilder.Entity<OfficeAssignment>().ToTable("OfficeAssignment");
             modelBuilder.Entity<CourseAssignment>().ToTable("CourseAssignment");
             modelBuilder.Entity<Person>().ToTable("Person");
+            modelBuilder.Entity<Contact>().ToTable("Contact");
 
             //modelBuilder.Entity<User>().ToTable("User");
             //modelBuilder.Entity<Role>().ToTable("Roles");
@@ -111,9 +113,9 @@ namespace BusinessEntities.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TUser>().ToTable("Users");
-            modelBuilder.Entity<TRole>().ToTable("Roles");
-            modelBuilder.Entity<TUserLogin>().ToTable("UserLogins");
+            modelBuilder.Entity<TUser>().ToTable("User");
+            modelBuilder.Entity<TRole>().ToTable("Role");
+            modelBuilder.Entity<TUserLogin>().ToTable("UserLogin");
 
             modelBuilder.Entity<TUser>()
                 .HasKey(c => new { c.Id });

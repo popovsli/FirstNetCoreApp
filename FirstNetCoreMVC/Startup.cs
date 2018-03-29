@@ -26,13 +26,15 @@ namespace FirstNetCoreMVC
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
             Bootstrapper.Run();
         }
 
         public IConfiguration Configuration { get; }
+        private IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -43,7 +45,11 @@ namespace FirstNetCoreMVC
                 //     options.Filters.Add(new AddHeaderAttribute("GlobalAddHeader",
                 //"Result filter added to MvcOptions.Filters")); // an instance
                 //     options.Filters.Add(typeof(SampleActionFilter)); // by type
-                options.Filters.Add(new RequireHttpsAttribute());
+                var skipHTTPS = Configuration.GetValue<bool>("LocalTest:skipHTTPS");
+                if (Environment.IsDevelopment() && !skipHTTPS)
+                {
+                    options.Filters.Add(new RequireHttpsAttribute());
+                }
             });
 
 
@@ -198,8 +204,12 @@ namespace FirstNetCoreMVC
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            //Redirects all HTTP requests to HTTPS:
-            app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
+            var skipHTTPS = Configuration.GetValue<bool>("LocalTest:skipHTTPS");
+            if (Environment.IsDevelopment() && !skipHTTPS)
+            {
+                //Redirects all HTTP requests to HTTPS:
+                app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
+            }
 
             app.UseStaticFiles();
             app.UseAuthentication();
