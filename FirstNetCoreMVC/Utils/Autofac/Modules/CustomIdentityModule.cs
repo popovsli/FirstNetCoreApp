@@ -5,11 +5,8 @@ using Reflaction = System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using AutofacRef = Autofac;
-using System.Reflection;
 using Autofac;
 using BusinessLayer.Services.Identity;
-using BusinessEntities.Context;
-using BusinessEntities.Models;
 
 namespace FirstNetCoreMVC.Utils.Autofac.Modules
 {

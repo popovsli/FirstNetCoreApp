@@ -3,5 +3,10 @@
 @using FirstNetCoreMVC.Models
 @using FirstNetCoreMVC.ViewModels.ManageViewModels
 @using FirstNetCoreMVC.ViewModels.AccountViewModels
+@using FirstNetCoreMVC.ViewModels
+@using BusinessLayer.Services.Authorization
+@using BusinessLayer.Constant
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, FirstNetCoreMVC
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService

@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using BusinessEntities.Options;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace FirstNetCoreMVC
 {
@@ -45,11 +47,19 @@ namespace FirstNetCoreMVC
                 //     options.Filters.Add(new AddHeaderAttribute("GlobalAddHeader",
                 //"Result filter added to MvcOptions.Filters")); // an instance
                 //     options.Filters.Add(typeof(SampleActionFilter)); // by type
+
+                // Set LocalTest:skipSSL to true to skip SSL requrement in
+                // debug mode. This is useful when not using Visual Studio.
                 var skipHTTPS = Configuration.GetValue<bool>("LocalTest:skipHTTPS");
                 if (Environment.IsDevelopment() && !skipHTTPS)
                 {
                     options.Filters.Add(new RequireHttpsAttribute());
                 }
+
+                var policy = new AuthorizationPolicyBuilder()
+                            .RequireAuthenticatedUser()
+                            .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
             });
 
 
