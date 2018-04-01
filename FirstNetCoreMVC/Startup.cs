@@ -59,7 +59,8 @@ namespace FirstNetCoreMVC
                 var policy = new AuthorizationPolicyBuilder()
                             .RequireAuthenticatedUser()
                             .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
+                options.Filters.Add(new AuthorizeFilter(policy));
+
             });
 
 
@@ -215,7 +216,7 @@ namespace FirstNetCoreMVC
             }
 
             var skipHTTPS = Configuration.GetValue<bool>("LocalTest:skipHTTPS");
-            if (Environment.IsDevelopment() && !skipHTTPS)
+            if (Environment.IsDevelopment() && skipHTTPS)
             {
                 //Redirects all HTTP requests to HTTPS:
                 app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
