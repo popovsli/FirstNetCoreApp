@@ -79,7 +79,8 @@ namespace FirstNetCoreMVC.Controllers
             if (!isAuthorized.Succeeded)
             {
                 return new ChallengeResult();
-            }
+            }
+
 
             _context.Add(contact);
             await _context.SaveChangesAsync();
@@ -147,7 +148,8 @@ namespace FirstNetCoreMVC.Controllers
                 var canApprove = await _authorizationService.AuthorizeAsync(User, contact,
                 ContactOperations.Approve);
                 if (!canApprove.Succeeded) contact.Status = ContactStatus.Submitted;
-            }            
+            }
+            
             _context.Update(contact);
             await _context.SaveChangesAsync();
 
