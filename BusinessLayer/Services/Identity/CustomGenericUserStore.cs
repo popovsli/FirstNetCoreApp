@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace BusinessLayer.Services.Identity
 {
 
-    public class CustomUserStore : CustomBaseUserStore<User, string, UserLogin, Role, MovieContext>
+    public class CustomUserStore : CustomBaseUserStore<User, string, UserLogin, MovieContext>
     {
         public CustomUserStore(MovieContext dbContext) : base(dbContext)
         {
@@ -22,22 +22,23 @@ namespace BusinessLayer.Services.Identity
 
     }
 
-    public class CustomBaseUserStore<TUser, TKey, TUserLogin, TRole, TContext> : IUserStore<TUser>,
+    public class CustomBaseUserStore<TUser, TKey, TUserLogin, TContext> : IUserStore<TUser>,
         IUserPasswordStore<TUser>,
         IUserEmailStore<TUser>,
         IUserLoginStore<TUser>,
         IUserSecurityStampStore<TUser>,
         IUserPhoneNumberStore<TUser>,
-        IUserLockoutStore<TUser>
+        IUserLockoutStore<TUser>,
+        IUserRoleStore<TUser>
         where TUser : IdentityUser<TKey>
         where TKey : IEquatable<TKey>
         where TUserLogin : IdentityUserLogin<TKey>, new()
-        where TRole : IdentityRole<TKey>, new()
-        where TContext : IdentityBaseDbContext<TUser, TKey, TUserLogin, TRole>
+        //where TRole : IdentityRole<TKey>, new()
+        where TContext : IdentityBaseDbContext<TUser, TKey, TUserLogin>
     {
-        private readonly IdentityBaseDbContext<TUser, TKey, TUserLogin, TRole> _context;
+        private readonly IdentityBaseDbContext<TUser, TKey, TUserLogin> _context;
 
-        public CustomBaseUserStore(IdentityBaseDbContext<TUser, TKey, TUserLogin, TRole> dbContext)
+        public CustomBaseUserStore(IdentityBaseDbContext<TUser, TKey, TUserLogin> dbContext)
         {
             _context = dbContext;
         }
@@ -452,6 +453,31 @@ namespace BusinessLayer.Services.Identity
 
             user.LockoutEnabled = enabled;
             return Task.CompletedTask;
+        }
+
+        public Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveFromRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsInRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

@@ -21,7 +21,7 @@ namespace FirstNetCoreMVC.Utils.Autofac.Modules
 
             //Register custom UserStores
             builder.RegisterType<CustomUserStore>().AsImplementedInterfaces().InstancePerLifetimeScope();
-            builder.RegisterGeneric(typeof(CustomRoleStore<>)).As(typeof(IRoleStore<>)).InstancePerLifetimeScope();
+            //builder.RegisterGeneric(typeof(CustomRoleStore<>)).As(typeof(IRoleStore<>)).InstancePerLifetimeScope();
            
             //Register custom UserManagers
             builder.RegisterGeneric(typeof(CustomUserManager<>)).AsSelf().InstancePerLifetimeScope();

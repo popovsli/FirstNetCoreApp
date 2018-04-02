@@ -7,7 +7,7 @@ using System;
 
 namespace BusinessEntities.Context
 {
-    public class MovieContext : IdentityBaseDbContext<User,string,UserLogin,Role> //IdentityDbContext
+    public class MovieContext : IdentityDbContext<User,string,UserLogin,Role> //IdentityDbContext
     {
         //Add migration- Add-Migration NewMigration -Project "Project name"
         //Create the database and tables in it- Update-Database
@@ -95,11 +95,34 @@ namespace BusinessEntities.Context
         }
     }
 
-    public class IdentityBaseDbContext<TUser, TKey, TUserLogin, TRole> : DbContext //IdentityDbContext<User, Role, string>
+    public class IdentityDbContext<TUser, TKey, TUserLogin, TRole> : IdentityBaseDbContext<TUser, TKey, TUserLogin>
+        where TUser : IdentityUser<TKey>
+        where TKey : IEquatable<TKey>
+        where TUserLogin : IdentityUserLogin<TKey>
+        where TRole : IdentityRole<TKey>
+    {
+        public IdentityDbContext(DbContextOptions options)
+                : base(options)
+        {
+        }
+
+        public DbSet<TRole> Role { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<TRole>().ToTable("Role");
+
+            modelBuilder.Entity<TRole>()
+                .HasKey(c => new { c.Id });
+        }
+    }
+
+    public class IdentityBaseDbContext<TUser, TKey, TUserLogin> : DbContext //IdentityDbContext<User, Role, string>
         where TKey : IEquatable<TKey>
         where TUser : IdentityUser<TKey>
-        where TUserLogin : IdentityUserLogin<TKey>, new()
-        where TRole : IdentityRole<TKey>, new()
+        where TUserLogin : IdentityUserLogin<TKey>
+        //where TRole : IdentityRole<TKey>, new()
         //where TContext : IdentityBaseDbContext<TUser, TKey, TUserLogin, TRole,TContext>
     {
         public IdentityBaseDbContext(DbContextOptions options)
@@ -108,13 +131,13 @@ namespace BusinessEntities.Context
         }
 
         public DbSet<TUser> User { get; set; }
-        public DbSet<TRole> Role { get; set; }
+        //public DbSet<TRole> Role { get; set; }
         public DbSet<TUserLogin> UserLogin { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<TUser>().ToTable("User");
-            modelBuilder.Entity<TRole>().ToTable("Role");
+            //modelBuilder.Entity<TRole>().ToTable("Role");
             modelBuilder.Entity<TUserLogin>().ToTable("UserLogin");
 
             modelBuilder.Entity<TUser>()
@@ -123,8 +146,8 @@ namespace BusinessEntities.Context
             modelBuilder.Entity<TUserLogin>()
                .HasKey(c => new { c.LoginProvider, c.ProviderKey });
 
-            modelBuilder.Entity<TRole>()
-                .HasKey(c => new { c.Id });
+            //modelBuilder.Entity<TRole>()
+            //    .HasKey(c => new { c.Id });
         }
     }
 

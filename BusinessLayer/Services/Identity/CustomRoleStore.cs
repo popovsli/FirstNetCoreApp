@@ -1,4 +1,5 @@
-﻿using BusinessEntities.Models;
+﻿using BusinessEntities.Context;
+using BusinessEntities.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -9,14 +10,31 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Services.Identity
 {
-    public class CustomRoleStore<TRole> : IRoleStore<TRole>, IQueryableRoleStore<TRole>
-        where TRole : IdentityRole,new()
+    public class CustomBaseRoleStore<TRole, TKey, TUser, TUserLogin, TContext> :
+        IRoleStore<TRole>,
+        IQueryableRoleStore<TRole>
+        where TRole : IdentityRole<TKey>
+        where TKey : IEquatable<TKey>
+        where TUser : IdentityUser<TKey>
+        where TUserLogin : IdentityUserLogin<TKey>, new()
+        where TContext : IdentityDbContext<TUser, TKey, TUserLogin, TRole>
     {
+        private readonly TContext _context;
+
         public IQueryable<TRole> Roles => throw new NotImplementedException();
 
-        public Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
+        public CustomBaseRoleStore(TContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+
+        public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (role == null) throw new ArgumentNullException(nameof(role));
+
+            _context.Role.Add(role);
+            return await _context.SaveChangesAsync() == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not insert role {role.Name}." }) : IdentityResult.Success;
         }
 
         public Task<IdentityResult> DeleteAsync(TRole role, CancellationToken cancellationToken)
@@ -26,7 +44,7 @@ namespace BusinessLayer.Services.Identity
 
         public void Dispose()
         {
-           
+
         }
 
         public Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
