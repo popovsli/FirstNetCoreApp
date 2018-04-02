@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Rewrite;
 using BusinessEntities.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using System.Security.Claims;
 
 namespace FirstNetCoreMVC
 {
@@ -63,6 +64,10 @@ namespace FirstNetCoreMVC
 
             });
 
+            services.AddAuthorization(option =>
+            {
+                option.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Email, "popovsli91@gmail.com").RequireRole("Administrator"));
+            });
 
             //When want to change Area folder name with other name
             //services.Configure<RazorViewEngineOptions>(options =>

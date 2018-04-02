@@ -13,7 +13,7 @@ namespace BusinessLayer.Services.Authorization
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,OperationAuthorizationRequirement requirement,Contact resource)
         {
-            if (context.User == null)
+            if (context.User == null)   
             {
                 return Task.FromResult(0);
             }

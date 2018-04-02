@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Services.Authorization
 {
+    //For example, MVC passes an instance of AuthorizationFilterContext in the Resource property.
+    //This property provides access to HttpContext, RouteData, and everything else provided by MVC and Razor Pages.
     public class ContactIsOwnerAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Contact>
     {
         CustomUserManager<User> _userManager;
