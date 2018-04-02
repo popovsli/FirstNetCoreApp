@@ -3,6 +3,7 @@ using BusinessEntities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -15,11 +16,7 @@ namespace BusinessLayer.Services.Identity
 
     public class CustomUserStore : CustomBaseUserStore<User, string, UserLogin, MovieContext>
     {
-        public CustomUserStore(MovieContext dbContext) : base(dbContext)
-        {
-
-        }
-
+        public CustomUserStore(MovieContext dbContext) : base(dbContext) { }
     }
 
     public class CustomBaseUserStore<TUser, TKey, TUserLogin, TContext> : IUserStore<TUser>,
@@ -28,8 +25,8 @@ namespace BusinessLayer.Services.Identity
         IUserLoginStore<TUser>,
         IUserSecurityStampStore<TUser>,
         IUserPhoneNumberStore<TUser>,
-        IUserLockoutStore<TUser>,
-        IUserRoleStore<TUser>
+        IUserLockoutStore<TUser>
+        //IUserRoleStore<TUser>
         where TUser : IdentityUser<TKey>
         where TKey : IEquatable<TKey>
         where TUserLogin : IdentityUserLogin<TKey>, new()
@@ -138,7 +135,7 @@ namespace BusinessLayer.Services.Identity
 
             _context.Attach(user).State = EntityState.Modified;
 
-            return await _context.SaveChangesAsync() == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not insert user {user.Email}." }) : IdentityResult.Success;
+            return await _context.SaveChangesAsync() == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not update user {user.Email}." }) : IdentityResult.Success;
         }
 
         public void Dispose()
@@ -457,17 +454,17 @@ namespace BusinessLayer.Services.Identity
 
         public Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task RemoveFromRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public Task<bool> IsInRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)

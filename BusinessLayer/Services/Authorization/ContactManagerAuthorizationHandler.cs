@@ -31,5 +31,6 @@ namespace BusinessLayer.Services.Authorization
             }
             return Task.FromResult(0);
         }
-    }
+    }
+
 }

@@ -20,7 +20,8 @@ namespace BusinessLayer.Services.Authorization
         userManager)
         {
             _userManager = userManager;
-        }
+        }
+
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, Contact resource)
         {
