@@ -1,6 +1,5 @@
 ﻿using BusinessEntities.Context;
-using BusinessEntities.GeneratedModels;
-using BusinessEntities.Models;
+using BusinessEntities.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;

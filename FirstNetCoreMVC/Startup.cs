@@ -15,7 +15,6 @@ using BusinessEntities.Context;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
-using BusinessEntities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +23,7 @@ using BusinessEntities.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using System.Security.Claims;
+using BusinessEntities.Models.Identity;
 
 namespace FirstNetCoreMVC
 {

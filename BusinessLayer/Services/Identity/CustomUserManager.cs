@@ -21,7 +21,6 @@ namespace BusinessLayer.Services.Identity
             : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
         }
-       
     }
 
 }

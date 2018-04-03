@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using BusinessEntities.Models;
+using BusinessEntities.Models.Identity;
 using BusinessLayer.Interfaces;
 using BusinessLayer.Services.Identity;
 using FirstNetCoreMVC.Utils.Extensions;

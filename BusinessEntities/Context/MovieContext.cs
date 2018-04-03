@@ -1,13 +1,14 @@
 ﻿
 using BusinessEntities.Models;
 using BusinessEntities.Models.ContosoUniversity;
+using BusinessEntities.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace BusinessEntities.Context
 {
-    public class MovieContext : IdentityDbContext<User,string,UserLogin,Role> //IdentityDbContext
+    public class MovieContext : IdentityDbContext<User, string, UserLogin, Role, UserRole> //IdentityDbContext
     {
         //Add migration- Add-Migration NewMigration -Project "Project name"
         //Create the database and tables in it- Update-Database
@@ -95,11 +96,12 @@ namespace BusinessEntities.Context
         }
     }
 
-    public class IdentityDbContext<TUser, TKey, TUserLogin, TRole> : IdentityBaseDbContext<TUser, TKey, TUserLogin>
+    public class IdentityDbContext<TUser, TKey, TUserLogin, TRole, TUserRole> : IdentityBaseDbContext<TUser, TKey, TUserLogin, TUserRole>
         where TUser : IdentityUser<TKey>
         where TKey : IEquatable<TKey>
         where TUserLogin : IdentityUserLogin<TKey>
         where TRole : IdentityRole<TKey>
+        where TUserRole : IdentityUserRole<TKey>
     {
         public IdentityDbContext(DbContextOptions options)
                 : base(options)
@@ -118,12 +120,11 @@ namespace BusinessEntities.Context
         }
     }
 
-    public class IdentityBaseDbContext<TUser, TKey, TUserLogin> : DbContext //IdentityDbContext<User, Role, string>
+    public class IdentityBaseDbContext<TUser, TKey, TUserLogin, TUserRole> : DbContext //IdentityDbContext<User, Role, string>
         where TKey : IEquatable<TKey>
         where TUser : IdentityUser<TKey>
         where TUserLogin : IdentityUserLogin<TKey>
-        //where TRole : IdentityRole<TKey>, new()
-        //where TContext : IdentityBaseDbContext<TUser, TKey, TUserLogin, TRole,TContext>
+        where TUserRole : IdentityUserRole<TKey>
     {
         public IdentityBaseDbContext(DbContextOptions options)
                 : base(options)
@@ -131,14 +132,14 @@ namespace BusinessEntities.Context
         }
 
         public DbSet<TUser> User { get; set; }
-        //public DbSet<TRole> Role { get; set; }
         public DbSet<TUserLogin> UserLogin { get; set; }
+        public DbSet<TUserRole> UserRole { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<TUser>().ToTable("User");
-            //modelBuilder.Entity<TRole>().ToTable("Role");
             modelBuilder.Entity<TUserLogin>().ToTable("UserLogin");
+            modelBuilder.Entity<TUserRole>().ToTable("UserRole");
 
             modelBuilder.Entity<TUser>()
                 .HasKey(c => new { c.Id });
@@ -146,8 +147,8 @@ namespace BusinessEntities.Context
             modelBuilder.Entity<TUserLogin>()
                .HasKey(c => new { c.LoginProvider, c.ProviderKey });
 
-            //modelBuilder.Entity<TRole>()
-            //    .HasKey(c => new { c.Id });
+            modelBuilder.Entity<TUserRole>()
+               .HasKey(c => new { c.RoleId, c.UserId });
         }
     }
 

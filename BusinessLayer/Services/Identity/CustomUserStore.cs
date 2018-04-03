@@ -1,5 +1,5 @@
 ﻿using BusinessEntities.Context;
-using BusinessEntities.Models;
+using BusinessEntities.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,28 +14,29 @@ using System.Threading.Tasks;
 namespace BusinessLayer.Services.Identity
 {
 
-    public class CustomUserStore : CustomBaseUserStore<User, string, UserLogin, MovieContext>
+    public class CustomUserStore : CustomBaseUserStore<User, string, UserLogin, UserRole, Role, MovieContext>
     {
         public CustomUserStore(MovieContext dbContext) : base(dbContext) { }
     }
 
-    public class CustomBaseUserStore<TUser, TKey, TUserLogin, TContext> : IUserStore<TUser>,
+    public class CustomBaseUserStore<TUser, TKey, TUserLogin, TUserRole, TRole, TContext> : IUserStore<TUser>,
         IUserPasswordStore<TUser>,
         IUserEmailStore<TUser>,
         IUserLoginStore<TUser>,
         IUserSecurityStampStore<TUser>,
         IUserPhoneNumberStore<TUser>,
-        IUserLockoutStore<TUser>
-        //IUserRoleStore<TUser>
+        IUserLockoutStore<TUser>,
+        IUserRoleStore<TUser>
         where TUser : IdentityUser<TKey>
         where TKey : IEquatable<TKey>
         where TUserLogin : IdentityUserLogin<TKey>, new()
-        //where TRole : IdentityRole<TKey>, new()
-        where TContext : IdentityBaseDbContext<TUser, TKey, TUserLogin>
+        where TUserRole : IdentityUserRole<TKey>, new()
+        where TRole : IdentityRole<TKey>
+        where TContext : IdentityDbContext<TUser, TKey, TUserLogin, TRole, TUserRole>
     {
-        private readonly IdentityBaseDbContext<TUser, TKey, TUserLogin> _context;
+        private readonly TContext _context;
 
-        public CustomBaseUserStore(IdentityBaseDbContext<TUser, TKey, TUserLogin> dbContext)
+        public CustomBaseUserStore(TContext dbContext)
         {
             _context = dbContext;
         }
@@ -452,14 +453,59 @@ namespace BusinessLayer.Services.Identity
             return Task.CompletedTask;
         }
 
-        public Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+        #endregion
+
+        #region IUserRoleStore
+
+        public async Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentException(nameof(user));
+            if (string.IsNullOrEmpty(roleName)) throw new ArgumentException(nameof(roleName));
+
+            TRole role = await FindRoleAync(roleName, cancellationToken);
+
+            await _context.UserRole.AddAsync(CreateUserRole(user, role));
+            await _context.SaveChangesAsync();
         }
 
-        public Task RemoveFromRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+        private TUserRole CreateUserRole(TUser user, TRole role)
         {
-            return Task.CompletedTask;
+            return new TUserRole()
+            {
+                UserId = user.Id,
+                RoleId = role.Id
+            };
+        }
+
+        protected virtual async Task<TRole> FindRoleAync(string normalizedName, CancellationToken cancellationToken)
+        {
+            return await _context.Role.SingleOrDefaultAsync(x => x.NormalizedName == normalizedName, cancellationToken);
+        }
+
+        public async Task RemoveFromRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentException(nameof(user));
+            if (string.IsNullOrEmpty(roleName)) throw new ArgumentException(nameof(roleName));
+
+            TRole role = await FindRoleAync(roleName, cancellationToken);
+
+            if (role != null)
+            {
+                var userRole = await FindUserRoleAsync(user.Id, role.Id, cancellationToken);
+
+                if(userRole != null)
+                {
+                    _context.Remove(userRole);
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+
+        public async Task<TUserRole> FindUserRoleAsync(TKey userId, TKey roleId, CancellationToken cancellationToken)
+        {
+            return await _context.UserRole.FindAsync(new object[] { userId, roleId }, cancellationToken);
         }
 
         public Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)

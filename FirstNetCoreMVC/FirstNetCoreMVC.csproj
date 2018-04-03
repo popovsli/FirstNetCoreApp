@@ -48,6 +48,7 @@
   <ItemGroup>
     <Folder Include="Areas\WebAPI\Views\" />
     <Folder Include="Views\Shared\EditorTemplates\" />
+    <Folder Include="wwwroot\js\infragistics\" />
   </ItemGroup>
 
 </Project>

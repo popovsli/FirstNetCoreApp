@@ -1,5 +1,5 @@
 ﻿using BusinessEntities.Context;
-using BusinessEntities.Models;
+using BusinessEntities.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,19 +13,20 @@ using System.Threading.Tasks;
 namespace BusinessLayer.Services.Identity
 {
 
-    public class CustomRoleStore : CustomBaseRoleStore<Role, string, User, UserLogin, MovieContext>
+    public class CustomRoleStore : CustomBaseRoleStore<Role, string, User, UserLogin, UserRole ,MovieContext>
     {
         public CustomRoleStore(MovieContext movieContext) : base(movieContext) { }
     }
 
-    public class CustomBaseRoleStore<TRole, TKey, TUser, TUserLogin, TContext> :
+    public class CustomBaseRoleStore<TRole, TKey, TUser, TUserLogin, TUserRole ,TContext> :
         IRoleStore<TRole>,
         IQueryableRoleStore<TRole>
         where TRole : IdentityRole<TKey>
         where TKey : IEquatable<TKey>
         where TUser : IdentityUser<TKey>
         where TUserLogin : IdentityUserLogin<TKey>, new()
-        where TContext : IdentityDbContext<TUser, TKey, TUserLogin, TRole>
+        where TUserRole : IdentityUserRole<TKey>
+        where TContext : IdentityDbContext<TUser, TKey, TUserLogin, TRole, TUserRole>
     {
         private readonly TContext _context;
 

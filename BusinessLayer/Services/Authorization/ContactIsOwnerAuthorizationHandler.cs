@@ -1,5 +1,4 @@
-﻿using BusinessEntities.Models;
-using BusinessEntities.Models.ContosoUniversity;
+﻿using BusinessEntities.Models.ContosoUniversity;
 using BusinessLayer.Services.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
@@ -8,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessEntities.Models.Identity;
 
 namespace BusinessLayer.Services.Authorization
 {
