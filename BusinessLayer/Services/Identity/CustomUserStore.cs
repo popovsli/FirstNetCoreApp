@@ -26,7 +26,8 @@ namespace BusinessLayer.Services.Identity
         IUserSecurityStampStore<TUser>,
         IUserPhoneNumberStore<TUser>,
         IUserLockoutStore<TUser>,
-        IUserRoleStore<TUser>
+        IUserRoleStore<TUser>,
+        IQueryableUserStore<TUser>
         where TUser : IdentityUser<TKey>
         where TKey : IEquatable<TKey>
         where TUserLogin : IdentityUserLogin<TKey>, new()
@@ -35,6 +36,8 @@ namespace BusinessLayer.Services.Identity
         where TContext : IdentityDbContext<TUser, TKey, TUserLogin, TRole, TUserRole>
     {
         private readonly TContext _context;
+
+        public IQueryable<TUser> Users => _context.User;
 
         public CustomBaseUserStore(TContext dbContext)
         {
@@ -495,7 +498,7 @@ namespace BusinessLayer.Services.Identity
             {
                 var userRole = await FindUserRoleAsync(user.Id, role.Id, cancellationToken);
 
-                if(userRole != null)
+                if (userRole != null)
                 {
                     _context.Remove(userRole);
                     await _context.SaveChangesAsync();
@@ -508,19 +511,52 @@ namespace BusinessLayer.Services.Identity
             return await _context.UserRole.FindAsync(new object[] { userId, roleId }, cancellationToken);
         }
 
-        public Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
+        public async Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
         {
-            return null;
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentException(nameof(user));
+
+            var roles = from userRole in _context.UserRole
+                        join role in _context.Role on userRole.RoleId equals role.Id
+                        where userRole.UserId.Equals(user.Id)
+                        select role.Name;
+
+            return await roles.ToListAsync(cancellationToken);
         }
 
-        public Task<bool> IsInRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+        public async Task<bool> IsInRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentException(nameof(user));
+
+            var role = await FindRoleAync(roleName, cancellationToken);
+
+            if (role != null)
+            {
+                var userRole = await FindUserRoleAsync(user.Id, role.Id, cancellationToken);
+
+                if (userRole != null)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            if (string.IsNullOrEmpty(roleName)) throw new ArgumentException(nameof(roleName));
+
+            var role = await FindRoleAync(roleName, cancellationToken);
+
+            var users = from user in _context.User
+                        join userRole in _context.UserRole on user.Id equals userRole.UserId
+                        join roles in _context.Role on userRole.RoleId equals roles.Id
+                        where roles.NormalizedName == roleName
+                        select user;
+
+            return await users.ToListAsync(cancellationToken);
         }
 
         #endregion

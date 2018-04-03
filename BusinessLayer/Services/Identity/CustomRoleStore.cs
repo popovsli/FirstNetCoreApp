@@ -1,5 +1,6 @@
 ﻿using BusinessEntities.Context;
 using BusinessEntities.Models.Identity;
+using BusinessLayer.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,12 +14,12 @@ using System.Threading.Tasks;
 namespace BusinessLayer.Services.Identity
 {
 
-    public class CustomRoleStore : CustomBaseRoleStore<Role, string, User, UserLogin, UserRole ,MovieContext>
+    public class CustomRoleStore : CustomBaseRoleStore<Role, string, User, UserLogin, UserRole, MovieContext>
     {
         public CustomRoleStore(MovieContext movieContext) : base(movieContext) { }
     }
 
-    public class CustomBaseRoleStore<TRole, TKey, TUser, TUserLogin, TUserRole ,TContext> :
+    public class CustomBaseRoleStore<TRole, TKey, TUser, TUserLogin, TUserRole, TContext> :
         IRoleStore<TRole>,
         IQueryableRoleStore<TRole>
         where TRole : IdentityRole<TKey>
@@ -87,17 +88,8 @@ namespace BusinessLayer.Services.Identity
             cancellationToken.ThrowIfCancellationRequested();
             if (string.IsNullOrEmpty(roleId)) throw new ArgumentNullException(nameof(roleId));
 
-            TKey roleID = ConvertIdFromString(roleId);
+            TKey roleID = Converters.ConvertIdFromString<TKey>(roleId);
             return await Roles.FirstOrDefaultAsync(u => u.Id.Equals(roleID), cancellationToken);
-        }
-
-        public virtual TKey ConvertIdFromString(string id)
-        {
-            if (id == null)
-            {
-                return default(TKey);
-            }
-            return (TKey)TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(id);
         }
 
         public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
@@ -120,16 +112,7 @@ namespace BusinessLayer.Services.Identity
             cancellationToken.ThrowIfCancellationRequested();
             if (role == null) throw new ArgumentNullException(nameof(role));
 
-            return Task.FromResult(ConvertIdToString(role.Id));
-        }
-
-        public virtual string ConvertIdToString(TKey id)
-        {
-            if (id.Equals(default(TKey)))
-            {
-                return null;
-            }
-            return id.ToString();
+            return Task.FromResult(Converters.ConvertIdToString(role.Id));
         }
 
         public Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
