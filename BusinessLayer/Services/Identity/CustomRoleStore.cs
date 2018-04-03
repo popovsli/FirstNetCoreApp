@@ -14,12 +14,12 @@ using System.Threading.Tasks;
 namespace BusinessLayer.Services.Identity
 {
 
-    public class CustomRoleStore : CustomBaseRoleStore<Role, string, User, UserLogin, UserRole, MovieContext>
+    public class CustomRoleStore : CustomBaseRoleStore<Role, string, User, UserLogin, UserRole, UserClaim ,MovieContext>
     {
         public CustomRoleStore(MovieContext movieContext) : base(movieContext) { }
     }
 
-    public class CustomBaseRoleStore<TRole, TKey, TUser, TUserLogin, TUserRole, TContext> :
+    public class CustomBaseRoleStore<TRole, TKey, TUser, TUserLogin, TUserRole, TUserClaim, TContext> :
         IRoleStore<TRole>,
         IQueryableRoleStore<TRole>
         where TRole : IdentityRole<TKey>
@@ -27,7 +27,8 @@ namespace BusinessLayer.Services.Identity
         where TUser : IdentityUser<TKey>
         where TUserLogin : IdentityUserLogin<TKey>, new()
         where TUserRole : IdentityUserRole<TKey>
-        where TContext : IdentityDbContext<TUser, TKey, TUserLogin, TRole, TUserRole>
+        where TUserClaim : IdentityUserClaim<TKey>
+        where TContext : IdentityDbContext<TUser, TKey, TUserLogin, TRole, TUserRole, TUserClaim>
     {
         private readonly TContext _context;
 

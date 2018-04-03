@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,12 +15,12 @@ using System.Threading.Tasks;
 namespace BusinessLayer.Services.Identity
 {
 
-    public class CustomUserStore : CustomBaseUserStore<User, string, UserLogin, UserRole, Role, MovieContext>
+    public class CustomUserStore : CustomBaseUserStore<User, string, UserLogin, UserRole, Role, UserClaim, MovieContext>
     {
         public CustomUserStore(MovieContext dbContext) : base(dbContext) { }
     }
 
-    public class CustomBaseUserStore<TUser, TKey, TUserLogin, TUserRole, TRole, TContext> : IUserStore<TUser>,
+    public class CustomBaseUserStore<TUser, TKey, TUserLogin, TUserRole, TRole, TUserClaim, TContext> : IUserStore<TUser>,
         IUserPasswordStore<TUser>,
         IUserEmailStore<TUser>,
         IUserLoginStore<TUser>,
@@ -27,13 +28,15 @@ namespace BusinessLayer.Services.Identity
         IUserPhoneNumberStore<TUser>,
         IUserLockoutStore<TUser>,
         IUserRoleStore<TUser>,
+        IUserClaimStore<TUser>,
         IQueryableUserStore<TUser>
         where TUser : IdentityUser<TKey>
         where TKey : IEquatable<TKey>
         where TUserLogin : IdentityUserLogin<TKey>, new()
         where TUserRole : IdentityUserRole<TKey>, new()
         where TRole : IdentityRole<TKey>
-        where TContext : IdentityDbContext<TUser, TKey, TUserLogin, TRole, TUserRole>
+        where TUserClaim : IdentityUserClaim<TKey>
+        where TContext : IdentityDbContext<TUser, TKey, TUserLogin, TRole, TUserRole, TUserClaim>
     {
         private readonly TContext _context;
 
@@ -271,7 +274,7 @@ namespace BusinessLayer.Services.Identity
             if (userLogin != null)
             {
                 _context.UserLogin.Remove(userLogin);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
             }
         }
 
@@ -293,16 +296,7 @@ namespace BusinessLayer.Services.Identity
             }
             return null;
         }
-
-        public virtual TKey ConvertIdFromString(string id)
-        {
-            if (id == null)
-            {
-                return default(TKey);
-            }
-            return (TKey)TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(id);
-        }
-
+        
         protected virtual async Task<TUserLogin> FindUserLoginAsync(string loginProvider, string providerKey, TUser user)
         {
             TUserLogin userLogin = await _context.UserLogin.Where(x => x.LoginProvider == loginProvider && x.ProviderKey == providerKey && x.UserId.Equals(user.Id))
@@ -557,6 +551,35 @@ namespace BusinessLayer.Services.Identity
                         select user;
 
             return await users.ToListAsync(cancellationToken);
+        }
+
+        #endregion
+
+        #region IUserClaimStore
+
+        public Task<IList<Claim>> GetClaimsAsync(TUser user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ReplaceClaimAsync(TUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<TUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
