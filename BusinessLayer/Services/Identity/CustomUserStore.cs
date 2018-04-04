@@ -35,7 +35,7 @@ namespace BusinessLayer.Services.Identity
         where TUserLogin : IdentityUserLogin<TKey>, new()
         where TUserRole : IdentityUserRole<TKey>, new()
         where TRole : IdentityRole<TKey>
-        where TUserClaim : IdentityUserClaim<TKey>
+        where TUserClaim : IdentityUserClaim<TKey>, new()
         where TContext : IdentityDbContext<TUser, TKey, TUserLogin, TRole, TUserRole, TUserClaim>
     {
         private readonly TContext _context;
@@ -296,7 +296,7 @@ namespace BusinessLayer.Services.Identity
             }
             return null;
         }
-        
+
         protected virtual async Task<TUserLogin> FindUserLoginAsync(string loginProvider, string providerKey, TUser user)
         {
             TUserLogin userLogin = await _context.UserLogin.Where(x => x.LoginProvider == loginProvider && x.ProviderKey == providerKey && x.UserId.Equals(user.Id))
@@ -557,29 +557,81 @@ namespace BusinessLayer.Services.Identity
 
         #region IUserClaimStore
 
-        public Task<IList<Claim>> GetClaimsAsync(TUser user, CancellationToken cancellationToken)
+        public async Task<IList<Claim>> GetClaimsAsync(TUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            return await (_context.UserClaim.Where(x => x.UserId.Equals(user)).Select(x => x.ToClaim())).ToListAsync(cancellationToken);
         }
 
-        public Task AddClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        public async Task AddClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            if (claims == null || claims.Count() == 0) throw new ArgumentNullException(nameof(claims));
+
+            List<TUserClaim> claimsForAdd = new List<TUserClaim>();
+
+            foreach (var claim in claims)
+            {
+                claimsForAdd.Add(CreateUserClaim(user, claim));
+            }
+
+            await _context.UserClaim.AddRangeAsync(claimsForAdd, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public Task ReplaceClaimAsync(TUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
+        public virtual TUserClaim CreateUserClaim(TUser user, Claim claim)
         {
-            throw new NotImplementedException();
+            return new TUserClaim()
+            {
+                UserId = user.Id,
+                ClaimType = claim.Type,
+                ClaimValue = claim.Value
+            };
         }
 
-        public Task RemoveClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        public async Task ReplaceClaimAsync(TUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            if (claim == null) throw new ArgumentNullException(nameof(claim));
+            if (newClaim == null) throw new ArgumentNullException(nameof(newClaim));
+
+            var matchedClaims = await _context.UserClaim.Where(x => x.UserId.Equals(user.Id) && x.ClaimType.Equals(claim.ValueType) && x.ClaimValue.Equals(claim.Value)).ToListAsync(cancellationToken);
+
+            foreach (var matchedClaim in matchedClaims)
+            {
+                _context.Attach(matchedClaim).State = EntityState.Modified;
+                matchedClaim.InitializeFromClaim(newClaim);
+            }
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<IList<TUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        public async Task RemoveClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            if (claims == null || claims.Count() == 0) throw new ArgumentNullException(nameof(claims));
+
+            List<TUserClaim> claimsForDeleted = new List<TUserClaim>();
+
+            foreach (var claim in claims)
+            {
+                claimsForDeleted.Add(CreateUserClaim(user, claim));
+            }
+
+            _context.UserClaim.RemoveRange(claimsForDeleted);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<IList<TUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (claim == null) throw new ArgumentNullException(nameof(claim));
+
+            //return await _context.UserClaim.Where(x => x == claim.)
         }
 
         #endregion
