@@ -60,7 +60,6 @@ namespace BusinessEntities.Context
             modelBuilder.Entity<Contact>().ToTable("Contact");
 
             //modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
-            //modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
             //modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
 
             modelBuilder.Entity<CourseAssignment>()

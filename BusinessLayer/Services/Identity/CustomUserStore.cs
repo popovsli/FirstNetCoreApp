@@ -631,7 +631,12 @@ namespace BusinessLayer.Services.Identity
             cancellationToken.ThrowIfCancellationRequested();
             if (claim == null) throw new ArgumentNullException(nameof(claim));
 
-            //return await _context.UserClaim.Where(x => x == claim.)
+            var users = from userClaim in _context.UserClaim
+                        join user in _context.User on userClaim.UserId equals user.Id
+                        where userClaim.ClaimType == claim.Type && userClaim.ClaimValue == claim.Value
+                        select user;
+
+            return await users.ToListAsync(cancellationToken);
         }
 
         #endregion
