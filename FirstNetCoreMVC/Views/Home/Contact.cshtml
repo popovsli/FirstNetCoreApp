@@ -1,6 +1,4 @@
-﻿@using Infragistics.Web.Mvc
-
-@{
+﻿@{
     ViewData["Title"] = "Contact";
 }
 <h2>@ViewData["Title"]</h2>
@@ -17,11 +15,3 @@
     <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
     <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
 </address>
-
-@(Html.Infragistics().Loader()
-        .ScriptPath(Url.Content("~/js/infragistics"))
-        .CssPath(Url.Content("~/css"))
-        .Render())
-
-
-@(Html.Infragistics().NumericEditor().ID("newEditor").MaxValue(100).Render()) 
