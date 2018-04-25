@@ -18,7 +18,7 @@ namespace BusinessLayer.Services.Authorization
                 //mvcContext
             }
 
-            var pendingRequirements = context.PendingRequirements.ToList();
+            var pendingRequirements = context.PendingRequirements?.ToList();
 
             foreach (var requirement in pendingRequirements)
             {

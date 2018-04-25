@@ -1,2 +1,0 @@
-﻿dbo.Movie
-dbo.Schedule

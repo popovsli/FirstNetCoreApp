@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using System.Security.Claims;
 using BusinessEntities.Models.Identity;
+using BusinessLayer.Services.Authorization;
 
 namespace FirstNetCoreMVC
 {
@@ -64,9 +65,15 @@ namespace FirstNetCoreMVC
 
             });
 
-            services.AddAuthorization(option =>
+            //services.AddAuthorization(option =>
+            //{
+            //    option.AddPolicy("AdminRole", policy => policy.RequireClaim(ClaimTypes.Email, "popovsli91@gmail.com").RequireRole("Admin"));
+            //});
+
+            services.AddAuthorization(options =>
             {
-                option.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Email, "popovsli91@gmail.com").RequireRole("Administrator"));
+                options.AddPolicy("EditPolicy", policy =>
+                    policy.Requirements.Add(new EditPermission()));
             });
 
             //When want to change Area folder name with other name
@@ -77,7 +84,6 @@ namespace FirstNetCoreMVC
             //    options.AreaViewLocationFormats.Add("/Services/{2}/Views/Shared/{0}.cshtml");
             //    options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             //});
-
             services.AddDbContext<MovieContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MovieContext"), x => x.MigrationsAssembly("BusinessEntities")));
 

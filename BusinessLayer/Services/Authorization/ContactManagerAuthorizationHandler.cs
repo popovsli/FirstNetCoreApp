@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Services.Authorization
 {
-    public class ContactManagerAuthorizationHandler :AuthorizationHandler<OperationAuthorizationRequirement, Contact>
+    public class ContactManagerAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Contact>
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,OperationAuthorizationRequirement requirement,Contact resource)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, Contact resource)
         {
             if (context.User == null || resource == null)
             {

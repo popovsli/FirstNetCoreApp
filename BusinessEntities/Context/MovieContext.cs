@@ -43,9 +43,15 @@ namespace BusinessEntities.Context
             base.SaveChanges();
         }
 
+        public virtual void Migrate()
+        {
+            this.Migrate();
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Movie>().ToTable(nameof(Movie));
             modelBuilder.Entity<Schedule>().ToTable(nameof(Schedule));
 

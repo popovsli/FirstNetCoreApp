@@ -3,3 +3,14 @@
 ################################################################################
 
 /FirstNetCoreMVC/bin/Debug
+/FirstNetCoreMVC/obj
+/BusinessEntities/bin/Debug/netstandard2.0
+/BusinessEntities/obj/Debug/netstandard2.0
+/BusinessEntities/obj
+/BusinessLayer/bin/Debug/netstandard2.0
+/BusinessLayer/obj/Debug/netstandard2.0
+/BusinessLayer/obj
+/.vs
+/FirstNetCoreApp/obj/Debug/netcoreapp2.0
+/FirstNetCoreApp/obj/Debug/netcoreapp2.1
+/FirstNetCoreApp/obj
