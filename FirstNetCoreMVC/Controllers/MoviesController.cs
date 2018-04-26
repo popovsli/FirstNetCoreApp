@@ -13,6 +13,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using FirstNetCoreMVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FirstNetCoreMVC.Controllers
 {
@@ -27,6 +28,7 @@ namespace FirstNetCoreMVC.Controllers
             _mapper = mapper;
         }
 
+        //[Authorize(Policy = "Read")]
         // GET: Movies
         public async Task<IActionResult> Index(string orderBy, int? page, MovieViewModel model)
         {

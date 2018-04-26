@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using System.Security.Claims;
 using BusinessEntities.Models.Identity;
 using BusinessLayer.Services.Authorization;
+using BusinessLayer.Constant;
 
 namespace FirstNetCoreMVC
 {
@@ -72,8 +73,8 @@ namespace FirstNetCoreMVC
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("EditPolicy", policy =>
-                    policy.Requirements.Add(new EditPermission()));
+                options.AddPolicy("Read", policy =>
+                    policy.Requirements.Add(ContactOperations.Read));
             });
 
             //When want to change Area folder name with other name

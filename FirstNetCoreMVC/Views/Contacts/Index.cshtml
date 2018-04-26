@@ -61,12 +61,12 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @if((await AuthorizationService.AuthorizeAsync(User, item, Constants.UpdateOperationName)).Succeeded)
+                @if((await AuthorizationService.AuthorizeAsync(User, item, ContactOperations.Update)).Succeeded)
                 {
                      <a asp-action="Edit" asp-route-id="@item.ContactId">Edit</a> <text> | </text>
                 }               
                 <a asp-action="Details" asp-route-id="@item.ContactId">Details</a> |
-                @if((await AuthorizationService.AuthorizeAsync(User, item, Constants.DeleteOperationName)).Succeeded)
+                @if((await AuthorizationService.AuthorizeAsync(User, item, ContactOperations.Delete)).Succeeded)
                 {
                     <a asp-action="Delete" asp-route-id="@item.ContactId">Delete</a>
                 }

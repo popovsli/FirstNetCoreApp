@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BusinessLayer.Constant;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
@@ -34,6 +36,14 @@ namespace BusinessLayer.Services.Authorization
                          requirement is DeletePermission)
                 {
                     if (IsOwner(context.User, context.Resource))
+                    {
+                        context.Succeed(requirement);
+                    }
+                }
+                else if(requirement is OperationAuthorizationRequirement)
+                {
+                    var operationRequirement = requirement as OperationAuthorizationRequirement;
+                    if(operationRequirement.Name == Constants.ReadOperationName)
                     {
                         context.Succeed(requirement);
                     }
