@@ -11,18 +11,18 @@
   </PropertyGroup>
 
   <!--Needed for NSwag Client generator tool-->
-  <Target Name="NSwag" AfterTargets="Build">
+  <!--<Target Name="NSwag" AfterTargets="Build">
     <Copy SourceFiles="@(Reference)" DestinationFolder="$(OutDir)References" />
     <Exec Command="$(NSwagExe_Core20) run nswag.json /variables:Configuration=$(Configuration)" />
     <RemoveDir Directories="$(OutDir)References" />
-  </Target>
+  </Target>-->
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.4" />
-    <PackageReference Include="NSwag.CodeGeneration.CSharp" Version="11.17.4" />
+    <PackageReference Include="NSwag.AspNetCore" Version="11.17.4" />
     <PackageReference Include="SendGrid" Version="9.9.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="2.4.0" />
     <PackageReference Include="TrackableEntities.EF.Core" Version="1.0.0-rc" />

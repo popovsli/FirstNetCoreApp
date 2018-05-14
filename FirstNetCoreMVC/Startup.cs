@@ -26,6 +26,9 @@ using System.Security.Claims;
 using BusinessEntities.Models.Identity;
 using BusinessLayer.Services.Authorization;
 using BusinessLayer.Constant;
+using NJsonSchema;
+using NSwag.AspNetCore;
+using System.Reflection;
 
 namespace FirstNetCoreMVC
 {
@@ -237,6 +240,22 @@ namespace FirstNetCoreMVC
             app.UseStaticFiles();
             app.UseAuthentication();
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            //// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            //});
+
+            // Enable the Swagger UI middleware and the Swagger generator
+            app.UseSwaggerUi(typeof(Startup).GetTypeInfo().Assembly, settings =>
+            {
+                settings.GeneratorSettings.DefaultPropertyNameHandling =
+                    PropertyNameHandling.CamelCase;
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -248,14 +267,7 @@ namespace FirstNetCoreMVC
                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             });
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
+          
         }
     }
 }
