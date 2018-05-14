@@ -12,9 +12,11 @@ using TrackableEntities.Common.Core;
 using static FirstNetCoreMVC.Common.Constants;
 using FirstNetCoreMVC.Utils.Filters;
 using BusinessLayer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
 {
+    [AllowAnonymous]
     [TypeFilter(typeof(ValidateModelFilterAttribute))]
     [Produces("application/json")]
     [Route("api/[controller]")]
@@ -111,10 +113,16 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
             return Ok();
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllStudent()
+        //{
+        //    return Ok(await _context.Students.ToListAsync());
+        //}
+
         [HttpGet]
-        public async Task<IActionResult> GetAllStudent()
+        public List<Instructor> GetAllStudent()
         {
-            return Ok(await _context.Students.ToListAsync());
+            return _context.Instructors.ToList();
         }
     }
 }
