@@ -28,7 +28,6 @@ using BusinessLayer.Services.Authorization;
 using BusinessLayer.Constant;
 using NJsonSchema;
 using NSwag.AspNetCore;
-using System.Reflection;
 
 namespace FirstNetCoreMVC
 {
@@ -67,6 +66,14 @@ namespace FirstNetCoreMVC
                             .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
 
+            });
+
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressConsumesConstraintForFormFileParameters = false;
+                options.SuppressInferBindingSourcesForParameters = false;
+                options.SuppressModelStateInvalidFilter = false;
             });
 
             //services.AddAuthorization(option =>
@@ -175,22 +182,24 @@ namespace FirstNetCoreMVC
                 options.ReturnUrlParameter = "ReturnUrl";
             });
 
-            // Register the Swagger generator, defining one or more Swagger documents
+            // Register the Swashbuckle generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info
                 {
                     Title = "Student API",
                     Version = "v1",
-                    Description = "A simple example ASP.NET Core Web API",
+                    Description = "A simple example ASP.NET Core Web API. Swashbuckle",
                     TermsOfService = "None",
+                    //Swashbuckle
                     Contact = new Contact { Name = "Shayne Boyer", Email = "", Url = "https://twitter.com/spboyer" },
                     License = new License { Name = "Use under LICX", Url = "https://example.com/license" }
                 });
 
                 // Set the comments path for the Swagger JSON and UI.
                 var basePath = AppContext.BaseDirectory;
-                var xmlPath = Path.Combine(basePath, "FirstNetCoreMVC.xml");
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(basePath, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
 
@@ -237,24 +246,51 @@ namespace FirstNetCoreMVC
                 app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
             }
 
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseAuthentication();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
-            //// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-            //app.UseSwaggerUI(c =>
+            // Register the NSwag generator
+            //app.UseSwagger(typeof(Startup).Assembly, settings =>
             //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            //    settings.PostProcess = document =>
+            //    {
+            //        document.Info.Version = "v1";
+            //        document.Info.Title = "ToDo API";
+            //        document.Info.Description = "A simple ASP.NET Core web API";
+            //        document.Info.TermsOfService = "None";
+            //        document.Info.Contact = new NSwag.SwaggerContact
+            //        {
+            //            Name = "Shayne Boyer",
+            //            Email = string.Empty,
+            //            Url = "https://twitter.com/spboyer"
+            //        };
+            //        document.Info.License = new NSwag.SwaggerLicense
+            //        {
+            //            Name = "Use under LICX",
+            //            Url = "https://example.com/license"
+            //        };
+            //    };
             //});
 
-            // Enable the Swagger UI middleware and the Swagger generator
-            app.UseSwaggerUi(typeof(Startup).GetTypeInfo().Assembly, settings =>
+            // Enable Swashbuckle middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
             {
-                settings.GeneratorSettings.DefaultPropertyNameHandling =
-                    PropertyNameHandling.CamelCase;
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
             });
+
+            // Enable the NSwag UI middleware and the Swagger generator
+            //app.UseSwaggerUi(typeof(Startup).GetTypeInfo().Assembly, settings =>
+            //{
+            //    settings.GeneratorSettings.DefaultPropertyNameHandling =
+            //        PropertyNameHandling.CamelCase;
+            //});
+
+           
 
             app.UseMvc(routes =>
             {

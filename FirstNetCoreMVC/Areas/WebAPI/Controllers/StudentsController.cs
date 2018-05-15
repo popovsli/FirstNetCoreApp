@@ -17,10 +17,11 @@ using Microsoft.AspNetCore.Authorization;
 namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
 {
     [AllowAnonymous]
-    [TypeFilter(typeof(ValidateModelFilterAttribute))]
-    [Produces("application/json")]
+    //[TypeFilter(typeof(ValidateModelFilterAttribute))]
+    //[Produces("application/json")]
+    [ApiController]
     [Route("api/[controller]")]
-    public class StudentsController : Controller
+    public class StudentsController : ControllerBase
     {
         private readonly MovieContext _context;
         public IMovieService MovieService { get; set; }
@@ -30,16 +31,19 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
             _context = context;
         }
 
-        [ValidateStudentExists]
+        //[ValidateStudentExists]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpGet("{id}", Name = "GetStudent")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<Person>> GetById(int id)
         {
             var item = await _context.Person.FirstOrDefaultAsync(t => t.Id == id);
             if (item == null)
             {
                 return NotFound(id);
             }
-            return Ok(item);
+            //return Ok(item); //Before asp.net core 2.1
+            return item;
         }
 
         /// <summary>
@@ -67,13 +71,13 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Student), 201)]
         [ProducesResponseType(typeof(Student), 400)]
-        public async Task<IActionResult> CreateUpdate([FromBody] Student student)
+        public async Task<IActionResult> CreateUpdate(Student student) //([FromBody] Student student)
         {
 
-            if (student == null || !ModelState.IsValid)
+            if (student == null) //|| !ModelState.IsValid
             {
                 //return BadRequest(ErrorCode.ObjectIsNotValid.ToString());
-                return BadRequest(ModelState);
+                return BadRequest(student);
             }
 
             try
@@ -89,7 +93,7 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
             {
                 return BadRequest(ErrorCode.CouldNotCreateObject.ToString());
             }
-
+            //return CreatedAtAction(nameof(GetById), new { id = student.Id }, student);
             return CreatedAtRoute("GetStudent", new { id = student.Id }, student);
             //return Ok(student);
         }
@@ -119,8 +123,10 @@ namespace FirstNetCoreMVC.Areas.WebAPI.Controllers
         //    return Ok(await _context.Students.ToListAsync());
         //}
 
+        [ProducesResponseType(200, Type = typeof(Instructor))]     // Ok Response
+        [ProducesResponseType(400)]     // BadRequest
         [HttpGet]
-        public List<Instructor> GetAllStudent()
+        public ActionResult<List<Instructor>> GetAllStudent()
         {
             return _context.Instructors.ToList();
         }
