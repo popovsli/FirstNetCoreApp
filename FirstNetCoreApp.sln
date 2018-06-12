@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirstNetCoreMVC", "FirstNet
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{C0C695A2-33AF-4AE9-B45E-8C0D87C0E3BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServices", "WebServices\WebServices.csproj", "{1BE93F0C-A1A6-4E0C-AF3B-7BACB981D171}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C0C695A2-33AF-4AE9-B45E-8C0D87C0E3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0C695A2-33AF-4AE9-B45E-8C0D87C0E3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0C695A2-33AF-4AE9-B45E-8C0D87C0E3BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BE93F0C-A1A6-4E0C-AF3B-7BACB981D171}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BE93F0C-A1A6-4E0C-AF3B-7BACB981D171}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BE93F0C-A1A6-4E0C-AF3B-7BACB981D171}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BE93F0C-A1A6-4E0C-AF3B-7BACB981D171}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

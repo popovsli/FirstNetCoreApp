@@ -250,9 +250,7 @@ namespace FirstNetCoreMVC
             app.UseStaticFiles();
             app.UseAuthentication();
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
+           
             // Register the NSwag generator
             //app.UseSwagger(typeof(Startup).Assembly, settings =>
             //{
@@ -276,22 +274,14 @@ namespace FirstNetCoreMVC
             //    };
             //});
 
-            // Enable Swashbuckle middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                c.RoutePrefix = string.Empty;
-            });
-
+            
             // Enable the NSwag UI middleware and the Swagger generator
             //app.UseSwaggerUi(typeof(Startup).GetTypeInfo().Assembly, settings =>
             //{
             //    settings.GeneratorSettings.DefaultPropertyNameHandling =
             //        PropertyNameHandling.CamelCase;
             //});
-
-           
-
+                       
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -303,7 +293,18 @@ namespace FirstNetCoreMVC
                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             });
 
-          
+            // Enable Swashbuckle middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
+            });
+
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+
         }
     }
 }

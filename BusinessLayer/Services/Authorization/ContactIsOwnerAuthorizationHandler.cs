@@ -16,8 +16,8 @@ namespace BusinessLayer.Services.Authorization
     public class ContactIsOwnerAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Contact>
     {
         CustomUserManager<User> _userManager;
-        public ContactIsOwnerAuthorizationHandler(CustomUserManager<User>
-        userManager)
+
+        public ContactIsOwnerAuthorizationHandler(CustomUserManager<User> userManager)
         {
             _userManager = userManager;
         }
