@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessEntities.GeneratedModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,6 +41,11 @@ namespace WebServices.Services
             Console.WriteLine("Received Divide({0},{1})", n1, n2);
             Console.WriteLine("Return: {0}", result);
             return result;
+        }
+
+        public Student GetUser(Student user)
+        {
+            return new Student();
         }
     }
 }

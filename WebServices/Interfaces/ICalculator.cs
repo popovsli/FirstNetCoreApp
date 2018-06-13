@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessEntities.GeneratedModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -18,5 +19,7 @@ namespace WebServices.Interfaces
         double Multiply(double n1, double n2);
         [OperationContract]
         double Divide(double n1, double n2);
+        [OperationContract(IsOneWay = true)]
+        Student GetUser(Student user);
     }
 }
