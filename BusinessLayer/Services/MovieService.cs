@@ -21,8 +21,9 @@ namespace BusinessLayer.Services
 
         public async Task Add(Movie movie)
         {
-            _context.Movie.Add(movie);
-            await _context.SaveChangesAsync();
+            //_context.Movie.Add(movie);
+            //await _context.SaveChangesAsync();
+           await _context.CommitAsync(movie);
         }
 
         public async Task Edit(Movie movie)

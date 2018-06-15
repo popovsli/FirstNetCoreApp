@@ -1,0 +1,14 @@
+﻿dbo.Contact
+dbo.Course
+dbo.CourseAssignment
+dbo.Department
+dbo.Enrollment
+dbo.Movie
+dbo.OfficeAssignment
+dbo.Person
+dbo.Role
+dbo.Schedule
+dbo.User
+dbo.UserClaim
+dbo.UserLogin
+dbo.UserRole

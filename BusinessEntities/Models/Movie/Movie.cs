@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessEntities.Models
 {
-    public class Movie
+    public class Movie : BaseModel
     {
         public int ID { get; set; }
 

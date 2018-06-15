@@ -5,6 +5,9 @@ using BusinessEntities.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading.Tasks;
+using TrackableEntities.Common.Core;
+using TrackableEntities.EF.Core;
 
 namespace BusinessEntities.Context
 {
@@ -36,17 +39,6 @@ namespace BusinessEntities.Context
         public DbSet<CourseAssignment> CourseAssignments { get; set; }
         public DbSet<Person> Person { get; set; }
         public DbSet<Contact> Contact { get; set; }
-
-
-        public virtual void Commit()
-        {
-            base.SaveChanges();
-        }
-
-        public virtual void Migrate()
-        {
-            this.Migrate();
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -116,6 +108,23 @@ namespace BusinessEntities.Context
         public IdentityBaseDbContext(DbContextOptions options)
                 : base(options)
         {
+        }
+
+        public virtual void Commit(ITrackable entity)
+        {
+            this.ApplyChanges(entity);
+            base.SaveChanges();
+        }
+
+        public async virtual Task CommitAsync(ITrackable entity)
+        {
+            this.ApplyChanges(entity);
+            await base.SaveChangesAsync();
+        }
+
+        public virtual void Migrate()
+        {
+            this.Migrate();
         }
 
         public DbSet<TUser> User { get; set; }

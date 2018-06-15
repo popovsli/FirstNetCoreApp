@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using FirstNetCoreMVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using TrackableEntities.Common.Core;
 
 namespace FirstNetCoreMVC.Controllers
 {
@@ -87,10 +88,12 @@ namespace FirstNetCoreMVC.Controllers
         {
             if (ModelState.IsValid)
             {
+                movie.TrackingState = TrackingState.Added;
                 await _service.Add(movie);
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            ViewBag.ActionType = nameof(Create);
+            return View("CreateEdit", movie);
         }
 
         // GET: Movies/Edit/5
