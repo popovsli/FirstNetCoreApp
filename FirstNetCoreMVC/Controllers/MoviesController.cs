@@ -15,10 +15,13 @@ using System.Threading.Tasks;
 using FirstNetCoreMVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using TrackableEntities.Common.Core;
+using FirstNetCoreMVC.Utils.Extensions;
+using FirstNetCoreMVC.Utils.BaseControllers;
+using FirstNetCoreMVC.Utils.Filters;
 
 namespace FirstNetCoreMVC.Controllers
 {
-    public class MoviesController : Controller
+    public class MoviesController : BaseController
     {
         private readonly IMovieService _service;
         private readonly IMapper _mapper;
@@ -75,6 +78,10 @@ namespace FirstNetCoreMVC.Controllers
         // GET: Movies/Create
         public IActionResult Create()
         {
+            Movie movie = new Movie();
+            movie.TrackingState = TrackingState.Modified;
+            var existingSession = Session.Get<Movie>("Model");
+            Session.Set("Model", movie);
             ViewBag.ActionType = nameof(Create);
             return View("CreateEdit");
         }
@@ -86,6 +93,7 @@ namespace FirstNetCoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Movie movie)
         {
+
             if (ModelState.IsValid)
             {
                 movie.TrackingState = TrackingState.Added;
@@ -97,6 +105,7 @@ namespace FirstNetCoreMVC.Controllers
         }
 
         // GET: Movies/Edit/5
+        [SaveEntityState]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)

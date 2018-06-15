@@ -46,6 +46,7 @@ namespace FirstNetCoreMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //The cookie-based TempData provider is enabled by default
             //register a filter globally
             services.AddMvc(options =>
             {
@@ -66,6 +67,18 @@ namespace FirstNetCoreMVC
                             .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
 
+            });
+            //configures the session-based TempData provider
+            //AddMvc().AddSessionStateTempDataProvider()
+
+            // Adds a default in-memory implementation of IDistributedCache.
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".Model.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
             });
 
 
@@ -246,11 +259,14 @@ namespace FirstNetCoreMVC
                 app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
             }
 
+            //Using Session
+            app.UseSession();
+
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseAuthentication();
 
-           
+
             // Register the NSwag generator
             //app.UseSwagger(typeof(Startup).Assembly, settings =>
             //{
@@ -274,14 +290,14 @@ namespace FirstNetCoreMVC
             //    };
             //});
 
-            
+
             // Enable the NSwag UI middleware and the Swagger generator
             //app.UseSwaggerUi(typeof(Startup).GetTypeInfo().Assembly, settings =>
             //{
             //    settings.GeneratorSettings.DefaultPropertyNameHandling =
             //        PropertyNameHandling.CamelCase;
             //});
-                       
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
