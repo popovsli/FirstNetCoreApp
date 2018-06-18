@@ -17,7 +17,7 @@ namespace FirstNetCoreMVC.Utils.Extensions
         public static T Get<T>(this ISession session, string key)
         {
             var value = session.GetString(key);
-            if (value != null) session.Remove(key);
+            if (value != null) session.Remove(key); //Maybe remove
             return value == null ? default(T) :
                                   JsonConvert.DeserializeObject<T>(value);
         }
