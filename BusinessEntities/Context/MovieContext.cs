@@ -98,7 +98,7 @@ namespace BusinessEntities.Context
         }
     }
 
-    public class IdentityBaseDbContext<TUser, TKey, TUserLogin, TUserRole, TUserClaim> : DbContext
+    public class IdentityBaseDbContext<TUser, TKey, TUserLogin, TUserRole, TUserClaim> : DbContext //GeneratedDbContext
         where TKey : IEquatable<TKey>
         where TUser : IdentityUser<TKey>
         where TUserLogin : IdentityUserLogin<TKey>
@@ -110,17 +110,22 @@ namespace BusinessEntities.Context
         {
         }
 
-        public virtual void Commit(ITrackable entity)
+        public virtual void Commit(ITrackable entity, bool loadRelatedEntities = false)
         {
             this.ApplyChanges(entity);
             base.SaveChanges();
+            if (loadRelatedEntities) this.LoadRelatedEntities(entity);
+            this.AcceptChanges(entity);
         }
 
-        public async virtual Task CommitAsync(ITrackable entity)
+        public async virtual Task CommitAsync(ITrackable entity, bool loadRelatedEntities = false)
         {
             this.ApplyChanges(entity);
             await base.SaveChangesAsync();
+            if (loadRelatedEntities) await this.LoadRelatedEntitiesAsync(entity);
+            this.AcceptChanges(entity);
         }
+        
 
         public virtual void Migrate()
         {

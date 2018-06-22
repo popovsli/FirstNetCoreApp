@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f4d824155cef45a0b2183151d01af724" Name="Diagram1">
+        <EntityTypeShape EntityType="NetCoreEntities.C__EFMigrationsHistory" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.Contact" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.Course" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.Department" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.Enrollment" Width="1.5" PointX="7.5" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.Movie" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.OfficeAssignment" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.Person" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.Role" Width="1.5" PointX="7.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.Schedule" Width="1.5" PointX="4.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.User" Width="1.5" PointX="6.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.UserClaim" Width="1.5" PointX="8.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.UserLogin" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NetCoreEntities.UserRole" Width="1.5" PointX="9.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="NetCoreEntities.FK_Course_Department_DepartmentID" ManuallyRouted="false" />
+        <AssociationConnector Association="NetCoreEntities.FK_Enrollment_Course_CourseID" ManuallyRouted="false" />
+        <AssociationConnector Association="NetCoreEntities.FK_Department_Instructor_InstructorID" ManuallyRouted="false" />
+        <AssociationConnector Association="NetCoreEntities.FK_Enrollment_Person_StudentID" ManuallyRouted="false" />
+        <AssociationConnector Association="NetCoreEntities.FK_OfficeAssignment_Instructor_InstructorID" ManuallyRouted="false" />
+        <AssociationConnector Association="NetCoreEntities.CourseAssignment" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

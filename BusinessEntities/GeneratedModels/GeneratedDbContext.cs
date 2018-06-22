@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BusinessEntities.GeneratedModels
 {
-    public partial class Movie2Context : DbContext
+    public partial class GeneratedDbContext : DbContext
     {
 
-        public Movie2Context(DbContextOptions<Movie2Context> options)
+        public GeneratedDbContext(DbContextOptions options)
                     : base(options)
         {
         }
