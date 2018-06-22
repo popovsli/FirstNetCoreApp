@@ -12,3 +12,9 @@
 /BusinessLayer/obj
 /FirstNetCoreApp/obj
 /FirstNetCoreMVC/obj
+/FirstNetCoreApp/bin/Debug/netcoreapp2.1
+/NetCore.Entities.Generated/bin/Debug
+/NetCore.Entities.Generated/obj/Debug
+/WebServices/bin/Debug
+/NetCore.Entities.Generated/packages.config
+/NetCore.Entities.Generated/Properties

@@ -50,9 +50,9 @@ namespace FirstNetCoreMVC
             //register a filter globally
             services.AddMvc(options =>
             {
-                //     options.Filters.Add(new AddHeaderAttribute("GlobalAddHeader",
-                //"Result filter added to MvcOptions.Filters")); // an instance
-                //     options.Filters.Add(typeof(SampleActionFilter)); // by type
+                //options.Filters.Add(new AddHeaderAttribute("GlobalAddHeader","Result filter added to MvcOptions.Filters")); // an instance
+                //options.Filters.Add(typeof(SampleActionFilter)); // by type
+                //options.Filters.Add(new SampleGlobalActionFilter()); // an instance
 
                 // Set LocalTest:skipSSL to true to skip SSL requrement in
                 // debug mode. This is useful when not using Visual Studio.

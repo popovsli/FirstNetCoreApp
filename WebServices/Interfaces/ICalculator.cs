@@ -1,4 +1,5 @@
 ﻿using BusinessEntities.GeneratedModels;
+using BusinessEntities.Models.ContosoUniversity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
