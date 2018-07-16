@@ -10,6 +10,7 @@ using BusinessEntities.Models.ContosoUniversity;
 
 namespace FirstNetCoreMVC.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class CoursesController : Controller
     {
         private readonly MovieContext _context;

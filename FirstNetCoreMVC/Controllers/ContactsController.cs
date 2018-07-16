@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FirstNetCoreMVC.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ContactsController : Controller
     {
         private readonly MovieContext _context;

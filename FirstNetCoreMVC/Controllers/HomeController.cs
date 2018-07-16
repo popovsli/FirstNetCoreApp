@@ -13,6 +13,7 @@ using AutoMapper;
 
 namespace FirstNetCoreMVC.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
         private IHomeService _service;

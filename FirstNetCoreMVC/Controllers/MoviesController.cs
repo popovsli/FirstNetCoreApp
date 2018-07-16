@@ -21,6 +21,7 @@ using FirstNetCoreMVC.Utils.Filters;
 
 namespace FirstNetCoreMVC.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class MoviesController : BaseController
     {
         private readonly IMovieService _service;

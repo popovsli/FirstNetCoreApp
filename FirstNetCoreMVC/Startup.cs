@@ -309,6 +309,9 @@ namespace FirstNetCoreMVC
                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             });
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
             // Enable Swashbuckle middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
@@ -317,8 +320,7 @@ namespace FirstNetCoreMVC
             });
 
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
+           
 
 
         }

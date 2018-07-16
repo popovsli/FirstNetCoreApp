@@ -11,6 +11,7 @@ using FirstNetCoreMVC.Utils.Helpers;
 
 namespace FirstNetCoreMVC.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class StudentsController : Controller
     {
         private readonly MovieContext _context;

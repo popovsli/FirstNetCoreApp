@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 namespace FirstNetCoreMVC.Controllers
 {
     //[Authorize]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
