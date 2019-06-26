@@ -54,7 +54,7 @@ namespace BusinessLayer.Services.Identity
         public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (user == null) throw new ArgumentException(nameof(User));
+            if (user == null) throw new ArgumentException(nameof(user));
 
             _context.User.Add(user);
             return await _context.SaveChangesAsync() == 0 ? IdentityResult.Failed(new IdentityError() { Description = $"Could not insert user {user.Email}." }) : IdentityResult.Success;

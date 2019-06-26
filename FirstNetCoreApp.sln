@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirstNetCoreApp", "FirstNetCoreApp\FirstNetCoreApp.csproj", "{1CB965D3-568A-44A7-AB3F-C9CBA3A7F311}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{C0C695A2-33AF-4AE9-B45E-8C0D87C0E3BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServices", "WebServices\WebServices.csproj", "{1BE93F0C-A1A6-4E0C-AF3B-7BACB981D171}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElRacoDePipo.Web", "ElRacoDePipo.Web\ElRacoDePipo.Web.csproj", "{2A6C4725-0E7E-4AB9-9FF0-9445A2C8894C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{1BE93F0C-A1A6-4E0C-AF3B-7BACB981D171}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BE93F0C-A1A6-4E0C-AF3B-7BACB981D171}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BE93F0C-A1A6-4E0C-AF3B-7BACB981D171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A6C4725-0E7E-4AB9-9FF0-9445A2C8894C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A6C4725-0E7E-4AB9-9FF0-9445A2C8894C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A6C4725-0E7E-4AB9-9FF0-9445A2C8894C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A6C4725-0E7E-4AB9-9FF0-9445A2C8894C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
