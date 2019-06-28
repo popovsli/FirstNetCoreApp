@@ -18,3 +18,11 @@
 /WebServices/bin/Debug
 /NetCore.Entities.Generated/packages.config
 /NetCore.Entities.Generated/Properties
+ElRacoDePipo.Web/bin/Debug/netcoreapp2.2/ElRacoDePipo.Web.deps.json
+*.dll
+*.pdb
+/obj
+/ElRacoDePipo.Web/bin/Debug
+/ElRacoDePipo.Web/obj/Debug
+/ElRacoDePipo.Web/obj/Debug/netcoreapp2.2
+*.cache

@@ -15,6 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServices", "WebServices\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElRacoDePipo.Web", "ElRacoDePipo.Web\ElRacoDePipo.Web.csproj", "{2A6C4725-0E7E-4AB9-9FF0-9445A2C8894C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{9C6B9C33-82F0-4E96-9285-50DF7706065C}"
+	ProjectSection(SolutionItems) = preProject
+		EntityframeworkMigration.txt = EntityframeworkMigration.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,0 +1,6 @@
+---------------------Initialize db schema---------------------
+Update-Database
+
+---------------------Update db Schema---------------------
+Add-Migration Rating
+Update-Database

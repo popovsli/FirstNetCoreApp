@@ -24,6 +24,7 @@ namespace BusinessEntities.Models
         [StringLength(30)]
         public string Genre { get; set; }
 
+        [Column(TypeName = "decimal(18, 2)")]
         [Range(1, 100)]
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
