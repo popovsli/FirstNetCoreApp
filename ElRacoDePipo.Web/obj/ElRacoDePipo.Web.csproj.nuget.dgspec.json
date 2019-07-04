@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dev\\GitHub\\FirstNetCoreApp\\ElRacoDePipo.Web\\ElRacoDePipo.Web.csproj": {}
+    "E:\\Devv\\GitHub\\FirstNetCoreApp\\ElRacoDePipo.Web\\ElRacoDePipo.Web.csproj": {}
   },
   "projects": {
-    "D:\\Dev\\GitHub\\FirstNetCoreApp\\ElRacoDePipo.Web\\ElRacoDePipo.Web.csproj": {
+    "E:\\Devv\\GitHub\\FirstNetCoreApp\\ElRacoDePipo.Web\\ElRacoDePipo.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dev\\GitHub\\FirstNetCoreApp\\ElRacoDePipo.Web\\ElRacoDePipo.Web.csproj",
+        "projectUniqueName": "E:\\Devv\\GitHub\\FirstNetCoreApp\\ElRacoDePipo.Web\\ElRacoDePipo.Web.csproj",
         "projectName": "ElRacoDePipo.Web",
-        "projectPath": "D:\\Dev\\GitHub\\FirstNetCoreApp\\ElRacoDePipo.Web\\ElRacoDePipo.Web.csproj",
-        "packagesPath": "C:\\Users\\nrpopov\\.nuget\\packages\\",
-        "outputPath": "D:\\Dev\\GitHub\\FirstNetCoreApp\\ElRacoDePipo.Web\\obj\\",
+        "projectPath": "E:\\Devv\\GitHub\\FirstNetCoreApp\\ElRacoDePipo.Web\\ElRacoDePipo.Web.csproj",
+        "packagesPath": "C:\\Users\\KOKO\\.nuget\\packages\\",
+        "outputPath": "E:\\Devv\\GitHub\\FirstNetCoreApp\\ElRacoDePipo.Web\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\nrpopov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\KOKO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
